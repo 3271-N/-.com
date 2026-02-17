@@ -67,8 +67,8 @@
 
     <div id="cursor-glow"></div>
     <div id="bg-image"></div>
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop>
+        <source src="https://files.catbox.moe/p9p4a3.mp3" type="audio/mpeg">
     </audio>
 
     <div id="vip-overlay" class="modal-overlay">
@@ -127,12 +127,12 @@
 
         <div class="main-content">
             <div class="content-grid" id="main-grid">
-                <div class="info-card" onclick="alert('Statü Verileri Yükleniyor...')"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları ve rütbe takibi.</p></div>
-                <div class="info-card" onclick="alert('Nişangah Kodları Hazırlanıyor...')"><h3 class="g-cyan">NİŞANGAH</h3><p>Profesyonel oyuncu crosshair kodları.</p></div>
-                <div class="info-card" onclick="alert('Harita Taktikleri Açılıyor...')"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Harita stratejileri ve taktikler.</p></div>
-                <div class="info-card" onclick="alert('Ajan Rehberi Yükleniyor...')"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Ajan yetenekleri ve combo rehberi.</p></div>
-                <div class="info-card" onclick="alert('Lineup Noktaları Gösteriliyor...')"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve görüş oku noktaları.</p></div>
-                <div class="info-card" onclick="alert('Espor Sonuçları Çekiliyor...')"><h3 class="g-pink">ESPORT</h3><p>Anlık turnuva sonuçları ve haberler.</p></div>
+                <div class="info-card" onclick="window.open('https://tracker.gg/valorant', '_blank')"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları ve rütbe takibi.</p></div>
+                <div class="info-card" onclick="window.open('https://vcrdb.net/', '_blank')"><h3 class="g-cyan">NİŞANGAH</h3><p>Profesyonel oyuncu crosshair kodları.</p></div>
+                <div class="info-card" onclick="window.open('https://playvalorant.com/tr-tr/maps/', '_blank')"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Harita stratejileri ve taktikler.</p></div>
+                <div class="info-card" onclick="window.open('https://playvalorant.com/tr-tr/agents/', '_blank')"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Ajan yetenekleri ve combo rehberi.</p></div>
+                <div class="info-card" onclick="window.open('https://www.valorantlineups.com/', '_blank')"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve görüş oku noktaları.</p></div>
+                <div class="info-card" onclick="window.open('https://www.vlr.gg/', '_blank')"><h3 class="g-pink">ESPORT</h3><p>Anlık turnuva sonuçları ve haberler.</p></div>
                 <div id="vip-cards-container" style="display: contents;"></div>
             </div>
         </div>
@@ -151,7 +151,7 @@
                 audio.play().then(() => {
                     mBtn.innerText = "🎵 ŞARKI: ÇALIYOR";
                     isPlaying = true;
-                }).catch(e => alert("Hata: Tarayıcı engelledi. Önce ekrana bir yere tıkla!"));
+                }).catch(() => alert("Ekrana bir kez tıklayıp sonra şarkıyı başlatın!"));
             } else {
                 audio.pause();
                 mBtn.innerText = "🎵 ŞARKI: KAPALI";
@@ -176,7 +176,7 @@
             if(vip) {
                 document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:10px; background:rgba(34,197,94,0.1);">VIP AKTİF</div>';
                 document.getElementById('vip-cards-container').innerHTML = `
-                    <div class="info-card" onclick="alert('VIP Meta Başlatılıyor...')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                    <div class="info-card" onclick="window.open('https://www.metasrc.com/valorant', '_blank')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
                         <h3 class="g-pink">VIP: META</h3><p>Gizli kazanma stratejileri.</p>
                     </div>
                 `;
