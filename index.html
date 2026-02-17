@@ -32,19 +32,12 @@
             100% { transform: scale(1); box-shadow: 0 0 5px var(--v-gold); }
         }
 
-        .neon-warning {
-            color: #ff3e3e; font-family: 'VALORANT'; font-size: 13px;
-            text-shadow: 0 0 10px rgba(255, 62, 62, 0.8); border: 1px solid rgba(255, 62, 62, 0.3);
-            padding: 10px; border-radius: 5px; background: rgba(255, 0, 0, 0.05); margin-bottom: 15px;
-        }
-
         .insta-link {
             color: var(--v-pink); text-decoration: none; font-size: 14px; font-weight: bold;
             display: inline-block; transition: 0.3s; text-shadow: 0 0 8px rgba(255, 0, 234, 0.6);
         }
         .insta-link:hover { color: white; transform: scale(1.1); }
 
-        /* GÖREV TUŞLARI İÇİN POINTER */
         .info-card { cursor: pointer; background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; text-decoration: none; color: white; transition: 0.3s; display: block; backdrop-filter: blur(10px); }
         .info-card:hover { transform: translateY(-5px); border-color: var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.2); }
         .info-card h3 { font-family: 'VALORANT'; font-size: 18px; margin: 0 0 8px 0; }
@@ -74,7 +67,9 @@
 
     <div id="cursor-glow"></div>
     <div id="bg-image"></div>
-    <audio id="bgMusic" loop src="https://files.catbox.moe/p9p4a3.mp3"></audio>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="vip-overlay" class="modal-overlay">
         <div class="vip-modal">
@@ -114,7 +109,7 @@
             <div class="g-cyan" style="font-family:'VALORANT'; font-size:1.5rem;">NEXUS</div>
             <div id="disp-user" style="color:var(--v-purple); font-weight:bold; text-align:center; font-size:12px; background:rgba(255,255,255,0.05); padding:5px; border-radius:5px;"></div>
             
-            <button class="btn-music" onclick="toggleMusic()">🎵 ŞARKI: KAPALI</button>
+            <button id="musicBtn" class="btn-music" onclick="toggleMusic()">🎵 ŞARKI: KAPALI</button>
 
             <div class="global-chat">
                 <div id="chat-messages"></div>
@@ -132,12 +127,12 @@
 
         <div class="main-content">
             <div class="content-grid" id="main-grid">
-                <div class="info-card" onclick="openTask('STATÜ')"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları ve rütbe takibi.</p></div>
-                <div class="info-card" onclick="openTask('NİŞANGAH')"><h3 class="g-cyan">NİŞANGAH</h3><p>Profesyonel oyuncu crosshair kodları.</p></div>
-                <div class="info-card" onclick="openTask('HARİTALAR')"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Harita stratejileri ve taktikler.</p></div>
-                <div class="info-card" onclick="openTask('AJANLAR')"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Ajan yetenekleri ve combo rehberi.</p></div>
-                <div class="info-card" onclick="openTask('LINEUPS')"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve görüş oku noktaları.</p></div>
-                <div class="info-card" onclick="openTask('ESPORT')"><h3 class="g-pink">ESPORT</h3><p>Anlık turnuva sonuçları ve haberler.</p></div>
+                <div class="info-card" onclick="alert('Statü Verileri Yükleniyor...')"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları ve rütbe takibi.</p></div>
+                <div class="info-card" onclick="alert('Nişangah Kodları Hazırlanıyor...')"><h3 class="g-cyan">NİŞANGAH</h3><p>Profesyonel oyuncu crosshair kodları.</p></div>
+                <div class="info-card" onclick="alert('Harita Taktikleri Açılıyor...')"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Harita stratejileri ve taktikler.</p></div>
+                <div class="info-card" onclick="alert('Ajan Rehberi Yükleniyor...')"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Ajan yetenekleri ve combo rehberi.</p></div>
+                <div class="info-card" onclick="alert('Lineup Noktaları Gösteriliyor...')"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve görüş oku noktaları.</p></div>
+                <div class="info-card" onclick="alert('Espor Sonuçları Çekiliyor...')"><h3 class="g-pink">ESPORT</h3><p>Anlık turnuva sonuçları ve haberler.</p></div>
                 <div id="vip-cards-container" style="display: contents;"></div>
             </div>
         </div>
@@ -148,18 +143,20 @@
         firebase.initializeApp(config); const db = firebase.database();
 
         let isPlaying = false;
+        const audio = document.getElementById('bgMusic');
+        const mBtn = document.getElementById('musicBtn');
 
         function toggleMusic() {
-            const m = document.getElementById('bgMusic');
-            const b = document.querySelector('.btn-music');
-            if(isPlaying) { m.pause(); b.innerText = "🎵 ŞARKI: KAPALI"; } 
-            else { m.play(); b.innerText = "🎵 ŞARKI: ÇALIYOR"; }
-            isPlaying = !isPlaying;
-        }
-
-        // 6 TUŞUN GÖREVLERİ
-        function openTask(type) {
-            alert(type + " Modülü Başlatılıyor... Veriler çekiliyor.");
+            if (audio.paused) {
+                audio.play().then(() => {
+                    mBtn.innerText = "🎵 ŞARKI: ÇALIYOR";
+                    isPlaying = true;
+                }).catch(e => alert("Hata: Tarayıcı engelledi. Önce ekrana bir yere tıkla!"));
+            } else {
+                audio.pause();
+                mBtn.innerText = "🎵 ŞARKI: KAPALI";
+                isPlaying = false;
+            }
         }
 
         function doLogin() {
@@ -179,14 +176,8 @@
             if(vip) {
                 document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:10px; background:rgba(34,197,94,0.1);">VIP AKTİF</div>';
                 document.getElementById('vip-cards-container').innerHTML = `
-                    <div class="info-card" onclick="openTask('VIP META')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                    <div class="info-card" onclick="alert('VIP Meta Başlatılıyor...')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
                         <h3 class="g-pink">VIP: META</h3><p>Gizli kazanma stratejileri.</p>
-                    </div>
-                    <div class="info-card" onclick="openTask('VIP SKINS')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
-                        <h3 class="g-pink">VIP: SKINS</h3><p>Görselleştirilmiş skin önizleme.</p>
-                    </div>
-                    <div class="info-card" onclick="openTask('VIP AIM')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
-                        <h3 class="g-pink">VIP: AIM</h3><p>Özel hassasiyet ayarları.</p>
                     </div>
                 `;
             }
