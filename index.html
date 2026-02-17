@@ -151,7 +151,10 @@
                 audio.play().then(() => {
                     mBtn.innerText = "🎵 ŞARKI: ÇALIYOR";
                     isPlaying = true;
-                }).catch(() => alert("Ekrana bir kez tıklayıp sonra şarkıyı başlatın!"));
+                }).catch(() => {
+                    // Tarayıcı ilk etkileşimi bekler, bu yüzden hata verirse alternatif uyarı:
+                    alert("Müzik için önce sayfada herhangi bir yere tıklayın!");
+                });
             } else {
                 audio.pause();
                 mBtn.innerText = "🎵 ŞARKI: KAPALI";
