@@ -10,7 +10,7 @@
         @import url('https://fonts.cdnfonts.com/css/valorant');
         :root { 
             --v-purple: #9333ea; --v-cyan: #00f2ff; --v-orange: #ff8c00; --v-pink: #ff00ea;
-            --v-green: #22c55e; --bg-dark: #0a0a0a; --card-bg: rgba(20, 20, 20, 0.8);
+            --v-green: #22c55e; --v-gold: #ffcc00; --bg-dark: #0a0a0a; --card-bg: rgba(20, 20, 20, 0.8);
         }
         body { font-family: 'Segoe UI', sans-serif; color: #f0f0f0; margin: 0; background: var(--bg-dark); height: 100vh; overflow: hidden; }
         #bg-image { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #1a0033 0%, #000 100%); opacity: 0.9; }
@@ -18,33 +18,41 @@
 
         .g-cyan { background: linear-gradient(to right, #fff, var(--v-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .g-pink { background: linear-gradient(to right, #fff, var(--v-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .g-orange { background: linear-gradient(to right, #fff, var(--v-orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* VIP UYARI STİLİ */
-        .neon-warning {
-            color: #ff3e3e;
+        
+        /* VIP FİYAT ETİKETİ STİLİ */
+        .vip-price-tag {
+            background: linear-gradient(45deg, rgba(147, 51, 234, 0.2), rgba(255, 204, 0, 0.1));
+            border: 1px solid var(--v-gold);
+            color: var(--v-gold);
+            padding: 10px 20px;
+            border-radius: 50px;
             font-family: 'VALORANT';
-            font-size: 14px;
+            font-size: 16px;
+            display: inline-block;
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+            animation: pulse 2s infinite;
             letter-spacing: 2px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 5px var(--v-gold); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px var(--v-gold); }
+            100% { transform: scale(1); box-shadow: 0 0 5px var(--v-gold); }
+        }
+
+        .neon-warning {
+            color: #ff3e3e; font-family: 'VALORANT'; font-size: 13px;
             text-shadow: 0 0 10px rgba(255, 62, 62, 0.8);
-            border: 1px solid rgba(255, 62, 62, 0.3);
-            padding: 10px;
-            border-radius: 5px;
-            background: rgba(255, 0, 0, 0.05);
-            margin-bottom: 20px;
+            border: 1px solid rgba(255, 62, 62, 0.3); padding: 10px;
+            border-radius: 5px; background: rgba(255, 0, 0, 0.05); margin-bottom: 15px;
         }
 
         .insta-link {
-            color: var(--v-pink);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
-            transition: 0.3s;
-            text-shadow: 0 0 8px rgba(255, 0, 234, 0.6);
+            color: var(--v-pink); text-decoration: none; font-size: 14px; font-weight: bold;
+            display: inline-block; transition: 0.3s; text-shadow: 0 0 8px rgba(255, 0, 234, 0.6);
         }
-        .insta-link:hover { color: white; transform: scale(1.1); text-shadow: 0 0 15px var(--v-pink); }
+        .insta-link:hover { color: white; transform: scale(1.1); }
 
         .info-card { background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; text-decoration: none; color: white; transition: 0.3s; display: block; backdrop-filter: blur(10px); }
         .info-card:hover { transform: translateY(-5px); border-color: #444; }
@@ -80,6 +88,9 @@
         <div class="vip-modal">
             <h2 class="g-pink" style="font-family:'VALORANT'; margin-bottom:5px;">VIP PANEL</h2>
             <a href="https://www.instagram.com/ahmet_57z" target="_blank" class="insta-link">@ahmet_57z</a>
+            
+            <br>
+            <div class="vip-price-tag">VIP OLMAK | 10TL |</div>
             
             <div id="guest-msg" style="display:none;" class="neon-warning">KAYITLI HESAP GEREKLİ!</div>
             
@@ -122,7 +133,7 @@
             <div class="global-chat">
                 <div id="chat-messages"></div>
                 <div class="chat-input-row">
-                    <input type="text" id="chatMsg" class="chat-input" placeholder="Sohbet...">
+                    <input type="text" id="chatMsg" class="chat-input" placeholder="Mesaj...">
                     <button onclick="sendChat()" style="background:none; border:none; color:var(--v-purple); cursor:pointer; font-weight:bold; padding:0 10px;">></button>
                 </div>
             </div>
@@ -137,8 +148,8 @@
             <div class="content-grid" id="main-grid">
                 <div class="info-card"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları.</p></div>
                 <div class="info-card"><h3 class="g-cyan">NİŞANGAH</h3><p>Crosshair kodları.</p></div>
-                <div class="info-card"><h3 class="g-orange">HARİTALAR</h3><p>Taktik rehberi.</p></div>
-                <div class="info-card"><h3 class="g-orange">AJANLAR</h3><p>Yetenek kullanımı.</p></div>
+                <div class="info-card"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Taktik rehberi.</p></div>
+                <div class="info-card"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Yetenek kullanımı.</p></div>
                 <div class="info-card"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve ok noktaları.</p></div>
                 <div class="info-card"><h3 class="g-pink">ESPORT</h3><p>Canlı skorlar.</p></div>
                 <div id="vip-cards-container" style="display: contents;"></div>
@@ -172,19 +183,15 @@
         function doLogin() {
             const u = document.getElementById("lName").value.trim();
             const p = document.getElementById("lPass").value.trim();
-
             if(u === "ADMIN" && p === "1200778") { 
                 if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
                 loginSuccess(u, true); return; 
             }
-
             db.ref('users/'+u).once('value').then(s => {
-                if(s.exists()) {
-                    if(s.val().password === p) {
-                        if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
-                        loginSuccess(u, s.val().isVip);
-                    } else alert("Hatalı Şifre!");
-                } else alert("Kullanıcı Bulunamadı!");
+                if(s.exists() && s.val().password === p) {
+                    if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
+                    loginSuccess(u, s.val().isVip);
+                } else alert("Hata!");
             });
         }
 
@@ -194,16 +201,16 @@
             document.getElementById("dashboard").style.display = "flex";
             document.getElementById("disp-user").innerText = u;
             if(vip) {
-                document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:10px; background:rgba(34,197,94,0.1);">VIP ÜYE</div>';
+                document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:10px; background:rgba(34,197,94,0.1);">VIP AKTİF</div>';
                 document.getElementById('vip-cards-container').innerHTML = `
-                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);">
-                        <h3 class="g-pink">VIP: META</h3><p>Kazanma oranı yüksek taktikler.</p>
+                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                        <h3 class="g-pink">VIP: META</h3><p>Gizli win taktikleri.</p>
                     </div>
-                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);">
-                        <h3 class="g-pink">VIP: SKINS</h3><p>Tüm gizli skin animasyonları.</p>
+                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                        <h3 class="g-pink">VIP: SKINS</h3><p>Özel skin önizlemeleri.</p>
                     </div>
-                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);">
-                        <h3 class="g-pink">VIP: AIM</h3><p>Profesyonel DPI ve Hassasiyet.</p>
+                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                        <h3 class="g-pink">VIP: AIM</h3><p>Radiant DPI ayarları.</p>
                     </div>
                 `;
             }
@@ -223,8 +230,8 @@
         function activateVip() {
             const code = document.getElementById('vCode').value, u = sessionStorage.getItem("user");
             if(code === "VN-9928-XQ71-PL00" && u !== "MİSAFİR") {
-                db.ref('users/'+u).update({isVip:true}).then(() => { alert("VIP AKTİF!"); location.reload(); });
-            } else alert("Geçersiz Kod!");
+                db.ref('users/'+u).update({isVip:true}).then(() => { alert("VIP BAŞARIYLA AKTİF EDİLDİ!"); location.reload(); });
+            } else alert("Kod Yanlış!");
         }
 
         function handleRegister() {
@@ -239,6 +246,7 @@
         function logout() { localStorage.removeItem("v_u"); localStorage.removeItem("v_p"); location.reload(); }
         function doGuest() { loginSuccess("MİSAFİR", false); }
         function showReg(v) { document.getElementById('login-container').style.display = v ? 'none' : 'block'; document.getElementById('register-container').style.display = v ? 'block' : 'none'; }
+        
         function openVip() { 
             document.getElementById('vip-overlay').style.display = 'flex'; 
             if(sessionStorage.getItem("user") === "MİSAFİR") { 
