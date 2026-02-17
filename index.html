@@ -16,9 +16,9 @@
         #bg-image { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #110022 0%, #000 100%); opacity: 0.8; }
         #cursor-glow { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(147, 51, 234, 0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 
-        /* MODAL (VIP PANEL) */
+        /* VIP PANEL TASARIMI */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 20000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .vip-modal { background: #000; border: 1px solid var(--v-purple); border-radius: 20px; padding: 40px; text-align: center; width: 350px; }
+        .vip-modal { background: #000; border: 1px solid var(--v-purple); border-radius: 20px; padding: 40px; text-align: center; width: 350px; box-shadow: 0 0 30px rgba(147, 51, 234, 0.2); }
 
         /* DASHBOARD */
         #dashboard { display: none; height: 100vh; width: 100%; }
@@ -51,10 +51,13 @@
 
     <div id="vip-overlay" class="modal-overlay">
         <div class="vip-modal">
-            <h2 style="color:var(--v-purple); font-family:'VALORANT'">VIP PANEL</h2>
+            <h2 style="color:var(--v-purple); font-family:'VALORANT'; margin-bottom: 5px;">VIP PANEL</h2>
+            <p style="font-size: 11px; color: #888; margin-bottom: 20px;">KOD ALMAK İÇİN INSTAGRAM:<br> 
+            <span style="color:#ff4655; font-weight:bold; font-size:16px; letter-spacing:1px;">ahmet_57z</span></p>
+            
             <input id="vCode" class="custom-input" placeholder="VN-KOD-GİRİN" style="text-align:center;">
-            <button class="btn-vanguard" onclick="activateVip()">AKTİF ET</button>
-            <button onclick="closeVip()" style="background:none; border:none; color:white; cursor:pointer;">GERİ</button>
+            <button class="btn-vanguard" onclick="activateVip()">KODU AKTİF ET</button>
+            <button onclick="closeVip()" style="background:none; border:none; color:#555; cursor:pointer; font-size:12px;">PENCEREYİ KAPAT</button>
         </div>
     </div>
 
@@ -106,8 +109,8 @@
                 <a href="https://www.vlr.gg/" target="_blank" class="info-card"><h3>ESPORT ANALİZ</h3><p>Canlı skorlar.</p></a>
 
                 <a id="vip-1" href="https://tracker.gg/valorant/insights/agents" target="_blank" class="info-card vip-only-card"><h3>VIP: KAZANMA METASI</h3><p>En yüksek oranlı ajanlar.</p></a>
-                <a id="vip-2" href="https://valorant.fandom.com/wiki/Skins" target="_blank" class="info-card vip-only-card"><h3>VIP: SKIN KATALOĞU</h3><p>Tüm skin setleri ve önizleme.</p></a>
-                <a id="vip-3" href="https://bo3.gg/tr/valorant/articles/best-sensitivity-settings-for-valorant-and-dpi-finding-the-right-balance" target="_blank" class="info-card vip-only-card"><h3>VIP: AIM MODÜLLERİ</h3><p>Pro DPI ve Hassasiyet rehberi.</p></a>
+                <a id="vip-2" href="https://valorant.fandom.com/wiki/Skins" target="_blank" class="info-card vip-only-card"><h3>VIP: SKIN KATALOĞU</h3><p>Tüm skin setleri.</p></a>
+                <a id="vip-3" href="https://bo3.gg/tr/valorant/articles/best-sensitivity-settings-for-valorant-and-dpi-finding-the-right-balance" target="_blank" class="info-card vip-only-card"><h3>VIP: AIM MODÜLLERİ</h3><p>Pro DPI rehberi.</p></a>
             </div>
         </div>
     </div>
@@ -124,7 +127,7 @@
         function showVip() { document.getElementById('vip-banner-box').style.display='none'; document.getElementById('vip-active-status').style.display='block'; document.querySelectorAll('.vip-only-card').forEach(c=>c.style.display='block'); }
         function openVip() { if(sessionStorage.getItem("active_user")==="MİSAFİR") alert("Kayıt olmalısın!"); else document.getElementById('vip-overlay').style.display='flex'; }
         function closeVip() { document.getElementById('vip-overlay').style.display='none'; }
-        function activateVip() { if(document.getElementById('vCode').value==="VN-9928-XQ71-PL00") { db.ref('users/'+sessionStorage.getItem("active_user")).update({isVip:true}).then(()=>{ alert("VIP AKTİF!"); location.reload(); }); } else alert("Kod yanlış!"); }
+        function activateVip() { if(document.getElementById('vCode').value==="VN-9928-XQ71-PL00") { db.ref('users/'+sessionStorage.getItem("active_user")).update({isVip:true}).then(()=>{ alert("VIP AKTİF!"); location.reload(); }); } else alert("Hata!"); }
         function doLogout() { location.reload(); }
         function sendChat() { const m=document.getElementById('chatMsg').value, u=sessionStorage.getItem("active_user"); if(m.trim()) { db.ref('chat').push({user:u, msg:m}); document.getElementById('chatMsg').value=""; } }
         db.ref('chat').limitToLast(15).on('value', s => { const box=document.getElementById('chat-messages'); box.innerHTML=""; s.forEach(c=>{ box.innerHTML+=`<div><b>${c.val().user}:</b> ${c.val().msg}</div>`; }); box.scrollTop=box.scrollHeight; });
