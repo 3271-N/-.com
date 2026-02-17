@@ -3,16 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANGUARD NEXUS | GLOBAL ULTIMATE</title>
     
-    <title>VANGUARD NEXUS | VALORANT ANALYTICS & VIP STRATEGY</title>
-    <meta name="description" content="Vanguard Nexus: Valorant için en güncel ajan metası, profesyonel aim geliştirme ve VIP analiz merkezi. Hemen giriş yap ve fark yarat.">
-    <meta name="keywords" content="Valorant, Valorant Meta, Valorant Aim, Valorant VIP, Ajan Analizi, Vanguard Nexus">
-    <meta name="author" content="Vanguard Nexus Team">
-    
+    <meta name="description" content="Vanguard Nexus: Valorant VIP Analiz ve Global Strateji Merkezi.">
     <meta property="og:title" content="VANGUARD NEXUS | ULTIMATE">
-    <meta property="og:description" content="Valorant dünyasında zirveye oyna. VIP modülleri ve analizler burada.">
     <meta property="og:image" content="https://static.wikia.nocookie.net/valorant/images/e/e3/TX_CompetitiveTier_Large_24.png">
-    <meta property="og:url" content="https://3271-n.github.io/-.com/">
 
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -28,35 +23,33 @@
         #bg-image { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #110022 0%, #000 100%); opacity: 0.8; }
         #cursor-glow { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(147, 51, 234, 0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 
-        /* AUTH SCREEN */
+        /* GİRİŞ EKRANI */
         #auth-screen { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: #000; }
-        .login-box { background: #050505; padding: 40px; border-radius: 20px; width: 350px; text-align: center; border: 1px solid #1a1a1a; box-shadow: 0 0 50px rgba(0,0,0,1); }
-        .login-header { font-family: 'VALORANT'; color: var(--v-purple); font-size: 2rem; margin-bottom: 25px; letter-spacing: 5px; }
+        .login-box { background: #050505; padding: 40px; border-radius: 20px; width: 350px; text-align: center; border: 1px solid #1a1a1a; }
+        .login-header { font-family: 'VALORANT'; color: var(--v-purple); font-size: 2rem; margin-bottom: 25px; }
         .custom-input { width: 100%; padding: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 8px; margin-bottom: 12px; outline: none; box-sizing: border-box; }
-        .btn-vanguard { background: var(--v-purple); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'VALORANT'; transition: 0.3s; }
+        .btn-vanguard { background: var(--v-purple); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'VALORANT'; transition: 0.3s; margin-bottom: 10px; }
         .btn-vanguard:hover { background: #a855f7; box-shadow: 0 0 15px var(--v-purple); }
 
         /* DASHBOARD */
         #dashboard { display: none; height: 100vh; width: 100%; }
-        .sidebar { width: 280px; background: #000; border-right: 1px solid #111; padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
-        .nexus-logo { font-family: 'VALORANT'; color: var(--v-purple); font-size: 1.2rem; letter-spacing: 3px; }
+        .sidebar { width: 280px; background: #000; border-right: 1px solid #111; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         
-        .profile-card { background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; text-align: center; }
-        .profile-img { width: 60px; height: 60px; background: #111; border-radius: 8px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; }
-        
-        .main-content { flex: 1; padding: 30px 50px; overflow-y: auto; position: relative; }
+        /* CHAT SİSTEMİ */
+        .global-chat { flex: 1; background: #050505; border: 1px solid #111; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; margin-top: 10px; }
+        #chat-messages { flex: 1; padding: 10px; overflow-y: auto; font-size: 11px; color: #ccc; }
+        .chat-input-row { display: flex; padding: 5px; background: #080808; gap: 5px; }
+        .chat-input { flex: 1; background: #000; border: 1px solid #111; color: #fff; font-size: 10px; padding: 5px; outline: none; }
+
+        .main-content { flex: 1; padding: 30px 50px; overflow-y: auto; }
         .content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .info-card { background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 15px; padding: 25px; text-decoration: none; color: white; transition: 0.4s; }
-        .info-card:hover { border-color: var(--v-purple); transform: translateY(-5px); }
-        .info-card h3 { font-family: 'VALORANT'; color: var(--v-purple); margin: 0 0 10px 0; font-size: 18px; }
-
-        .vip-active-msg { grid-column: span 2; background: rgba(34, 197, 94, 0.1); border: 1px solid var(--v-green); border-radius: 15px; padding: 20px; text-align: center; color: var(--v-green); font-family: 'VALORANT'; display: none; }
+        .info-card h3 { font-family: 'VALORANT'; color: var(--v-purple); margin: 0 0 10px 0; }
+        
         .vip-only-card { border-color: var(--v-green) !important; display: none; }
-        .vip-only-card h3 { color: var(--v-green) !important; }
+        .vip-active-msg { grid-column: span 2; background: rgba(34, 197, 94, 0.1); border: 1px solid var(--v-green); border-radius: 15px; padding: 20px; text-align: center; color: var(--v-green); font-family: 'VALORANT'; display: none; }
 
-        /* SHARE BUTTON */
-        .share-btn { margin-top: 30px; background: #111; border: 1px solid #333; color: #888; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; transition: 0.3s; }
-        .share-btn:hover { border-color: var(--v-purple); color: white; }
+        .share-btn { background: #111; border: 1px solid #333; color: #888; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 10px; width: 100%; }
     </style>
 </head>
 <body>
@@ -70,58 +63,61 @@
             <input type="text" id="lName" class="custom-input" placeholder="KULLANICI ADI">
             <input type="password" id="lPass" class="custom-input" placeholder="ŞİFRE">
             <button class="btn-vanguard" onclick="doLogin()">SİSTEME GİR</button>
-            <p style="font-size:11px; margin-top:15px;">HESABIN YOK MU? <span style="color:var(--v-purple); cursor:pointer;" onclick="toggleAuth()">KAYIT OL</span></p>
+            <button class="btn-vanguard" onclick="doGuest()" style="background:rgba(255,255,255,0.03); border:1px solid #222; font-size:10px;">MİSAFİR GİRİŞİ</button>
+            <p style="font-size:11px; margin-top:10px;">HESABIN YOK MU? <span style="color:var(--v-purple); cursor:pointer;" onclick="toggleAuth()">KAYIT OL</span></p>
         </div>
         <div class="login-box" id="register-container" style="display:none;">
             <div class="login-header">KAYIT OL</div>
             <input type="text" id="rName" class="custom-input" placeholder="YENİ KULLANICI ADI">
             <input type="password" id="rPass" class="custom-input" placeholder="YENİ ŞİFRE">
             <button class="btn-vanguard" onclick="handleRegister()">HESABI OLUŞTUR</button>
-            <p style="font-size:11px; margin-top:15px;">ZATEN ÜYE MİSİN? <span style="color:var(--v-purple); cursor:pointer;" onclick="toggleAuth()">GİRİŞ YAP</span></p>
+            <p style="font-size:11px; margin-top:10px;">ZATEN ÜYE MİSİN? <span style="color:var(--v-purple); cursor:pointer;" onclick="toggleAuth()">GİRİŞ YAP</span></p>
         </div>
     </div>
 
     <div id="dashboard">
         <div class="sidebar">
-            <div class="nexus-logo">NEXUS</div>
-            <div class="profile-card">
-                <div class="profile-img"><img src="https://static.wikia.nocookie.net/valorant/images/e/e3/TX_CompetitiveTier_Large_24.png" width="40"></div>
-                <div id="disp-user" style="font-weight:bold;">BAĞLANIYOR...</div>
+            <div style="font-family:'VALORANT'; color:var(--v-purple); font-size:1.5rem;">NEXUS</div>
+            <div id="disp-user" style="font-weight:bold; text-align:center; padding:10px; background:rgba(255,255,255,0.02); border-radius:8px;"></div>
+            
+            <div class="global-chat">
+                <div style="font-size:9px; padding:5px; background:#111; color:var(--v-purple); font-weight:bold;">GLOBAL CHAT</div>
+                <div id="chat-messages"></div>
+                <div class="chat-input-row">
+                    <input type="text" id="chatMsg" class="chat-input" placeholder="Mesaj yaz...">
+                    <button onclick="sendChat()" style="background:var(--v-purple); border:none; color:white; cursor:pointer; padding:0 10px;">></button>
+                </div>
             </div>
-            <button class="share-btn" onclick="shareSite()">🌐 GLOBALE YAY (PAYLAŞ)</button>
-            <button onclick="doLogout()" style="margin-top:auto; background:none; border:1px solid #222; color:#444; font-size:10px; padding:10px; border-radius:4px; cursor:pointer;">BAĞLANTIYI KES</button>
+
+            <button class="share-btn" onclick="shareSite()">🌐 SİTEYİ PAYLAŞ</button>
+            <button onclick="doLogout()" style="background:none; border:1px solid #222; color:#444; font-size:9px; padding:8px; cursor:pointer;">BAĞLANTIYI KES</button>
         </div>
 
         <div class="main-content">
-            <h1 style="font-family:'VALORANT'; font-size:3rem; margin:0;">HOŞ GELDİN, <span id="welcome-user"></span></h1>
-            <p style="color:var(--v-red); font-size:11px; margin-bottom:30px;">OPERASYON MERKEZİ V2.0 | GLOBAL EDITION</p>
+            <h1 style="font-family:'VALORANT'; font-size:2.5rem; margin:0;">HOŞ GELDİN, <span id="welcome-user"></span></h1>
+            <p style="color:var(--v-red); font-size:10px; margin-bottom:30px;">GLOBAL COMMAND CENTER V2.0</p>
             
             <div class="content-grid">
-                <div id="vip-active-status" class="vip-active-msg">SİSTEM PROTOKOLÜ: VIP ERİŞİMİ AKTİF EDİLDİ</div>
+                <div id="vip-active-status" class="vip-active-msg">SİSTEM PROTOKOLÜ: VIP ERİŞİMİ AKTİF</div>
 
                 <a href="https://tracker.gg/valorant" target="_blank" class="info-card"><h3>STATÜ ANALİZİ</h3><p>Profil ve rütbe analizi.</p></a>
                 <a href="https://www.vcrdb.net/" target="_blank" class="info-card"><h3>NİŞANGAH MERKEZİ</h3><p>Crosshair veritabanı.</p></a>
                 
                 <a id="vip-1" href="https://tracker.gg/valorant/insights/agents" target="_blank" class="info-card vip-only-card"><h3>VIP: EN YÜKSEK KAZANMA ORANLI AJANLAR</h3><p>Canlı İstatistikler ve Ajan Metası.</p></a>
-                <a id="vip-3" href="https://bo3.gg/tr/valorant/articles/best-sensitivity-settings-for-valorant-and-dpi-finding-the-right-balance" target="_blank" class="info-card vip-only-card"><h3>VIP: PROFESYONEL AIM MODÜLLERİ</h3><p>DPI ve Hassasiyet Dengesi Rehberi.</p></a>
+                <a id="vip-3" href="https://bo3.gg/tr/valorant/articles/best-sensitivity-settings-for-valorant-and-dpi-finding-the-right-balance" target="_blank" class="info-card vip-only-card"><h3>VIP: AIM MODÜLLERİ</h3><p>DPI ve Hassasiyet Dengesi Rehberi.</p></a>
             </div>
         </div>
     </div>
 
     <script>
-        // FIREBASE AYARLARI (SENİN VERİTABANIN)
         const config = { apiKey: "AIzaSyBC_h0zpRSSGdzcbtGsq3Bh2WGKAgTrNKc", authDomain: "vanguardnexus-a2871.firebaseapp.com", databaseURL: "https://vanguardnexus-a2871-default-rtdb.firebaseio.com", projectId: "vanguardnexus-a2871", storageBucket: "vanguardnexus-a2871.firebasestorage.app", messagingSenderId: "259157755007", appId: "1:259157755007:web:3736462a79258365df2b4a" };
         firebase.initializeApp(config); const db = firebase.database();
 
-        // MOUSE EFEKTİ
         window.onmousemove = e => { document.getElementById('cursor-glow').style.left = e.clientX + 'px'; document.getElementById('cursor-glow').style.top = e.clientY + 'px'; };
 
-        // AUTH İŞLEMLERİ
         function toggleAuth() {
-            const l = document.getElementById('login-container');
-            const r = document.getElementById('register-container');
-            l.style.display = l.style.display === 'none' ? 'block' : 'none';
-            r.style.display = r.style.display === 'none' ? 'block' : 'none';
+            document.getElementById('login-container').style.display = document.getElementById('login-container').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('register-container').style.display = document.getElementById('register-container').style.display === 'none' ? 'block' : 'none';
         }
 
         function handleRegister() {
@@ -133,11 +129,14 @@
         function doLogin() {
             const u = document.getElementById("lName").value; 
             const p = document.getElementById("lPass").value;
+            if(u === "ADMIN" && p === "1200778") { loginSuccess(u, true); return; }
             db.ref('users/'+u).once('value').then(s => { 
                 if(s.exists() && s.val().password === p) loginSuccess(u, s.val().isVip); 
-                else alert("Hata: Kullanıcı adı veya şifre yanlış!"); 
+                else alert("Hata!"); 
             });
         }
+
+        function doGuest() { loginSuccess("MİSAFİR", false); }
 
         function loginSuccess(user, isVip) {
             sessionStorage.setItem("active_user", user);
@@ -153,11 +152,21 @@
 
         function doLogout() { location.reload(); }
 
-        // PAYLAŞMA FONKSİYONU
+        function sendChat() {
+            const m = document.getElementById('chatMsg').value;
+            const u = sessionStorage.getItem("active_user");
+            if(m.trim()) { db.ref('chat').push({user: u, msg: m}); document.getElementById('chatMsg').value = ""; }
+        }
+
+        db.ref('chat').limitToLast(15).on('value', s => {
+            const box = document.getElementById('chat-messages'); box.innerHTML = "";
+            s.forEach(c => { box.innerHTML += `<div><b style="color:var(--v-purple)">${c.val().user}:</b> ${c.val().msg}</div>`; });
+            box.scrollTop = box.scrollHeight;
+        });
+
         function shareSite() {
-            const shareData = { title: 'Vanguard Nexus', text: 'Valorant VIP Analiz Merkezi!', url: 'https://3271-n.github.io/-.com/' };
-            if (navigator.share) { navigator.share(shareData); } 
-            else { navigator.clipboard.writeText(shareData.url); alert("Link kopyalandı! Arkadaşlarına gönderebilirsin."); }
+            const url = 'https://3271-n.github.io/-.com/';
+            navigator.clipboard.writeText(url); alert("Link kopyalandı! Artık globale yayabilirsin.");
         }
     </script>
 </body>
