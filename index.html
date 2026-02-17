@@ -19,20 +19,11 @@
         .g-cyan { background: linear-gradient(to right, #fff, var(--v-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .g-pink { background: linear-gradient(to right, #fff, var(--v-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* VIP FİYAT ETİKETİ STİLİ */
         .vip-price-tag {
             background: linear-gradient(45deg, rgba(147, 51, 234, 0.2), rgba(255, 204, 0, 0.1));
-            border: 1px solid var(--v-gold);
-            color: var(--v-gold);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-family: 'VALORANT';
-            font-size: 16px;
-            display: inline-block;
-            margin: 15px 0;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-            animation: pulse 2s infinite;
-            letter-spacing: 2px;
+            border: 1px solid var(--v-gold); color: var(--v-gold); padding: 10px 20px;
+            border-radius: 50px; font-family: 'VALORANT'; font-size: 16px; display: inline-block;
+            margin: 15px 0; text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); animation: pulse 2s infinite; letter-spacing: 2px;
         }
 
         @keyframes pulse {
@@ -43,9 +34,8 @@
 
         .neon-warning {
             color: #ff3e3e; font-family: 'VALORANT'; font-size: 13px;
-            text-shadow: 0 0 10px rgba(255, 62, 62, 0.8);
-            border: 1px solid rgba(255, 62, 62, 0.3); padding: 10px;
-            border-radius: 5px; background: rgba(255, 0, 0, 0.05); margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 62, 62, 0.8); border: 1px solid rgba(255, 62, 62, 0.3);
+            padding: 10px; border-radius: 5px; background: rgba(255, 0, 0, 0.05); margin-bottom: 15px;
         }
 
         .insta-link {
@@ -69,6 +59,9 @@
         .chat-input { flex: 1; background: transparent; border: none; color: white; outline: none; padding: 8px; font-size: 12px; }
 
         .btn-vanguard { background: var(--v-purple); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-family: 'VALORANT'; transition: 0.3s; width: 100%; }
+        .btn-music { background: rgba(255,255,255,0.05); color: var(--v-cyan); border: 1px solid #222; padding: 10px; border-radius: 8px; font-family: 'VALORANT'; font-size: 12px; cursor: pointer; transition: 0.3s; }
+        .btn-music:hover { background: var(--v-cyan); color: black; box-shadow: 0 0 15px var(--v-cyan); }
+        
         .btn-auto { padding: 10px; font-size: 9px; border: 1px solid #222; background: transparent; color: #555; cursor: pointer; border-radius: 5px; flex: 1; margin: 2px; }
         .btn-auto.active { background: var(--v-green); color: white; border-color: var(--v-green); }
 
@@ -83,17 +76,15 @@
 
     <div id="cursor-glow"></div>
     <div id="bg-image"></div>
+    <audio id="bgMusic" loop src="https://files.catbox.moe/97p877.mp3"></audio>
 
     <div id="vip-overlay" class="modal-overlay">
         <div class="vip-modal">
             <h2 class="g-pink" style="font-family:'VALORANT'; margin-bottom:5px;">VIP PANEL</h2>
             <a href="https://www.instagram.com/ahmet_57z" target="_blank" class="insta-link">@ahmet_57z</a>
-            
             <br>
             <div class="vip-price-tag">VIP OLMAK | 10TL |</div>
-            
             <div id="guest-msg" style="display:none;" class="neon-warning">KAYITLI HESAP GEREKLİ!</div>
-            
             <div id="vip-input-area">
                 <input id="vCode" class="custom-input" placeholder="VN-KOD-GİRİN">
                 <button class="btn-vanguard" onclick="activateVip()">ONAYLA</button>
@@ -130,6 +121,8 @@
             <div class="g-cyan" style="font-family:'VALORANT'; font-size:1.5rem;">NEXUS</div>
             <div id="disp-user" style="color:var(--v-purple); font-weight:bold; text-align:center; font-size:12px; background:rgba(255,255,255,0.05); padding:5px; border-radius:5px;"></div>
             
+            <button class="btn-music" onclick="toggleMusic()">🎵 ŞARKI: KAPALI</button>
+
             <div class="global-chat">
                 <div id="chat-messages"></div>
                 <div class="chat-input-row">
@@ -162,6 +155,15 @@
         firebase.initializeApp(config); const db = firebase.database();
 
         let isAuto = localStorage.getItem("v_a") === "true";
+        let isPlaying = false;
+
+        function toggleMusic() {
+            const m = document.getElementById('bgMusic');
+            const b = document.querySelector('.btn-music');
+            if(isPlaying) { m.pause(); b.innerText = "🎵 ŞARKI: KAPALI"; } 
+            else { m.play(); b.innerText = "🎵 ŞARKI: ÇALIYOR"; }
+            isPlaying = !isPlaying;
+        }
 
         window.onload = () => {
             const sU = localStorage.getItem("v_u"), sP = localStorage.getItem("v_p");
@@ -246,14 +248,7 @@
         function logout() { localStorage.removeItem("v_u"); localStorage.removeItem("v_p"); location.reload(); }
         function doGuest() { loginSuccess("MİSAFİR", false); }
         function showReg(v) { document.getElementById('login-container').style.display = v ? 'none' : 'block'; document.getElementById('register-container').style.display = v ? 'block' : 'none'; }
-        
-        function openVip() { 
-            document.getElementById('vip-overlay').style.display = 'flex'; 
-            if(sessionStorage.getItem("user") === "MİSAFİR") { 
-                document.getElementById('guest-msg').style.display = 'block'; 
-                document.getElementById('vip-input-area').style.display = 'none'; 
-            } 
-        }
+        function openVip() { document.getElementById('vip-overlay').style.display = 'flex'; if(sessionStorage.getItem("user") === "MİSAFİR") { document.getElementById('guest-msg').style.display = 'block'; document.getElementById('vip-input-area').style.display = 'none'; } }
         function closeVip() { document.getElementById('vip-overlay').style.display = 'none'; }
         window.onmousemove = e => { const g = document.getElementById('cursor-glow'); g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'; };
     </script>
