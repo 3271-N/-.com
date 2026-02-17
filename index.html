@@ -20,6 +20,24 @@
         .g-orange { background: linear-gradient(to right, #fff, var(--v-orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .g-pink { background: linear-gradient(to right, #fff, var(--v-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
+        /* INSTAGRAM LINK STYLE */
+        .insta-link {
+            color: var(--v-pink);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            text-shadow: 0 0 10px rgba(255, 0, 234, 0.5);
+            letter-spacing: 1px;
+        }
+        .insta-link:hover {
+            color: white;
+            text-shadow: 0 0 15px var(--v-pink);
+            transform: scale(1.1);
+        }
+
         .info-card { background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; text-decoration: none; color: white; transition: 0.3s; display: block; backdrop-filter: blur(10px); }
         .info-card:hover { transform: translateY(-5px); border-color: #444; }
         .info-card h3 { font-family: 'VALORANT'; font-size: 18px; margin: 0 0 8px 0; }
@@ -29,7 +47,6 @@
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
-        /* CHAT STYLE */
         .global-chat { flex: 1; background: #050505; border: 1px solid #1a1a1a; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; margin: 10px 0; }
         #chat-messages { flex: 1; padding: 12px; overflow-y: auto; font-size: 11px; color: #ccc; line-height: 1.5; }
         .chat-input-row { display: flex; background: #080808; border-top: 1px solid #1a1a1a; padding: 5px; }
@@ -53,8 +70,11 @@
 
     <div id="vip-overlay" class="modal-overlay">
         <div class="vip-modal">
-            <h2 class="g-pink" style="font-family:'VALORANT';">VIP PANEL</h2>
+            <h2 class="g-pink" style="font-family:'VALORANT'; margin-bottom:5px;">VIP PANEL</h2>
+            <a href="https://www.instagram.com/ahmet_57z" target="_blank" class="insta-link">@ahmet_57z</a>
+            
             <div id="guest-msg" style="display:none; color:var(--v-orange); margin-bottom:20px; font-size:12px;">SADECE KAYITLI HESAPLAR VIP OLABİLİR!</div>
+            
             <div id="vip-input-area">
                 <input id="vCode" class="custom-input" placeholder="VN-KOD-GİRİN">
                 <button class="btn-vanguard" onclick="activateVip()">ONAYLA</button>
