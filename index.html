@@ -44,8 +44,9 @@
         }
         .insta-link:hover { color: white; transform: scale(1.1); }
 
-        .info-card { background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; text-decoration: none; color: white; transition: 0.3s; display: block; backdrop-filter: blur(10px); }
-        .info-card:hover { transform: translateY(-5px); border-color: #444; }
+        /* GÖREV TUŞLARI İÇİN POINTER */
+        .info-card { cursor: pointer; background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; text-decoration: none; color: white; transition: 0.3s; display: block; backdrop-filter: blur(10px); }
+        .info-card:hover { transform: translateY(-5px); border-color: var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.2); }
         .info-card h3 { font-family: 'VALORANT'; font-size: 18px; margin: 0 0 8px 0; }
 
         #dashboard { display: none; height: 100vh; width: 100%; }
@@ -62,9 +63,6 @@
         .btn-music { background: rgba(255,255,255,0.05); color: var(--v-cyan); border: 1px solid #222; padding: 10px; border-radius: 8px; font-family: 'VALORANT'; font-size: 12px; cursor: pointer; transition: 0.3s; }
         .btn-music:hover { background: var(--v-cyan); color: black; box-shadow: 0 0 15px var(--v-cyan); }
         
-        .btn-auto { padding: 10px; font-size: 9px; border: 1px solid #222; background: transparent; color: #555; cursor: pointer; border-radius: 5px; flex: 1; margin: 2px; }
-        .btn-auto.active { background: var(--v-green); color: white; border-color: var(--v-green); }
-
         #auth-screen { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: #000; }
         .custom-input { width: 100%; padding: 12px; background: #111; border: 1px solid #222; color: #fff; border-radius: 8px; margin-bottom: 12px; outline: none; text-align: center; box-sizing: border-box; }
         
@@ -76,7 +74,7 @@
 
     <div id="cursor-glow"></div>
     <div id="bg-image"></div>
-    <audio id="bgMusic" loop src="https://files.catbox.moe/97p877.mp3"></audio>
+    <audio id="bgMusic" loop src="https://files.catbox.moe/p9p4a3.mp3"></audio>
 
     <div id="vip-overlay" class="modal-overlay">
         <div class="vip-modal">
@@ -98,15 +96,10 @@
             <div class="g-cyan" style="font-family:'VALORANT'; font-size:2rem; margin-bottom:20px;">VANGUARD</div>
             <input type="text" id="lName" class="custom-input" placeholder="KULLANICI ADI">
             <input type="password" id="lPass" class="custom-input" placeholder="ŞİFRE">
-            <div style="display:flex; margin-bottom:15px;">
-                <button id="autoOn" class="btn-auto" onclick="toggleAuto(true)">OTO GİRİŞ: AÇIK</button>
-                <button id="autoOff" class="btn-auto active" onclick="toggleAuto(false)">KAPALI</button>
-            </div>
             <button class="btn-vanguard" onclick="doLogin()">GİRİŞ YAP</button>
             <button class="btn-vanguard" onclick="doGuest()" style="background:rgba(255,255,255,0.05); margin-top:10px; font-size:10px;">MİSAFİR</button>
             <p style="font-size:11px; margin-top:20px;">YENİ MİSİN? <span style="color:var(--v-purple); cursor:pointer;" onclick="showReg(true)">KAYIT OL</span></p>
         </div>
-
         <div id="register-container" style="display:none; text-align:center; background:#050505; padding:40px; border-radius:20px; border:1px solid #222; width:320px;">
             <div class="g-pink" style="font-family:'VALORANT'; font-size:2rem; margin-bottom:20px;">KAYDOL</div>
             <input type="text" id="rName" class="custom-input" placeholder="KULLANICI ADI">
@@ -139,12 +132,12 @@
 
         <div class="main-content">
             <div class="content-grid" id="main-grid">
-                <div class="info-card"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları.</p></div>
-                <div class="info-card"><h3 class="g-cyan">NİŞANGAH</h3><p>Crosshair kodları.</p></div>
-                <div class="info-card"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Taktik rehberi.</p></div>
-                <div class="info-card"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Yetenek kullanımı.</p></div>
-                <div class="info-card"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve ok noktaları.</p></div>
-                <div class="info-card"><h3 class="g-pink">ESPORT</h3><p>Canlı skorlar.</p></div>
+                <div class="info-card" onclick="openTask('STATÜ')"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları ve rütbe takibi.</p></div>
+                <div class="info-card" onclick="openTask('NİŞANGAH')"><h3 class="g-cyan">NİŞANGAH</h3><p>Profesyonel oyuncu crosshair kodları.</p></div>
+                <div class="info-card" onclick="openTask('HARİTALAR')"><h3 style="color:var(--v-orange)">HARİTALAR</h3><p>Harita stratejileri ve taktikler.</p></div>
+                <div class="info-card" onclick="openTask('AJANLAR')"><h3 style="color:var(--v-orange)">AJANLAR</h3><p>Ajan yetenekleri ve combo rehberi.</p></div>
+                <div class="info-card" onclick="openTask('LINEUPS')"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve görüş oku noktaları.</p></div>
+                <div class="info-card" onclick="openTask('ESPORT')"><h3 class="g-pink">ESPORT</h3><p>Anlık turnuva sonuçları ve haberler.</p></div>
                 <div id="vip-cards-container" style="display: contents;"></div>
             </div>
         </div>
@@ -154,7 +147,6 @@
         const config = { apiKey: "AIzaSyBC_h0zpRSSGdzcbtGsq3Bh2WGKAgTrNKc", authDomain: "vanguardnexus-a2871.firebaseapp.com", databaseURL: "https://vanguardnexus-a2871-default-rtdb.firebaseio.com", projectId: "vanguardnexus-a2871", storageBucket: "vanguardnexus-a2871.firebasestorage.app", messagingSenderId: "259157755007", appId: "1:259157755007:web:3736462a79258365df2b4a" };
         firebase.initializeApp(config); const db = firebase.database();
 
-        let isAuto = localStorage.getItem("v_a") === "true";
         let isPlaying = false;
 
         function toggleMusic() {
@@ -165,35 +157,17 @@
             isPlaying = !isPlaying;
         }
 
-        window.onload = () => {
-            const sU = localStorage.getItem("v_u"), sP = localStorage.getItem("v_p");
-            if(isAuto && sU && sP) {
-                if(sU === "ADMIN" && sP === "1200778") { loginSuccess(sU, true); return; }
-                db.ref('users/'+sU).once('value').then(s => {
-                    if(s.exists() && s.val().password === sP) loginSuccess(sU, s.val().isVip);
-                });
-            }
-        };
-
-        function toggleAuto(v) {
-            isAuto = v;
-            document.getElementById('autoOn').classList.toggle('active', v);
-            document.getElementById('autoOff').classList.toggle('active', !v);
-            localStorage.setItem("v_a", v);
+        // 6 TUŞUN GÖREVLERİ
+        function openTask(type) {
+            alert(type + " Modülü Başlatılıyor... Veriler çekiliyor.");
         }
 
         function doLogin() {
-            const u = document.getElementById("lName").value.trim();
-            const p = document.getElementById("lPass").value.trim();
-            if(u === "ADMIN" && p === "1200778") { 
-                if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
-                loginSuccess(u, true); return; 
-            }
+            const u = document.getElementById("lName").value.trim(), p = document.getElementById("lPass").value.trim();
+            if(u === "ADMIN" && p === "1200778") { loginSuccess(u, true); return; }
             db.ref('users/'+u).once('value').then(s => {
-                if(s.exists() && s.val().password === p) {
-                    if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
-                    loginSuccess(u, s.val().isVip);
-                } else alert("Hata!");
+                if(s.exists() && s.val().password === p) loginSuccess(u, s.val().isVip);
+                else alert("Giriş Başarısız!");
             });
         }
 
@@ -205,14 +179,14 @@
             if(vip) {
                 document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:10px; background:rgba(34,197,94,0.1);">VIP AKTİF</div>';
                 document.getElementById('vip-cards-container').innerHTML = `
-                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
-                        <h3 class="g-pink">VIP: META</h3><p>Gizli win taktikleri.</p>
+                    <div class="info-card" onclick="openTask('VIP META')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                        <h3 class="g-pink">VIP: META</h3><p>Gizli kazanma stratejileri.</p>
                     </div>
-                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
-                        <h3 class="g-pink">VIP: SKINS</h3><p>Özel skin önizlemeleri.</p>
+                    <div class="info-card" onclick="openTask('VIP SKINS')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                        <h3 class="g-pink">VIP: SKINS</h3><p>Görselleştirilmiş skin önizleme.</p>
                     </div>
-                    <div class="info-card" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
-                        <h3 class="g-pink">VIP: AIM</h3><p>Radiant DPI ayarları.</p>
+                    <div class="info-card" onclick="openTask('VIP AIM')" style="border:1px solid var(--v-purple); box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);">
+                        <h3 class="g-pink">VIP: AIM</h3><p>Özel hassasiyet ayarları.</p>
                     </div>
                 `;
             }
@@ -232,20 +206,16 @@
         function activateVip() {
             const code = document.getElementById('vCode').value, u = sessionStorage.getItem("user");
             if(code === "VN-9928-XQ71-PL00" && u !== "MİSAFİR") {
-                db.ref('users/'+u).update({isVip:true}).then(() => { alert("VIP BAŞARIYLA AKTİF EDİLDİ!"); location.reload(); });
-            } else alert("Kod Yanlış!");
+                db.ref('users/'+u).update({isVip:true}).then(() => { alert("VIP AKTİF!"); location.reload(); });
+            } else alert("Geçersiz Kod!");
         }
 
         function handleRegister() {
             const u = document.getElementById('rName').value.trim(), p = document.getElementById('rPass').value.trim();
-            if(u && p) {
-                db.ref('users/'+u).set({password:p, isVip:false}).then(() => {
-                    alert("Kayıt Başarılı!"); showReg(false);
-                });
-            }
+            if(u && p) db.ref('users/'+u).set({password:p, isVip:false}).then(() => { alert("Başarılı!"); showReg(false); });
         }
 
-        function logout() { localStorage.removeItem("v_u"); localStorage.removeItem("v_p"); location.reload(); }
+        function logout() { location.reload(); }
         function doGuest() { loginSuccess("MİSAFİR", false); }
         function showReg(v) { document.getElementById('login-container').style.display = v ? 'none' : 'block'; document.getElementById('register-container').style.display = v ? 'block' : 'none'; }
         function openVip() { document.getElementById('vip-overlay').style.display = 'flex'; if(sessionStorage.getItem("user") === "MİSAFİR") { document.getElementById('guest-msg').style.display = 'block'; document.getElementById('vip-input-area').style.display = 'none'; } }
