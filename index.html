@@ -17,10 +17,8 @@
         #cursor-glow { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(147, 51, 234, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 
         .g-cyan { background: linear-gradient(to right, #fff, var(--v-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .g-orange { background: linear-gradient(to right, #fff, var(--v-orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .g-pink { background: linear-gradient(to right, #fff, var(--v-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* INSTAGRAM LINK STYLE */
         .insta-link {
             color: var(--v-pink);
             text-decoration: none;
@@ -29,14 +27,9 @@
             display: inline-block;
             margin-bottom: 20px;
             transition: 0.3s;
-            text-shadow: 0 0 10px rgba(255, 0, 234, 0.5);
-            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 0, 234, 0.6);
         }
-        .insta-link:hover {
-            color: white;
-            text-shadow: 0 0 15px var(--v-pink);
-            transform: scale(1.1);
-        }
+        .insta-link:hover { color: white; transform: scale(1.1); text-shadow: 0 0 15px var(--v-pink); }
 
         .info-card { background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; text-decoration: none; color: white; transition: 0.3s; display: block; backdrop-filter: blur(10px); }
         .info-card:hover { transform: translateY(-5px); border-color: #444; }
@@ -48,7 +41,7 @@
         .content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
         .global-chat { flex: 1; background: #050505; border: 1px solid #1a1a1a; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; margin: 10px 0; }
-        #chat-messages { flex: 1; padding: 12px; overflow-y: auto; font-size: 11px; color: #ccc; line-height: 1.5; }
+        #chat-messages { flex: 1; padding: 12px; overflow-y: auto; font-size: 11px; color: #ccc; }
         .chat-input-row { display: flex; background: #080808; border-top: 1px solid #1a1a1a; padding: 5px; }
         .chat-input { flex: 1; background: transparent; border: none; color: white; outline: none; padding: 8px; font-size: 12px; }
 
@@ -73,11 +66,11 @@
             <h2 class="g-pink" style="font-family:'VALORANT'; margin-bottom:5px;">VIP PANEL</h2>
             <a href="https://www.instagram.com/ahmet_57z" target="_blank" class="insta-link">@ahmet_57z</a>
             
-            <div id="guest-msg" style="display:none; color:var(--v-orange); margin-bottom:20px; font-size:12px;">SADECE KAYITLI HESAPLAR VIP OLABİLİR!</div>
+            <div id="guest-msg" style="display:none; color:var(--v-orange); margin-bottom:20px; font-size:12px;">KAYITLI HESAP GEREKLİ!</div>
             
             <div id="vip-input-area">
                 <input id="vCode" class="custom-input" placeholder="VN-KOD-GİRİN">
-                <button class="btn-vanguard" onclick="activateVip()">ONAYLA</button>
+                <button class="btn-vanguard" onclick="activateVip()">AKTİF ET</button>
             </div>
             <button onclick="closeVip()" style="background:none; border:none; color:#444; margin-top:20px; cursor:pointer;">KAPAT</button>
         </div>
@@ -94,14 +87,15 @@
             </div>
             <button class="btn-vanguard" onclick="doLogin()">GİRİŞ YAP</button>
             <button class="btn-vanguard" onclick="doGuest()" style="background:rgba(255,255,255,0.05); margin-top:10px; font-size:10px;">MİSAFİR</button>
-            <p style="font-size:11px; margin-top:20px;">HESABIN YOK MU? <span style="color:var(--v-purple); cursor:pointer;" onclick="showReg(true)">KAYIT OL</span></p>
+            <p style="font-size:11px; margin-top:20px;">YENİ HESAP? <span style="color:var(--v-purple); cursor:pointer;" onclick="showReg(true)">KAYIT OL</span></p>
         </div>
+
         <div id="register-container" style="display:none; text-align:center; background:#050505; padding:40px; border-radius:20px; border:1px solid #222; width:320px;">
-            <div class="g-orange" style="font-family:'VALORANT'; font-size:2rem; margin-bottom:20px;">KAYIT OL</div>
+            <div class="g-pink" style="font-family:'VALORANT'; font-size:2rem; margin-bottom:20px;">KAYDOL</div>
             <input type="text" id="rName" class="custom-input" placeholder="KULLANICI ADI">
             <input type="password" id="rPass" class="custom-input" placeholder="ŞİFRE">
-            <button class="btn-vanguard" onclick="handleRegister()">KAYDOL</button>
-            <p style="font-size:11px; margin-top:20px;">ÜYE MİSİN? <span style="color:var(--v-purple); cursor:pointer;" onclick="showReg(false)">GİRİŞ YAP</span></p>
+            <button class="btn-vanguard" onclick="handleRegister()">KAYDI TAMAMLA</button>
+            <p style="font-size:11px; margin-top:20px;">HESABIN VAR MI? <span style="color:var(--v-purple); cursor:pointer;" onclick="showReg(false)">GİRİŞ YAP</span></p>
         </div>
     </div>
 
@@ -113,7 +107,7 @@
             <div class="global-chat">
                 <div id="chat-messages"></div>
                 <div class="chat-input-row">
-                    <input type="text" id="chatMsg" class="chat-input" placeholder="Mesaj yaz...">
+                    <input type="text" id="chatMsg" class="chat-input" placeholder="Sohbet et...">
                     <button onclick="sendChat()" style="background:none; border:none; color:var(--v-purple); cursor:pointer; font-weight:bold; padding:0 10px;">></button>
                 </div>
             </div>
@@ -121,17 +115,15 @@
             <div id="vip-action-area">
                 <button id="vip-upgrade-btn" onclick="openVip()" class="btn-vanguard" style="background:linear-gradient(45deg, #9333ea, #ff00ea);">VIP YÜKSELT</button>
             </div>
-            <button onclick="logout()" style="background:none; border:none; color:#333; cursor:pointer; font-size:10px;">ÇIKIŞ</button>
+            <button onclick="logout()" style="background:none; border:none; color:#333; cursor:pointer; font-size:10px;">OTURUMU KAPAT</button>
         </div>
 
         <div class="main-content">
             <div class="content-grid" id="main-grid">
-                <div class="info-card"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profil detayları.</p></div>
-                <div class="info-card"><h3 class="g-cyan">NİŞANGAH</h3><p>Crosshair kodları.</p></div>
-                <div class="info-card"><h3 class="g-orange">HARİTALAR</h3><p>Taktik rehberi.</p></div>
-                <div class="info-card"><h3 class="g-orange">AJANLAR</h3><p>Yetenek kullanımı.</p></div>
-                <div class="info-card"><h3 class="g-pink">LINEUPS</h3><p>Ok ve zehir noktaları.</p></div>
-                <div class="info-card"><h3 class="g-pink">ESPORT</h3><p>Canlı sonuçlar.</p></div>
+                <div class="info-card"><h3>STATÜ</h3><p>Profil detayları.</p></div>
+                <div class="info-card"><h3>NİŞANGAH</h3><p>Crosshair kodları.</p></div>
+                <div class="info-card"><h3>HARİTALAR</h3><p>Taktik rehberi.</p></div>
+                <div class="info-card"><h3>AJANLAR</h3><p>Yetenek kullanımı.</p></div>
                 <div id="vip-cards-container" style="display: contents;"></div>
             </div>
         </div>
@@ -141,12 +133,14 @@
         const config = { apiKey: "AIzaSyBC_h0zpRSSGdzcbtGsq3Bh2WGKAgTrNKc", authDomain: "vanguardnexus-a2871.firebaseapp.com", databaseURL: "https://vanguardnexus-a2871-default-rtdb.firebaseio.com", projectId: "vanguardnexus-a2871", storageBucket: "vanguardnexus-a2871.firebasestorage.app", messagingSenderId: "259157755007", appId: "1:259157755007:web:3736462a79258365df2b4a" };
         firebase.initializeApp(config); const db = firebase.database();
 
-        let isAuto = false;
+        let isAuto = localStorage.getItem("v_a") === "true";
 
         window.onload = () => {
-            const sU = localStorage.getItem("v_u"), sP = localStorage.getItem("v_p"), sA = localStorage.getItem("v_a");
-            if(sA === "true" && sU && sP) {
+            const sU = localStorage.getItem("v_u"), sP = localStorage.getItem("v_p");
+            if(isAuto && sU && sP) {
+                // ADMIN (Tam eşleşme - Sadece büyük harf)
                 if(sU === "ADMIN" && sP === "1200778") { loginSuccess(sU, true); return; }
+                
                 db.ref('users/'+sU).once('value').then(s => {
                     if(s.exists() && s.val().password === sP) loginSuccess(sU, s.val().isVip);
                 });
@@ -161,31 +155,35 @@
         }
 
         function doLogin() {
-            const u = document.getElementById("lName").value, p = document.getElementById("lPass").value;
+            const u = document.getElementById("lName").value.trim();
+            const p = document.getElementById("lPass").value.trim();
+
+            // SADECE BÜYÜK HARFLE "ADMIN" GİRİŞİNE İZİN VERİR
             if(u === "ADMIN" && p === "1200778") { 
                 if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
-                loginSuccess(u, true); 
-                return; 
+                loginSuccess(u, true); return; 
             }
+
             db.ref('users/'+u).once('value').then(s => {
-                if(s.exists() && s.val().password === p) {
-                    if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
-                    loginSuccess(u, s.val().isVip);
-                } else alert("Hatalı Giriş!");
-            });
+                if(s.exists()) {
+                    if(s.val().password === p) {
+                        if(isAuto) { localStorage.setItem("v_u", u); localStorage.setItem("v_p", p); }
+                        loginSuccess(u, s.val().isVip);
+                    } else alert("Hata: Şifre yanlış!");
+                } else alert("Hata: Kullanıcı bulunamadı!");
+            }).catch(e => alert("Bağlantı Hatası!"));
         }
 
         function loginSuccess(u, vip) {
             sessionStorage.setItem("user", u);
             document.getElementById("auth-screen").style.display = "none";
             document.getElementById("dashboard").style.display = "flex";
-            document.getElementById("disp-user").innerText = u.toUpperCase();
+            document.getElementById("disp-user").innerText = u; // Kullanıcı adını olduğu gibi gösterir
             if(vip) {
-                document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:12px; background:rgba(34,197,94,0.1);">VIP MÜŞTERİMİZ</div>';
+                document.getElementById('vip-action-area').innerHTML = '<div style="color:var(--v-green); font-family:\'VALORANT\'; text-align:center; padding:10px; border:1px solid var(--v-green); border-radius:8px; font-size:10px;">VIP AKTİF</div>';
                 document.getElementById('vip-cards-container').innerHTML = `
-                    <div class="info-card" style="border-color:var(--v-purple)"><h3 class="g-pink">VIP: META</h3><p>En iyi stratejiler.</p></div>
-                    <div class="info-card" style="border-color:var(--v-purple)"><h3 class="g-pink">VIP: SKINS</h3><p>Skin arşivi.</p></div>
-                    <div class="info-card" style="border-color:var(--v-purple)"><h3 class="g-pink">VIP: AIM</h3><p>Aim geliştirme.</p></div>
+                    <div class="info-card" style="border-color:var(--v-purple)"><h3>VIP: META</h3><p>Görünmez stratejiler.</p></div>
+                    <div class="info-card" style="border-color:var(--v-purple)"><h3>VIP: AIM</h3><p>Aim geliştirme.</p></div>
                 `;
             }
         }
@@ -195,24 +193,25 @@
             if(m.trim() && u) { db.ref('chat').push({u: u, m: m}); document.getElementById('chatMsg').value = ""; }
         }
 
-        db.ref('chat').limitToLast(20).on('value', s => {
+        db.ref('chat').limitToLast(15).on('value', s => {
             const b = document.getElementById('chat-messages'); b.innerHTML = "";
             s.forEach(c => { b.innerHTML += `<div><b style="color:var(--v-purple)">${c.val().u}:</b> ${c.val().m}</div>`; });
             b.scrollTop = b.scrollHeight;
         });
 
-        function activateVip() {
-            const code = document.getElementById('vCode').value, u = sessionStorage.getItem("user");
-            if(code === "VN-9928-XQ71-PL00" && u !== "MİSAFİR") {
-                db.ref('users/'+u).update({isVip:true}).then(() => { alert("VIP AKTİF!"); location.reload(); });
-            } else alert("Geçersiz Kod veya Misafir Girişi!");
+        function handleRegister() {
+            const u = document.getElementById('rName').value.trim(), p = document.getElementById('rPass').value.trim();
+            if(u && p) {
+                db.ref('users/'+u).set({password:p, isVip:false}).then(() => {
+                    alert("Kayıt Başarılı!"); showReg(false);
+                });
+            }
         }
 
-        function logout() { localStorage.clear(); location.reload(); }
+        function logout() { localStorage.removeItem("v_u"); localStorage.removeItem("v_p"); location.reload(); }
         function doGuest() { loginSuccess("MİSAFİR", false); }
         function showReg(v) { document.getElementById('login-container').style.display = v ? 'none' : 'block'; document.getElementById('register-container').style.display = v ? 'block' : 'none'; }
-        function handleRegister() { const u = document.getElementById('rName').value, p = document.getElementById('rPass').value; if(u && p) db.ref('users/'+u).set({password:p, isVip:false}).then(() => { alert("Kayıt Tamam!"); showReg(false); }); }
-        function openVip() { document.getElementById('vip-overlay').style.display = 'flex'; const u = sessionStorage.getItem("user"); if(u === "MİSAFİR") { document.getElementById('guest-msg').style.display = 'block'; document.getElementById('vip-input-area').style.display = 'none'; } }
+        function openVip() { document.getElementById('vip-overlay').style.display = 'flex'; if(sessionStorage.getItem("user") === "MİSAFİR") { document.getElementById('guest-msg').style.display='block'; document.getElementById('vip-input-area').style.display='none'; } }
         function closeVip() { document.getElementById('vip-overlay').style.display = 'none'; }
         window.onmousemove = e => { const g = document.getElementById('cursor-glow'); g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'; };
     </script>
