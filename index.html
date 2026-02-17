@@ -10,77 +10,65 @@
         @import url('https://fonts.cdnfonts.com/css/valorant');
         :root { 
             --v-purple: #9333ea; --v-red: #ff4655; --v-green: #22c55e;
-            --bg-dark: #020202; --card-bg: rgba(15, 15, 15, 0.7);
+            --v-cyan: #00f2ff; --v-orange: #ff8c00; --v-pink: #ff00ea;
+            --bg-dark: #0a0a0a; --card-bg: rgba(20, 20, 20, 0.8);
         }
         body { font-family: 'Segoe UI', sans-serif; color: #f0f0f0; margin: 0; background: var(--bg-dark); height: 100vh; overflow: hidden; }
-        #bg-image { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #110022 0%, #000 100%); opacity: 0.8; }
-        #cursor-glow { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(147, 51, 234, 0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+        #bg-image { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #1a0033 0%, #000 100%); opacity: 0.9; }
+        #cursor-glow { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(147, 51, 234, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 
-        /* MUHTEŞEM BUTON VE KART EFEKTLERİ */
+        /* GRADIENT BAŞLIKLAR (GÖRSELDEKİ GİBİ) */
+        .g-cyan { background: linear-gradient(to right, #fff, var(--v-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 5px rgba(0,242,255,0.5)); }
+        .g-orange { background: linear-gradient(to right, #fff, var(--v-orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 5px rgba(255,140,0,0.5)); }
+        .g-pink { background: linear-gradient(to right, #fff, var(--v-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 5px rgba(255,0,234,0.5)); }
+
+        /* KART TASARIMLARI */
         .info-card { 
-            background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 15px; padding: 25px; 
-            text-decoration: none; color: white; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            position: relative; overflow: hidden; backdrop-filter: blur(5px);
+            background: var(--card-bg); border: 1px solid #222; border-radius: 12px; padding: 25px; 
+            text-decoration: none; color: white; transition: all 0.4s ease; 
+            position: relative; overflow: hidden; backdrop-filter: blur(10px); display: block;
         }
         .info-card:hover { 
-            transform: translateY(-10px) scale(1.02); 
-            border-color: var(--v-purple); 
-            box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
-            background: rgba(20, 20, 20, 0.9);
+            transform: scale(1.03) translateY(-5px); 
+            border-color: #555; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            background: rgba(30, 30, 30, 0.9);
         }
-        .info-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: 0.5s;
-        }
-        .info-card:hover::before { left: 100%; }
+        .info-card h3 { font-family: 'VALORANT'; font-size: 20px; margin: 0 0 8px 0; letter-spacing: 1px; }
+        .info-card p { color: #888; margin: 0; font-size: 13px; }
 
-        .btn-vanguard { 
-            background: var(--v-purple); color: white; border: none; padding: 14px; width: 100%; 
-            border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'VALORANT'; 
-            transition: all 0.3s ease; position: relative; z-index: 1; overflow: hidden;
+        /* VIP PANEL & MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; backdrop-filter: blur(20px); }
+        .vip-modal { background: #050505; border: 2px solid var(--v-purple); border-radius: 25px; padding: 40px; text-align: center; width: 380px; box-shadow: 0 0 50px rgba(147, 51, 234, 0.3); }
+        
+        .insta-btn { 
+            display: inline-block; padding: 10px 20px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            border-radius: 10px; color: white; text-decoration: none; font-weight: bold; margin-bottom: 20px; transition: 0.3s;
         }
-        .btn-vanguard:hover { 
-            letter-spacing: 2px; transform: scale(1.05);
-            box-shadow: 0 0 20px var(--v-purple), 0 0 40px rgba(147, 51, 234, 0.4); 
-        }
+        .insta-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(220, 39, 67, 0.5); }
 
-        /* INSTAGRAM ADI PARLAMA EFEKTİ */
-        .insta-link {
-            text-decoration:none; color:#ff4655; font-weight:bold; font-size:20px; 
-            letter-spacing:1px; cursor:pointer; transition: 0.3s;
-            text-shadow: 0 0 10px rgba(255, 70, 85, 0.5);
-            animation: pulse-red 2s infinite;
-        }
-        @keyframes pulse-red {
-            0% { text-shadow: 0 0 5px var(--v-red); }
-            50% { text-shadow: 0 0 20px var(--v-red), 0 0 30px var(--v-red); }
-            100% { text-shadow: 0 0 5px var(--v-red); }
-        }
-
-        /* VIP BANNER EFEKTİ */
-        .vip-banner { 
-            grid-column: span 2; background: linear-gradient(90deg, #0a0a0a, #1a0b2e); 
-            border: 1px solid var(--v-purple); border-radius: 15px; padding: 25px; 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 20px; transition: 0.5s;
-        }
-        .vip-banner:hover { border-color: #fff; box-shadow: inset 0 0 20px rgba(147, 51, 234, 0.2); }
-
-        /* DİĞER STANDARTLAR */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 20000; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .vip-modal, .error-modal { background: #000; border: 1px solid var(--v-purple); border-radius: 20px; padding: 40px; text-align: center; width: 350px; }
-        .error-modal { border-color: var(--v-red); }
+        /* DASHBOARD YAPISI */
         #dashboard { display: none; height: 100vh; width: 100%; }
-        .sidebar { width: 280px; background: #000; border-right: 1px solid #111; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .global-chat { flex: 1; background: #050505; border: 1px solid #111; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
-        #chat-messages { flex: 1; padding: 10px; overflow-y: auto; font-size: 11px; color: #ccc; }
-        .main-content { flex: 1; padding: 30px 50px; overflow-y: auto; }
-        .content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .vip-only-card { border-color: var(--v-green) !important; display: none; }
+        .sidebar { width: 300px; background: #000; border-right: 1px solid #111; padding: 25px; display: flex; flex-direction: column; gap: 20px; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: rgba(0,0,0,0.3); }
+        .content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+
+        /* CHAT */
+        .global-chat { flex: 1; background: #050505; border: 1px solid #1a1a1a; border-radius: 15px; display: flex; flex-direction: column; overflow: hidden; }
+        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 12px; }
+        #chat-messages b { color: var(--v-purple); }
+        .chat-input-row { display: flex; padding: 10px; background: #080808; border-top: 1px solid #1a1a1a; }
+        .chat-input { flex: 1; background: transparent; border: none; color: white; outline: none; padding: 5px; }
+
+        /* BUTONLAR */
+        .btn-vanguard { 
+            background: var(--v-purple); color: white; border: none; padding: 15px; 
+            border-radius: 10px; font-weight: bold; cursor: pointer; font-family: 'VALORANT'; 
+            transition: 0.3s; width: 100%;
+        }
+        .btn-vanguard:hover { background: #a855f7; letter-spacing: 1px; box-shadow: 0 0 20px var(--v-purple); }
+        
         #auth-screen { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: #000; }
-        .login-box { background: #050505; padding: 40px; border-radius: 20px; width: 350px; text-align: center; border: 1px solid #1a1a1a; }
-        .custom-input { width: 100%; padding: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 8px; margin-bottom: 12px; outline: none; box-sizing: border-box; }
+        .custom-input { width: 100%; padding: 12px; background: #111; border: 1px solid #222; color: #fff; border-radius: 8px; margin-bottom: 12px; outline: none; text-align: center; }
     </style>
 </head>
 <body>
@@ -90,74 +78,56 @@
 
     <div id="vip-overlay" class="modal-overlay">
         <div class="vip-modal">
-            <h2 style="color:var(--v-purple); font-family:'VALORANT';">VIP PANEL</h2>
-            <p style="font-size: 11px; color: #888; margin-bottom: 20px;">KOD ALMAK İÇİN TIKLA:<br> 
-            <a href="https://www.instagram.com/ahmet_57z" target="_blank" class="insta-link">ahmet_57z</a></p>
-            <input id="vCode" class="custom-input" placeholder="VN-KOD-GİRİN" style="text-align:center;">
+            <h2 class="g-pink" style="font-family:'VALORANT'; margin-bottom:10px;">VIP ACCESS</h2>
+            <p style="color:#888; font-size:12px; margin-bottom:20px;">KOD ALMAK İÇİN YAZIN:</p>
+            <a href="https://www.instagram.com/ahmet_57z" target="_blank" class="insta-btn">@ahmet_57z</a>
+            
+            <input id="vCode" class="custom-input" placeholder="VN-XXXX-XXXX">
             <button class="btn-vanguard" onclick="activateVip()">KODU AKTİF ET</button>
-            <button onclick="closeVip()" style="background:none; border:none; color:#555; cursor:pointer; margin-top:10px;">KAPAT</button>
-        </div>
-    </div>
-
-    <div id="guest-error-overlay" class="modal-overlay">
-        <div class="error-modal">
-            <h2 style="color:var(--v-red); font-family:'VALORANT';">ERİŞİM ENGELLENDİ</h2>
-            <p style="color:#ccc; margin-bottom:25px;">VIP ÖZELLİKLER İÇİN KAYIT OLUN.</p>
-            <button class="btn-vanguard" style="background:var(--v-red)" onclick="doLogout()">KAYIT / GİRİŞ YAP</button>
-            <button onclick="closeGuestError()" style="background:none; border:none; color:#555; cursor:pointer; margin-top:10px;">VAZGEÇ</button>
+            <button onclick="closeVip()" style="background:none; border:none; color:#444; cursor:pointer; margin-top:15px; font-size:12px;">PENCEREYİ KAPAT</button>
         </div>
     </div>
 
     <div id="auth-screen">
-        <div class="login-box" id="login-container">
-            <div style="font-family:'VALORANT'; color:var(--v-purple); font-size:2rem; margin-bottom:20px;">VANGUARD</div>
+        <div class="login-box" id="login-container" style="text-align:center; background:#050505; padding:50px; border-radius:30px; border:1px solid #111;">
+            <div class="g-cyan" style="font-family:'VALORANT'; font-size:2.5rem; margin-bottom:30px;">VANGUARD</div>
             <input type="text" id="lName" class="custom-input" placeholder="KULLANICI ADI">
             <input type="password" id="lPass" class="custom-input" placeholder="ŞİFRE">
-            <button class="btn-vanguard" onclick="doLogin()">SİSTEME GİR</button>
-            <button class="btn-vanguard" onclick="doGuest()" style="background:rgba(255,255,255,0.03); border:1px solid #222; font-size:10px;">MİSAFİR GİRİŞİ</button>
-            <p style="font-size:11px; margin-top:10px;">YOK MU? <span style="color:var(--v-purple); cursor:pointer;" onclick="toggleAuth()">KAYIT OL</span></p>
-        </div>
-        <div class="login-box" id="register-container" style="display:none;">
-            <div style="font-family:'VALORANT'; color:var(--v-purple); font-size:2rem; margin-bottom:20px;">KAYIT OL</div>
-            <input type="text" id="rName" class="custom-input" placeholder="YENİ AD">
-            <input type="password" id="rPass" class="custom-input" placeholder="YENİ ŞİFRE">
-            <button class="btn-vanguard" onclick="handleRegister()">OLUŞTUR</button>
-            <p style="font-size:11px; margin-top:10px;">ÜYE MİSİN? <span style="color:var(--v-purple); cursor:pointer;" onclick="toggleAuth()">GİRİŞ YAP</span></p>
+            <button class="btn-vanguard" onclick="doLogin()">GİRİŞ YAP</button>
+            <button class="btn-vanguard" onclick="doGuest()" style="background:rgba(255,255,255,0.05); margin-top:10px; font-size:10px;">MİSAFİR OLARAK DEVAM ET</button>
         </div>
     </div>
 
     <div id="dashboard">
         <div class="sidebar">
-            <div style="font-family:'VALORANT'; color:var(--v-purple); font-size:1.5rem;">NEXUS</div>
-            <div id="disp-user" style="font-weight:bold; text-align:center; padding:10px; background:rgba(255,255,255,0.02); border-radius:8px;"></div>
+            <div class="g-cyan" style="font-family:'VALORANT'; font-size:1.8rem;">NEXUS</div>
+            <div id="disp-user" style="color:var(--v-purple); font-weight:bold; text-align:center;"></div>
+            
             <div class="global-chat">
                 <div id="chat-messages"></div>
                 <div class="chat-input-row">
-                    <input type="text" id="chatMsg" class="chat-input" placeholder="Mesaj...">
-                    <button onclick="sendChat()" style="background:var(--v-purple); border:none; color:white; cursor:pointer;">></button>
+                    <input type="text" id="chatMsg" class="chat-input" placeholder="Bir şeyler yaz...">
+                    <button onclick="sendChat()" style="background:none; border:none; color:var(--v-purple); cursor:pointer; font-weight:bold;">></button>
                 </div>
             </div>
-            <button onclick="doLogout()" style="background:none; border:1px solid #222; color:#444; font-size:9px; padding:8px; cursor:pointer;">ÇIKIŞ</button>
+            
+            <button onclick="openVip()" class="btn-vanguard" style="background:linear-gradient(45deg, #9333ea, #ff00ea);">VIP YÜKSELT</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:#333; cursor:pointer; font-size:10px;">OTURUMU KAPAT</button>
         </div>
 
         <div class="main-content">
-            <div id="vip-banner-box" class="vip-banner">
-                <div><h3 style="font-family:'VALORANT'; margin:0;">PREMIUM VIP ACCESS</h3><p style="color:#555; font-size:12px; margin:5px 0 0 0;">Özel modülleri aktif edin.</p></div>
-                <button onclick="openVip()" class="btn-vanguard" style="width:auto; padding:10px 30px; margin:0;">YÜKSELT</button>
-            </div>
-            <div id="vip-active-status" style="display:none; background:rgba(34,197,94,0.1); border:1px solid var(--v-green); border-radius:15px; padding:20px; text-align:center; color:var(--v-green); font-family:'VALORANT'; margin-bottom:20px;">VIP PROTOKOLÜ AKTİF</div>
-            
             <div class="content-grid">
-                <a href="https://tracker.gg/valorant" target="_blank" class="info-card"><h3>STATÜ ANALİZİ</h3><p>Profil analizi.</p></a>
-                <a href="https://www.vcrdb.net/" target="_blank" class="info-card"><h3>NİŞANGAH</h3><p>Crosshair veritabanı.</p></a>
-                <a href="https://playvalorant.com/en-us/maps/" target="_blank" class="info-card"><h3>HARİTALAR</h3><p>Harita rehberi.</p></a>
-                <a href="https://valorant.fandom.com/wiki/Agents" target="_blank" class="info-card"><h3>AJANLAR</h3><p>Yetenek detayları.</p></a>
-                <a href="https://strats.gg/valorant" target="_blank" class="info-card"><h3>LINEUPS</h3><p>Lineup taktikleri.</p></a>
-                <a href="https://www.vlr.gg/" target="_blank" class="info-card"><h3>ESPORT</h3><p>Canlı skorlar.</p></a>
+                <a href="#" class="info-card"><h3 class="g-cyan">STATÜ ANALİZİ</h3><p>Profilinizin detaylı rütbe analizi.</p></a>
+                <a href="#" class="info-card"><h3 class="g-cyan">NİŞANGAH</h3><p>En iyi oyuncuların crosshair kodları.</p></a>
+                
+                <a href="#" class="info-card"><h3 class="g-orange">HARİTALAR</h3><p>Tüm haritalar için taktik rehberi.</p></a>
+                <a href="#" class="info-card"><h3 class="g-orange">AJANLAR</h3><p>Yetenek kullanım uzmanlığı.</p></a>
+                
+                <a href="#" class="info-card"><h3 class="g-pink">LINEUPS</h3><p>Zehir ve ok atış noktaları.</p></a>
+                <a href="#" class="info-card"><h3 class="g-pink">ESPORT</h3><p>Dünya çapında canlı skorlar.</p></a>
 
-                <a id="vip-1" href="https://tracker.gg/valorant/insights/agents" target="_blank" class="info-card vip-only-card"><h3>VIP: META</h3><p>Kazanma oranları.</p></a>
-                <a id="vip-2" href="https://valorant.fandom.com/wiki/Skins" target="_blank" class="info-card vip-only-card"><h3>VIP: SKINS</h3><p>Tüm skin setleri.</p></a>
-                <a id="vip-3" href="https://bo3.gg/tr/valorant/articles/best-sensitivity-settings-for-valorant-and-dpi-finding-the-right-balance" target="_blank" class="info-card vip-only-card"><h3>VIP: AIM</h3><p>Pro DPI rehberi.</p></a>
+                <a id="vip-1" href="#" class="info-card vip-only-card" style="border-color:var(--v-green);"><h3 class="g-pink">VIP: META</h3><p>Kazanma oranı en yüksek taktikler.</p></a>
+                <a id="vip-2" href="#" class="info-card vip-only-card" style="border-color:var(--v-green);"><h3 class="g-pink">VIP: SKINS</h3><p>Tüm gizli skin animasyonları.</p></a>
             </div>
         </div>
     </div>
@@ -171,19 +141,47 @@
             glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; 
         };
 
-        function toggleAuth() { document.getElementById('login-container').style.display = document.getElementById('login-container').style.display==='none'?'block':'none'; document.getElementById('register-container').style.display = document.getElementById('register-container').style.display==='none'?'block':'none'; }
-        function handleRegister() { const u=document.getElementById('rName').value, p=document.getElementById('rPass').value; if(u && p) db.ref('users/'+u).set({password:p, isVip:false}).then(()=>alert("Başarılı!")); }
-        function doLogin() { const u=document.getElementById("lName").value, p=document.getElementById("lPass").value; if(u==="ADMIN"&&p==="1200778") { loginSuccess(u,true); return; } db.ref('users/'+u).once('value').then(s=>{ if(s.exists()&&s.val().password===p) loginSuccess(u,s.val().isVip); else alert("Hata!"); }); }
+        function doLogin() { 
+            const u=document.getElementById("lName").value, p=document.getElementById("lPass").value; 
+            if(u==="ADMIN" && p==="1200778") { loginSuccess(u,true); return; }
+            db.ref('users/'+u).once('value').then(s=>{ 
+                if(s.exists() && s.val().password===p) loginSuccess(u, s.val().isVip); 
+                else alert("Hatalı Giriş!"); 
+            }); 
+        }
         function doGuest() { loginSuccess("MİSAFİR", false); }
-        function loginSuccess(u, vip) { sessionStorage.setItem("active_user", u); document.getElementById("auth-screen").style.display="none"; document.getElementById("dashboard").style.display="flex"; document.getElementById("disp-user").innerText=u.toUpperCase(); if(vip) showVip(); }
-        function showVip() { document.getElementById('vip-banner-box').style.display='none'; document.getElementById('vip-active-status').style.display='block'; document.querySelectorAll('.vip-only-card').forEach(c=>c.style.display='block'); }
-        function openVip() { if(sessionStorage.getItem("active_user")==="MİSAFİR") document.getElementById('guest-error-overlay').style.display='flex'; else document.getElementById('vip-overlay').style.display='flex'; }
+        function loginSuccess(u, vip) { 
+            sessionStorage.setItem("active_user", u); 
+            document.getElementById("auth-screen").style.display="none"; 
+            document.getElementById("dashboard").style.display="flex"; 
+            document.getElementById("disp-user").innerText=u.toUpperCase(); 
+            if(vip) document.querySelectorAll('.vip-only-card').forEach(c=>c.style.display='block');
+        }
+
+        function openVip() { document.getElementById('vip-overlay').style.display='flex'; }
         function closeVip() { document.getElementById('vip-overlay').style.display='none'; }
-        function closeGuestError() { document.getElementById('guest-error-overlay').style.display='none'; }
-        function activateVip() { if(document.getElementById('vCode').value==="VN-9928-XQ71-PL00") { db.ref('users/'+sessionStorage.getItem("active_user")).update({isVip:true}).then(()=>{ alert("VIP AKTİF!"); location.reload(); }); } else alert("Hata!"); }
-        function doLogout() { location.reload(); }
-        function sendChat() { const m=document.getElementById('chatMsg').value, u=sessionStorage.getItem("active_user"); if(m.trim()) { db.ref('chat').push({user:u, msg:m}); document.getElementById('chatMsg').value=""; } }
-        db.ref('chat').limitToLast(15).on('value', s => { const box=document.getElementById('chat-messages'); box.innerHTML=""; s.forEach(c=>{ box.innerHTML+=`<div><b>${c.val().user}:</b> ${c.val().msg}</div>`; }); box.scrollTop=box.scrollHeight; });
+        
+        function activateVip() { 
+            const code = document.getElementById('vCode').value;
+            if(code === "VN-9928-XQ71-PL00") {
+                const user = sessionStorage.getItem("active_user");
+                if(user === "MİSAFİR") return alert("Önce Kayıt Olmalısın!");
+                db.ref('users/'+user).update({isVip:true}).then(()=>{ 
+                    alert("VIP AKTİF EDİLDİ!"); 
+                    location.reload(); 
+                });
+            } else { alert("Hatalı Kod!"); }
+        }
+
+        function sendChat() { 
+            const m=document.getElementById('chatMsg').value, u=sessionStorage.getItem("active_user"); 
+            if(m.trim()) { db.ref('chat').push({user:u, msg:m}); document.getElementById('chatMsg').value=""; } 
+        }
+        db.ref('chat').limitToLast(15).on('value', s => { 
+            const box=document.getElementById('chat-messages'); box.innerHTML=""; 
+            s.forEach(c=>{ box.innerHTML+=`<div><b>${c.val().user}:</b> ${c.val().msg}</div>`; }); 
+            box.scrollTop=box.scrollHeight; 
+        });
     </script>
 </body>
 </html>
