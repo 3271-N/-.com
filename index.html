@@ -6,117 +6,526 @@
     <title>VANGUARD NEXUS | GLOBAL</title>
     
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     
     <style>
         @import url('https://fonts.cdnfonts.com/css/valorant');
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
+        /* ===== CSS VARIABLES ===== */
         :root {
-            --v-purple: #9333ea; --v-cyan: #00f2ff; --v-pink: #ff00ea;
-            --color-primary: #7380ec; --color-danger: #ff7782; --color-success: #41f1b6;
-            --color-warning: #ffbb55; --color-white: #fff; --color-info-dark: #7d8da1;
-            --color-dark: #363949; --color-light: rgba(132, 139, 200, 0.18);
-            --color-background: #f6f6f9; --card-border-radius: 2rem;
-            --box-shadow: 0 2rem 3rem var(--color-light);
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #111127;
+            --bg-card: rgba(26, 26, 62, 0.6);
+            --bg-card-solid: #1a1a3e;
+            --bg-input: rgba(255, 255, 255, 0.05);
+            --v-purple: #9333ea;
+            --v-purple-light: #a855f7;
+            --v-cyan: #00f2ff;
+            --v-pink: #ff00ea;
+            --v-green: #41f1b6;
+            --v-orange: #ffbb55;
+            --v-red: #ff7782;
+            --text-primary: #ffffff;
+            --text-secondary: #8b8fa3;
+            --text-muted: #4a4a6a;
+            --border-glow: rgba(147, 51, 234, 0.3);
+            --border-subtle: rgba(147, 51, 234, 0.15);
+            --glass-bg: rgba(26, 26, 62, 0.6);
+            --glass-border: rgba(147, 51, 234, 0.2);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; text-decoration: none; list-style: none; border: 0; outline: none; }
-        body { background: var(--color-background); overflow-x: hidden; }
-        
-        /* --- GİRİŞ/KAYIT EKRANI (DOKUNULMADI) --- */
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        a { text-decoration: none; color: inherit; }
+        ul, li { list-style: none; }
+        button { border: none; outline: none; cursor: pointer; font-family: inherit; }
+        input { border: none; outline: none; font-family: inherit; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .font-valorant {
+            font-family: 'VALORANT', sans-serif;
+            letter-spacing: 2px;
+        }
+
+        /* ===== GLASSMORPHISM ===== */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-light {
+            background: rgba(26, 26, 62, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(147, 51, 234, 0.1);
+        }
+
+        /* ===== GLOW EFFECTS ===== */
+        .glow-purple { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), 0 0 60px rgba(147, 51, 234, 0.1); }
+        .glow-cyan { box-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
+        .text-glow-purple { text-shadow: 0 0 10px rgba(147, 51, 234, 0.5), 0 0 30px rgba(147, 51, 234, 0.3); }
+        .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 30px rgba(0, 242, 255, 0.3); }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3); } 50% { box-shadow: 0 0 40px rgba(147, 51, 234, 0.6), 0 0 80px rgba(147, 51, 234, 0.2); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-slide-up { animation: slideUp 0.6s ease-out forwards; }
+        .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(10, 10, 26, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(147, 51, 234, 0.5); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(147, 51, 234, 0.8); }
+
+        /* ===== CURSOR GLOW ===== */
+        #cursor-glow {
+            position: fixed; width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.08) 0%, transparent 70%);
+            pointer-events: none; z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: left 0.1s ease, top 0.1s ease;
+        }
+
+        /* ========================================
+           AUTH SCREEN
+        ======================================== */
         #auth-screen {
-            font-family: 'Segoe UI', sans-serif; background-color: #c9d6ff; height: 100vh; width: 100%;
-            position: fixed; z-index: 100000; display: flex; align-items: center; justify-content: center;
+            position: fixed; inset: 0; z-index: 100000;
+            display: flex; align-items: center; justify-content: center;
+            background-image: url('https://mgx-backend-cdn.metadl.com/generate/images/977031/2026-02-18/0c11e437-06ff-478b-a4e8-17d42b56b92b.png');
+            background-size: cover; background-position: center;
         }
-        .auth-container { background-color: #fff; border-radius: 30px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35); position: relative; overflow: hidden; width: 768px; max-width: 95%; min-height: 480px; }
-        .form-container { position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out; }
-        .sign-in { left: 0; width: 50%; z-index: 2; }
-        .auth-container.active .sign-in { transform: translateX(100%); }
-        .sign-up { left: 0; width: 50%; opacity: 0; z-index: 1; }
-        .auth-container.active .sign-up { transform: translateX(100%); opacity: 1; z-index: 5; animation: move 0.6s; }
-        @keyframes move { 0%, 49.99% { opacity: 0; z-index: 1; } 50%, 100% { opacity: 1; z-index: 5; } }
-        form { background-color: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0 40px; height: 100%; text-align: center; }
-        .auth-input { background-color: #eee; border: none; margin: 8px 0; padding: 10px 15px; font-size: 13px; border-radius: 8px; width: 100%; }
-        .auth-btn { background-color: var(--v-purple); color: #fff; font-size: 12px; padding: 10px 45px; border-radius: 8px; font-weight: 600; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .toggle-container { position: absolute; top: 0; left: 50%; width: 50%; height: 100%; overflow: hidden; transition: all 0.6s ease-in-out; z-index: 1000; }
-        .auth-container.active .toggle-container { transform: translateX(-100%); border-radius: 0 150px 100px 0; }
-        .toggle { background: linear-gradient(to right, #5c67ff, var(--v-purple)); color: #fff; position: relative; left: -100%; height: 100%; width: 200%; transition: all 0.6s ease-in-out; }
-        .auth-container.active .toggle { transform: translateX(50%); }
-        .toggle-panel { position: absolute; width: 50%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0 30px; text-align: center; top: 0; transition: all 0.6s ease-in-out; }
-        .toggle-left { transform: translateX(-200%); }
-        .auth-container.active .toggle-left { transform: translateX(0); }
-        .toggle-right { right: 0; }
-        .auth-container.active .toggle-right { transform: translateX(200%); }
-
-        /* --- DASHBOARD --- */
-        #dashboard { 
-            display: none; width: 96%; margin: 0 auto; gap: 1.8rem; grid-template-columns: 14rem auto 23rem;
-            font-family: 'Poppins', sans-serif; min-height: 100vh;
+        #auth-screen .overlay {
+            position: absolute; inset: 0;
+            background: rgba(10, 10, 26, 0.82);
+            backdrop-filter: blur(4px);
         }
 
-        aside { height: 100vh; }
-        aside .top { display: flex; align-items: center; justify-content: space-between; margin-top: 1.4rem; }
-        aside .sidebar { display: flex; flex-direction: column; height: 86vh; position: relative; top: 3rem; }
-        aside .sidebar a { display: flex; color: var(--color-info-dark); margin-left: 2rem; gap: 1rem; align-items: center; position: relative; height: 3.7rem; transition: all 300ms ease; cursor: pointer; }
-        aside .sidebar a span { font-size: 1.6rem; transition: all 300ms ease; }
-        aside .sidebar a.active { background: var(--color-light); color: var(--color-primary); margin-left: 0; }
-        aside .sidebar a.active:before { content: ""; width: 6px; height: 100%; background: var(--color-primary); }
-        aside .sidebar a:hover { color: var(--color-primary); }
-
-        main { margin-top: 1.4rem; width: 100%; }
-        
-        /* Butonlar Grid Sistemi (Ekran boyutuna göre otomatik dizilir) */
-        main .insights { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 1.2rem; 
-        }
-        main .insights > div { 
-            background: var(--color-white); padding: 1.5rem; 
-            border-radius: var(--card-border-radius); box-shadow: var(--box-shadow); 
-            transition: 0.3s; cursor: pointer; text-align: center;
-        }
-        main .insights > div:hover { box-shadow: none; transform: scale(1.02); }
-        main .insights h3 { margin-top: 0.8rem; font-size: 0.85rem; font-family: 'VALORANT'; letter-spacing: 1px; }
-        
-        /* GRAFİK TABLOSU DÜZENLEME (BOYUTU SINIRLANDIRILDI) */
-        .chart-container { 
-            background: var(--color-white); border-radius: var(--card-border-radius); 
-            padding: 1.5rem; margin-top: 2rem; box-shadow: var(--box-shadow); 
-            width: 100%; height: 300px; /* Yükseklik sabitlendi */
-            position: relative;
+        /* Floating Particles */
+        .particle {
+            position: absolute; border-radius: 50%;
+            background: rgba(147, 51, 234, 0.2);
+            animation: float 5s ease-in-out infinite;
         }
 
-        .right { margin-top: 1.4rem; }
-        .right .top { display: flex; justify-content: end; gap: 2rem; }
-        .right .profile { display: flex; gap: 1rem; text-align: right; }
-        
-        .global-chat-modern { margin-top: 2rem; background: var(--color-white); padding: 1.5rem; border-radius: var(--card-border-radius); box-shadow: var(--box-shadow); height: 400px; display: flex; flex-direction: column; }
-        #chat-messages { flex: 1; overflow-y: auto; font-size: 0.85rem; margin-bottom: 1rem; }
-        .chat-input-area { display: flex; gap: 0.5rem; border-top: 1px solid var(--color-light); padding-top: 1rem; }
-        .chat-input-area input { width: 100%; background: var(--color-background); padding: 0.8rem; border-radius: 1rem; }
+        .auth-card {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 420px; margin: 0 16px;
+            border-radius: 20px; overflow: hidden;
+        }
 
-        /* RESPONSIVE AYARLAR */
+        .auth-header { text-align: center; padding: 32px 24px 16px; }
+        .auth-header h1 { font-size: 1.8rem; color: #fff; margin-bottom: 2px; }
+        .auth-header h2 { font-size: 1rem; color: var(--v-cyan); }
+        .auth-divider {
+            width: 80px; height: 2px; margin: 16px auto 0;
+            background: linear-gradient(to right, transparent, var(--v-purple), transparent);
+        }
+
+        .auth-tabs {
+            display: flex; margin: 8px 24px 0; border-radius: 10px; overflow: hidden;
+        }
+        .auth-tabs .glass-light { width: 100%; display: flex; }
+        .auth-tab {
+            flex: 1; padding: 10px; font-size: 0.85rem; font-weight: 600;
+            background: transparent; color: var(--text-muted);
+            transition: all 0.3s;
+        }
+        .auth-tab.active {
+            background: linear-gradient(135deg, #7c3aed, #9333ea);
+            color: #fff; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+        }
+        .auth-tab:hover:not(.active) { color: #fff; }
+
+        .auth-form { padding: 20px 24px; }
+        .auth-error {
+            color: var(--v-red); font-size: 0.8rem; text-align: center;
+            background: rgba(255, 119, 130, 0.1); border: 1px solid rgba(255, 119, 130, 0.2);
+            border-radius: 10px; padding: 8px; margin-bottom: 12px;
+            display: none;
+        }
+        .auth-error.show { display: block; animation: fadeIn 0.3s ease; }
+
+        .auth-input {
+            width: 100%; padding: 12px 16px; margin-bottom: 10px;
+            background: var(--bg-input); border: 1px solid var(--border-subtle);
+            border-radius: 10px; color: #fff; font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        .auth-input::placeholder { color: var(--text-muted); }
+        .auth-input:focus { border-color: var(--v-purple-light); }
+
+        .auth-btn {
+            width: 100%; padding: 12px; border-radius: 10px;
+            font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;
+            transition: all 0.3s; margin-top: 4px;
+        }
+        .auth-btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #9333ea);
+            color: #fff;
+        }
+        .auth-btn-primary:hover {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
+        }
+        .auth-btn-cyan {
+            background: linear-gradient(135deg, #00d4dd, #00f2ff);
+            color: var(--bg-primary);
+        }
+        .auth-btn-cyan:hover {
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+        }
+        .auth-btn-ghost {
+            background: transparent; border: 1px solid var(--text-muted);
+            color: var(--text-secondary); font-size: 0.75rem; margin-top: 8px;
+        }
+        .auth-btn-ghost:hover { border-color: var(--border-glow); color: #fff; }
+
+        .auth-footer {
+            text-align: center; padding: 0 24px 24px;
+        }
+        .auth-footer-line {
+            width: 100%; height: 1px; margin-bottom: 16px;
+            background: linear-gradient(to right, transparent, rgba(147, 51, 234, 0.3), transparent);
+        }
+        .auth-footer p { color: var(--text-muted); font-size: 0.7rem; }
+
+        .spinner {
+            display: inline-block; width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+            border-radius: 50%; animation: spin 0.6s linear infinite;
+            margin-right: 8px; vertical-align: middle;
+        }
+
+        /* ========================================
+           DASHBOARD
+        ======================================== */
+        #dashboard { display: none; min-height: 100vh; position: relative; }
+
+        .dashboard-bg {
+            position: fixed; inset: 0; opacity: 0.1; pointer-events: none;
+            background-image: url('https://mgx-backend-cdn.metadl.com/generate/images/977031/2026-02-18/52a72aba-367c-4071-ba23-86b48cf32a84.png');
+            background-size: cover; background-position: center;
+        }
+
+        .dashboard-layout {
+            position: relative; z-index: 10;
+            display: flex; min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px; height: 100vh; position: sticky; top: 0;
+            padding: 12px; display: flex; flex-direction: column;
+            transition: width 0.3s;
+        }
+        .sidebar.collapsed { width: 80px; }
+        .sidebar-inner {
+            flex: 1; border-radius: 16px; padding: 16px;
+            display: flex; flex-direction: column;
+        }
+
+        .sidebar-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; padding: 0 8px; }
+        .sidebar-logo-icon {
+            width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+            background: linear-gradient(135deg, #9333ea, #00f2ff);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sidebar-logo-icon .material-icons-sharp { color: #fff; font-size: 20px; }
+        .sidebar-logo-text h1 { font-size: 0.85rem; color: #fff; }
+        .sidebar-logo-text p { font-size: 0.6rem; color: var(--text-muted); }
+        .sidebar.collapsed .sidebar-logo-text { display: none; }
+
+        .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 12px; border-radius: 12px;
+            color: var(--text-secondary); background: transparent;
+            transition: all 0.2s; width: 100%; text-align: left;
+        }
+        .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .nav-item.active { color: #fff; background: rgba(147, 51, 234, 0.2); }
+        .nav-item.active .material-icons-sharp { color: var(--v-purple-light); }
+        .nav-item.danger:hover { color: var(--v-red); background: rgba(255, 119, 130, 0.1); }
+        .nav-item .material-icons-sharp { font-size: 20px; }
+        .nav-item span:last-child { font-size: 0.85rem; font-weight: 500; }
+        .sidebar.collapsed .nav-item span:last-child { display: none; }
+        .nav-item .nav-dot {
+            margin-left: auto; width: 6px; height: 6px;
+            border-radius: 50%; background: var(--v-purple-light);
+        }
+        .sidebar.collapsed .nav-dot { display: none; }
+
+        .sidebar-collapse-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; padding: 8px; border-radius: 10px; margin-top: 12px;
+            background: transparent; color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .sidebar-collapse-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+        .nav-spacer { flex: 1; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { flex: 1; padding: 20px 24px; overflow: hidden; }
+
+        /* Top Bar */
+        .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .top-bar h1 { font-size: 1.3rem; color: #fff; }
+        .top-bar p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+        .top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+        .mobile-btn {
+            display: none; width: 40px; height: 40px; border-radius: 12px;
+            align-items: center; justify-content: center;
+            transition: all 0.3s;
+        }
+        .mobile-btn .material-icons-sharp { color: #fff; font-size: 20px; }
+        .mobile-btn:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3); }
+
+        .user-badge {
+            display: flex; align-items: center; gap: 12px;
+            border-radius: 12px; padding: 8px 16px;
+        }
+        .user-avatar {
+            width: 32px; height: 32px; border-radius: 10px;
+            background: linear-gradient(135deg, #9333ea, #00f2ff);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .user-avatar .material-icons-sharp { color: #fff; font-size: 16px; }
+        .user-info { display: block; }
+        .user-info p { font-size: 0.85rem; font-weight: 500; color: #fff; }
+        .user-info small { font-size: 0.7rem; }
+        .user-info small.vip { color: var(--v-green); }
+        .user-info small.standard { color: var(--text-muted); }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 12px; margin-bottom: 24px;
+        }
+        .stat-card {
+            border-radius: 16px; padding: 16px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .stat-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .stat-icon.green { background: rgba(65, 241, 182, 0.15); }
+        .stat-icon.green .material-icons-sharp { color: var(--v-green); }
+        .stat-icon.purple { background: rgba(147, 51, 234, 0.15); }
+        .stat-icon.purple .material-icons-sharp { color: var(--v-purple-light); }
+        .stat-icon.cyan { background: rgba(0, 242, 255, 0.15); }
+        .stat-icon.cyan .material-icons-sharp { color: var(--v-cyan); }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); }
+
+        /* Tool Cards Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px; margin-bottom: 24px;
+        }
+        .tool-card {
+            border-radius: 16px; padding: 20px; text-align: center;
+            transition: all 0.3s; cursor: pointer; background: var(--glass-bg);
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+        }
+        .tool-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), 0 0 60px rgba(147, 51, 234, 0.1);
+        }
+        .tool-card.vip-card { border: 1px solid rgba(147, 51, 234, 0.4); }
+        .tool-card .material-icons-sharp { font-size: 2rem; margin-bottom: 10px; display: block; transition: transform 0.3s; }
+        .tool-card:hover .material-icons-sharp { transform: scale(1.1); }
+        .tool-card h3 { font-size: 0.7rem; color: #fff; }
+        .tool-card .vip-tag {
+            display: inline-block; margin-top: 8px; font-size: 0.55rem;
+            background: rgba(147, 51, 234, 0.2); color: var(--v-purple-light);
+            padding: 2px 8px; border-radius: 20px;
+        }
+
+        /* Chart Section */
+        .chart-section { border-radius: 20px; padding: 20px; margin-bottom: 24px; }
+        .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .chart-header-left { display: flex; align-items: center; gap: 8px; }
+        .chart-header-left .material-icons-sharp { color: var(--v-cyan); font-size: 18px; }
+        .chart-header-left h3 { font-size: 0.8rem; color: #fff; }
+        .chart-header-right { display: flex; align-items: center; gap: 6px; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--v-green); animation: pulseGlow 2s infinite; }
+        .chart-header-right span { font-size: 0.7rem; color: var(--text-muted); }
+        .chart-wrapper { height: 220px; position: relative; }
+
+        /* --- RIGHT PANEL --- */
+        .right-panel { width: 340px; padding: 20px 16px; }
+        .right-panel-inner { position: sticky; top: 24px; }
+
+        /* Chat */
+        .chat-box { border-radius: 20px; padding: 16px; display: flex; flex-direction: column; height: 400px; }
+        .chat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .chat-header .material-icons-sharp { color: var(--v-cyan); font-size: 18px; }
+        .chat-header h3 { font-size: 0.8rem; color: #fff; }
+        .chat-header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+        .chat-header-right .live-dot { width: 6px; height: 6px; }
+        .chat-header-right span { font-size: 0.65rem; color: var(--text-muted); }
+
+        .chat-divider {
+            width: 100%; height: 1px; margin-bottom: 12px;
+            background: linear-gradient(to right, transparent, rgba(147, 51, 234, 0.3), transparent);
+        }
+
+        .chat-messages { flex: 1; overflow-y: auto; padding-right: 4px; }
+        .chat-empty { text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 40px 0; }
+
+        .chat-msg { margin-bottom: 10px; animation: fadeIn 0.3s ease; }
+        .chat-msg.mine { text-align: right; }
+        .chat-msg-user { font-size: 0.6rem; font-weight: 600; margin-bottom: 2px; padding: 0 4px; }
+        .chat-msg-bubble {
+            display: inline-block; max-width: 85%; padding: 6px 12px;
+            border-radius: 12px; font-size: 0.8rem; line-height: 1.4;
+        }
+        .chat-msg.mine .chat-msg-bubble {
+            background: rgba(147, 51, 234, 0.3); color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg:not(.mine) .chat-msg-bubble {
+            background: rgba(255, 255, 255, 0.05); color: #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            display: flex; gap: 8px; margin-top: 12px;
+            border-top: 1px solid rgba(147, 51, 234, 0.15); padding-top: 12px;
+        }
+        .chat-input {
+            flex: 1; padding: 8px 14px; border-radius: 10px;
+            background: var(--bg-input); border: 1px solid var(--border-subtle);
+            color: #fff; font-size: 0.8rem; transition: border-color 0.3s;
+        }
+        .chat-input::placeholder { color: var(--text-muted); }
+        .chat-input:focus { border-color: var(--v-purple-light); }
+        .chat-send-btn {
+            width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+            background: linear-gradient(135deg, #7c3aed, #9333ea);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
+        }
+        .chat-send-btn:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.4); }
+        .chat-send-btn .material-icons-sharp { color: #fff; font-size: 18px; }
+
+        /* ===== VIP MODAL ===== */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 200000;
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+
+        .vip-modal {
+            position: relative; z-index: 10; width: 100%; max-width: 380px;
+            border-radius: 20px; overflow: hidden; animation: slideUp 0.4s ease;
+        }
+        .vip-modal-header {
+            position: relative; height: 120px; overflow: hidden;
+        }
+        .vip-modal-header img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .vip-modal-header .gradient-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent, var(--bg-primary));
+        }
+        .vip-modal-header h2 {
+            position: absolute; bottom: 12px; left: 0; right: 0;
+            text-align: center; font-size: 1.3rem; color: #fff;
+        }
+
+        .vip-modal-body { padding: 20px; }
+        .vip-modal-body .ig-link { text-align: center; margin-bottom: 16px; }
+        .vip-modal-body .ig-link a { color: var(--v-pink); font-size: 0.85rem; font-weight: 500; transition: color 0.3s; }
+        .vip-modal-body .ig-link a:hover { color: #ff44ef; }
+
+        .vip-guest-warning {
+            display: none; text-align: center; padding: 16px;
+            background: rgba(255, 119, 130, 0.1); border: 1px solid rgba(255, 119, 130, 0.2);
+            border-radius: 12px;
+        }
+        .vip-guest-warning.show { display: block; }
+        .vip-guest-warning .material-icons-sharp { color: var(--v-red); font-size: 2rem; margin-bottom: 8px; }
+        .vip-guest-warning p { color: var(--v-red); font-size: 0.85rem; font-weight: 500; }
+        .vip-guest-warning small { color: var(--text-muted); font-size: 0.7rem; }
+
+        .vip-success {
+            display: none; text-align: center; padding: 16px;
+            background: rgba(65, 241, 182, 0.1); border: 1px solid rgba(65, 241, 182, 0.2);
+            border-radius: 12px;
+        }
+        .vip-success.show { display: block; animation: fadeIn 0.3s ease; }
+        .vip-success .material-icons-sharp { color: var(--v-green); font-size: 2rem; margin-bottom: 8px; }
+        .vip-success p { color: var(--v-green); font-size: 0.85rem; font-weight: 500; }
+
+        .vip-input-area { display: block; }
+        .vip-input-area.hidden { display: none; }
+
+        .vip-close-btn {
+            width: 100%; padding: 10px; margin-top: 16px;
+            background: transparent; color: var(--text-muted);
+            font-size: 0.8rem; border-radius: 10px; transition: all 0.2s;
+        }
+        .vip-close-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+        /* ===== RESPONSIVE ===== */
         @media screen and (max-width: 1200px) {
-            #dashboard { grid-template-columns: 7rem auto 23rem; }
-            aside .sidebar h3 { display: none; }
+            .right-panel { width: 300px; }
         }
         @media screen and (max-width: 992px) {
-            #dashboard { grid-template-columns: 1fr; }
-            aside { display: none; }
-            .right { display: block; }
+            .sidebar { display: none; }
+            .right-panel { display: none; }
+            .mobile-btn { display: flex; }
+            .mobile-chat { display: block; margin-top: 24px; }
+            .mobile-logout { display: flex; }
         }
-        @media screen and (max-width: 600px) {
-            main .insights { grid-template-columns: 1fr; }
-            .chart-container { height: 250px; }
+        @media screen and (max-width: 768px) {
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .stats-row .stat-card:last-child { grid-column: span 2; }
+            .user-info { display: none; }
+            .top-bar h1 { font-size: 1rem; }
+        }
+        @media screen and (max-width: 500px) {
+            .tools-grid { grid-template-columns: 1fr 1fr; }
+            .stats-row { grid-template-columns: 1fr; }
+            .stats-row .stat-card:last-child { grid-column: span 1; }
         }
 
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200000; align-items: center; justify-content: center; }
-        .vip-modal { background: var(--color-white); border-radius: 2rem; padding: 2rem; text-align: center; width: 90%; max-width: 400px; }
-        #cursor-glow { position: fixed; width: 300px; height: 300px; background: radial-gradient(circle, rgba(115, 128, 236, 0.1) 0%, transparent 70%); pointer-events: none; z-index: 99999; transform: translate(-50%, -50%); }
+        .mobile-chat { display: none; }
+        .mobile-logout {
+            display: none; width: 100%; margin-top: 16px;
+            border-radius: 12px; padding: 12px;
+            align-items: center; justify-content: center; gap: 8px;
+            color: var(--text-muted); transition: color 0.3s;
+        }
+        .mobile-logout:hover { color: var(--v-red); }
+        .mobile-logout .material-icons-sharp { font-size: 18px; }
+        .mobile-logout span:last-child { font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -124,150 +533,647 @@
     <div id="cursor-glow"></div>
     <audio id="bgMusic" loop src="https://files.catbox.moe/97p877.mp3"></audio>
 
+    <!-- ========== AUTH SCREEN ========== -->
     <div id="auth-screen">
-        <div class="auth-container" id="auth-container">
-            <div class="form-container sign-up"><form><h1>Hesap Oluştur</h1><input type="text" id="rName" class="auth-input" placeholder="Kullanıcı Adı"><input type="password" id="rPass" class="auth-input" placeholder="Şifre"><button type="button" class="auth-btn" onclick="handleRegister()">KAYDOL</button></form></div>
-            <div class="form-container sign-in"><form><h1>Giriş Yap</h1><input type="text" id="lName" class="auth-input" placeholder="Kullanıcı Adı"><input type="password" id="lPass" class="auth-input" placeholder="Şifre"><button type="button" class="auth-btn" onclick="doLogin()">GİRİŞ YAP</button><button type="button" class="auth-btn" onclick="doGuest()" style="background: #333; margin-top: 5px; padding: 8px 20px; font-size: 10px;">MİSAFİR</button></form></div>
-            <div class="toggle-container"><div class="toggle"><div class="toggle-panel toggle-left"><h1>Tekrar Hoşgeldin!</h1><button class="auth-btn" style="background:transparent; border:1px solid white;" id="loginBtn">GİRİŞ YAP</button></div><div class="toggle-panel toggle-right"><h1>Selam Dostum!</h1><button class="auth-btn" style="background:transparent; border:1px solid white;" id="registerBtn">KAYDOL</button></div></div></div>
+        <div class="overlay"></div>
+        <!-- Particles -->
+        <div id="particles"></div>
+
+        <div class="auth-card glass glow-purple">
+            <div class="auth-header">
+                <h1 class="font-valorant text-glow-purple">VANGUARD</h1>
+                <h2 class="font-valorant text-glow-cyan">NEXUS</h2>
+                <div class="auth-divider"></div>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="glass-light" style="display:flex; width:100%; border-radius:10px;">
+                    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">GİRİŞ YAP</button>
+                    <button class="auth-tab" id="tab-register" onclick="switchTab('register')">KAYDOL</button>
+                </div>
+            </div>
+
+            <div class="auth-form">
+                <div class="auth-error" id="auth-error"></div>
+
+                <!-- Login Form -->
+                <div id="form-login" class="animate-fade-in">
+                    <input type="text" id="lName" class="auth-input" placeholder="Kullanıcı Adı">
+                    <input type="password" id="lPass" class="auth-input" placeholder="Şifre">
+                    <button class="auth-btn auth-btn-primary" id="btn-login" onclick="doLogin()">GİRİŞ YAP</button>
+                    <button class="auth-btn auth-btn-ghost" onclick="doGuest()">MİSAFİR OLARAK GİR</button>
+                </div>
+
+                <!-- Register Form -->
+                <div id="form-register" style="display:none;" class="animate-fade-in">
+                    <input type="text" id="rName" class="auth-input" placeholder="Kullanıcı Adı">
+                    <input type="password" id="rPass" class="auth-input" placeholder="Şifre">
+                    <button class="auth-btn auth-btn-cyan" id="btn-register" onclick="handleRegister()">HESAP OLUŞTUR</button>
+                </div>
+            </div>
+
+            <div class="auth-footer">
+                <div class="auth-footer-line"></div>
+                <p>VANGUARD NEXUS © 2024 — Tüm Hakları Saklıdır</p>
+            </div>
         </div>
     </div>
 
+    <!-- ========== DASHBOARD ========== -->
     <div id="dashboard">
-        <aside>
-            <div class="top"><div class="logo"><h2 style="font-family:'VALORANT'; color:var(--v-purple)">NEXUS</h2></div></div>
-            <div class="sidebar">
-                <a class="active"><span class="material-icons-sharp">grid_view</span><h3>Dashboard</h3></a>
-                <a onclick="toggleMusic()"><span class="material-icons-sharp">music_note</span><h3 id="m-text">Müzik: Kapalı</h3></a>
-                <a onclick="openVip()"><span class="material-icons-sharp">workspace_premium</span><h3>VIP Panel</h3></a>
-                <a onclick="location.reload()"><span class="material-icons-sharp">logout</span><h3>Çıkış Yap</h3></a>
-            </div>
-        </aside>
+        <div class="dashboard-bg"></div>
 
-        <main>
-            <h1>Sistem Paneli</h1>
-            <div class="insights" id="main-grid">
-                <div onclick="window.open('https://tracker.gg/valorant', '_blank')"><span class="material-icons-sharp" style="color:var(--v-cyan)">analytics</span><h3>STATÜ ANALİZİ</h3></div>
-                <div onclick="window.open('https://vcrdb.net/', '_blank')"><span class="material-icons-sharp" style="color:var(--v-cyan)">ads_click</span><h3>NİŞANGAH</h3></div>
-                <div onclick="window.open('https://playvalorant.com/tr-tr/maps/', '_blank')"><span class="material-icons-sharp" style="color:var(--v-orange)">map</span><h3>HARİTALAR</h3></div>
-                <div onclick="window.open('https://playvalorant.com/tr-tr/agents/', '_blank')"><span class="material-icons-sharp" style="color:var(--v-orange)">groups</span><h3>AJANLAR</h3></div>
-                <div onclick="window.open('https://lineupsvalorant.com/', '_blank')"><span class="material-icons-sharp" style="color:var(--v-pink)">gps_fixed</span><h3>LINEUPS</h3></div>
-                <div onclick="window.open('https://www.vlr.gg/', '_blank')"><span class="material-icons-sharp" style="color:var(--v-pink)">emoji_events</span><h3>ESPORT</h3></div>
-            </div>
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-inner glass-light">
+                    <div class="sidebar-logo">
+                        <div class="sidebar-logo-icon"><span class="material-icons-sharp">shield</span></div>
+                        <div class="sidebar-logo-text">
+                            <h1 class="font-valorant">NEXUS</h1>
+                            <p>VANGUARD</p>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2 id="realtime-status" style="font-size: 0.9rem; margin-bottom: 0.5rem; color:var(--color-info-dark)">Aktivite Yükleniyor...</h2>
-                <canvas id="myChart"></canvas>
-            </div>
-        </main>
+                    <nav class="sidebar-nav">
+                        <button class="nav-item active">
+                            <span class="material-icons-sharp">grid_view</span>
+                            <span>Dashboard</span>
+                            <div class="nav-dot"></div>
+                        </button>
+                        <button class="nav-item" onclick="toggleMusic()">
+                            <span class="material-icons-sharp" id="music-icon">music_off</span>
+                            <span id="music-text">Müzik: Kapalı</span>
+                        </button>
+                        <button class="nav-item" onclick="openVip()">
+                            <span class="material-icons-sharp">workspace_premium</span>
+                            <span>VIP Panel</span>
+                        </button>
 
-        <div class="right">
-            <div class="top"><div class="profile"><div class="info"><p>Selam, <b id="disp-user">...</b></p><small class="text-muted" id="user-status">Standart Üye</small></div></div></div>
-            <div class="global-chat-modern">
-                <h3>Global Chat</h3>
-                <div id="chat-messages"></div>
-                <div class="chat-input-area"><input type="text" id="chatMsg" placeholder="Mesaj yazın..."><button onclick="sendChat()" class="material-icons-sharp" style="cursor:pointer; background:none; color:var(--v-purple)">send</button></div>
-            </div>
+                        <div class="nav-spacer"></div>
+
+                        <button class="nav-item danger" onclick="doLogout()">
+                            <span class="material-icons-sharp">logout</span>
+                            <span>Çıkış Yap</span>
+                        </button>
+                    </nav>
+
+                    <button class="sidebar-collapse-btn" onclick="toggleSidebar()">
+                        <span class="material-icons-sharp" id="collapse-icon">chevron_left</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Top Bar -->
+                <div class="top-bar">
+                    <div>
+                        <h1 class="font-valorant text-glow-purple">SİSTEM PANELİ</h1>
+                        <p>Hoş geldin, komutan.</p>
+                    </div>
+                    <div class="top-bar-right">
+                        <button class="mobile-btn glass" onclick="toggleMusic()">
+                            <span class="material-icons-sharp" id="music-icon-mobile">music_off</span>
+                        </button>
+                        <button class="mobile-btn glass" onclick="openVip()">
+                            <span class="material-icons-sharp" style="color:var(--v-purple-light)">workspace_premium</span>
+                        </button>
+                        <div class="user-badge glass">
+                            <div class="user-avatar"><span class="material-icons-sharp">person</span></div>
+                            <div class="user-info">
+                                <p id="disp-user">...</p>
+                                <small id="user-status" class="standard">Standart Üye</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-card glass">
+                        <div class="stat-icon green"><span class="material-icons-sharp">people</span></div>
+                        <div><div class="stat-value" id="stat-active">0</div><div class="stat-label">Canlı Aktif</div></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon purple"><span class="material-icons-sharp">visibility</span></div>
+                        <div><div class="stat-value" id="stat-visits">0</div><div class="stat-label">Toplam Ziyaret</div></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon cyan"><span class="material-icons-sharp">dashboard</span></div>
+                        <div><div class="stat-value" id="stat-tools">6</div><div class="stat-label">Araç Sayısı</div></div>
+                    </div>
+                </div>
+
+                <!-- Tool Cards -->
+                <div class="tools-grid" id="tools-grid">
+                    <div class="tool-card" onclick="window.open('https://tracker.gg/valorant','_blank')">
+                        <span class="material-icons-sharp" style="color:var(--v-cyan)">analytics</span>
+                        <h3 class="font-valorant">STATÜ ANALİZİ</h3>
+                    </div>
+                    <div class="tool-card" onclick="window.open('https://vcrdb.net/','_blank')">
+                        <span class="material-icons-sharp" style="color:var(--v-cyan)">ads_click</span>
+                        <h3 class="font-valorant">NİŞANGAH</h3>
+                    </div>
+                    <div class="tool-card" onclick="window.open('https://playvalorant.com/tr-tr/maps/','_blank')">
+                        <span class="material-icons-sharp" style="color:var(--v-orange)">map</span>
+                        <h3 class="font-valorant">HARİTALAR</h3>
+                    </div>
+                    <div class="tool-card" onclick="window.open('https://playvalorant.com/tr-tr/agents/','_blank')">
+                        <span class="material-icons-sharp" style="color:var(--v-orange)">groups</span>
+                        <h3 class="font-valorant">AJANLAR</h3>
+                    </div>
+                    <div class="tool-card" onclick="window.open('https://lineupsvalorant.com/','_blank')">
+                        <span class="material-icons-sharp" style="color:var(--v-pink)">gps_fixed</span>
+                        <h3 class="font-valorant">LINEUPS</h3>
+                    </div>
+                    <div class="tool-card" onclick="window.open('https://www.vlr.gg/','_blank')">
+                        <span class="material-icons-sharp" style="color:var(--v-pink)">emoji_events</span>
+                        <h3 class="font-valorant">ESPORT</h3>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-section glass">
+                    <div class="chart-header">
+                        <div class="chart-header-left">
+                            <span class="material-icons-sharp">show_chart</span>
+                            <h3 class="font-valorant">AKTİVİTE GRAFİĞİ</h3>
+                        </div>
+                        <div class="chart-header-right">
+                            <div class="live-dot"></div>
+                            <span>Gerçek Zamanlı</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Mobile Chat -->
+                <div class="mobile-chat">
+                    <div class="chat-box glass" id="mobile-chat-box">
+                        <div class="chat-header">
+                            <span class="material-icons-sharp">forum</span>
+                            <h3 class="font-valorant">GLOBAL CHAT</h3>
+                            <div class="chat-header-right"><div class="live-dot"></div><span>Canlı</span></div>
+                        </div>
+                        <div class="chat-divider"></div>
+                        <div class="chat-messages" id="mobile-chat-messages"><div class="chat-empty">Henüz mesaj yok. İlk mesajı sen yaz!</div></div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="mobile-chatMsg" placeholder="Mesaj yazın..." onkeydown="if(event.key==='Enter')sendChat('mobile')">
+                            <button class="chat-send-btn" onclick="sendChat('mobile')"><span class="material-icons-sharp">send</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Logout -->
+                <button class="mobile-logout glass" onclick="doLogout()">
+                    <span class="material-icons-sharp">logout</span>
+                    <span>Çıkış Yap</span>
+                </button>
+            </main>
+
+            <!-- Right Panel -->
+            <aside class="right-panel">
+                <div class="right-panel-inner">
+                    <div class="chat-box glass">
+                        <div class="chat-header">
+                            <span class="material-icons-sharp">forum</span>
+                            <h3 class="font-valorant">GLOBAL CHAT</h3>
+                            <div class="chat-header-right"><div class="live-dot"></div><span>Canlı</span></div>
+                        </div>
+                        <div class="chat-divider"></div>
+                        <div class="chat-messages" id="chat-messages"><div class="chat-empty">Henüz mesaj yok. İlk mesajı sen yaz!</div></div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="chatMsg" placeholder="Mesaj yazın..." onkeydown="if(event.key==='Enter')sendChat('desktop')">
+                            <button class="chat-send-btn" onclick="sendChat('desktop')"><span class="material-icons-sharp">send</span></button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
+    <!-- ========== VIP MODAL ========== -->
     <div id="vip-overlay" class="modal-overlay">
-        <div class="vip-modal">
-            <h2 style="font-family:'VALORANT'; color:var(--v-purple)">VIP PANEL</h2>
-            <p style="margin: 1rem 0;"><a href="https://www.instagram.com/ahmet_57z" target="_blank" style="color:var(--v-pink)">@ahmet_57z</a></p>
-            <div id="guest-msg" style="display:none; color:red; margin-bottom:1rem;">KAYITLI HESAP GEREKLİ!</div>
-            <div id="vip-input-area"><input id="vCode" class="auth-input" placeholder="VIP KODUNUZU GİRİN" style="text-align:center; border: 1px solid #ddd;"><button class="auth-btn" style="width:100%" onclick="activateVip()">ONAYLA</button></div>
-            <button onclick="closeVip()" style="margin-top:2rem; cursor:pointer; background:none; color:var(--color-info-dark)">KAPAT</button>
+        <div class="modal-backdrop" onclick="closeVip()"></div>
+        <div class="vip-modal glass glow-purple animate-slide-up">
+            <div class="vip-modal-header">
+                <img src="https://mgx-backend-cdn.metadl.com/generate/images/977031/2026-02-18/3b9bcab3-51e2-4721-817d-18993487a8b5.png" alt="VIP">
+                <div class="gradient-overlay"></div>
+                <h2 class="font-valorant text-glow-purple">VIP PANEL</h2>
+            </div>
+            <div class="vip-modal-body">
+                <div class="ig-link"><a href="https://www.instagram.com/ahmet_57z" target="_blank">@ahmet_57z</a></div>
+
+                <div class="vip-guest-warning" id="vip-guest-warning">
+                    <span class="material-icons-sharp">lock</span>
+                    <p>KAYITLI HESAP GEREKLİ!</p>
+                    <small>VIP özelliklerini kullanmak için kayıt olun.</small>
+                </div>
+
+                <div class="vip-success" id="vip-success">
+                    <span class="material-icons-sharp">check_circle</span>
+                    <p>VIP AKTİF EDİLDİ!</p>
+                </div>
+
+                <div class="vip-input-area" id="vip-input-area">
+                    <div class="auth-error" id="vip-error"></div>
+                    <input type="text" id="vCode" class="auth-input" placeholder="VIP KODUNUZU GİRİN" style="text-align:center; letter-spacing:2px;" onkeydown="if(event.key==='Enter')activateVip()">
+                    <button class="auth-btn auth-btn-primary" style="background:linear-gradient(135deg,#9333ea,#ff00ea);" onclick="activateVip()">ONAYLA</button>
+                </div>
+
+                <button class="vip-close-btn" onclick="closeVip()">KAPAT</button>
+            </div>
         </div>
     </div>
 
+    <!-- ========== JAVASCRIPT ========== -->
     <script>
-        const authContainer = document.getElementById('auth-container');
-        document.getElementById('registerBtn').addEventListener('click', () => authContainer.classList.add("active"));
-        document.getElementById('loginBtn').addEventListener('click', () => authContainer.classList.remove("active"));
+        // ===== Firebase Setup =====
+        const config = {
+            apiKey: "AIzaSyBC_h0zpRSSGdzcbtGsq3Bh2WGKAgTrNKc",
+            authDomain: "vanguardnexus-a2871.firebaseapp.com",
+            databaseURL: "https://vanguardnexus-a2871-default-rtdb.firebaseio.com",
+            projectId: "vanguardnexus-a2871"
+        };
+        firebase.initializeApp(config);
+        const db = firebase.database();
 
-        const config = { apiKey: "AIzaSyBC_h0zpRSSGdzcbtGsq3Bh2WGKAgTrNKc", authDomain: "vanguardnexus-a2871.firebaseapp.com", databaseURL: "https://vanguardnexus-a2871-default-rtdb.firebaseio.com", projectId: "vanguardnexus-a2871" };
-        firebase.initializeApp(config); const db = firebase.database();
+        // ===== State =====
+        let currentUser = null;
+        let isVip = false;
+        let isPlaying = false;
+        let myChartInstance = null;
+        let sidebarCollapsed = false;
 
-        let myChartInstance;
-        function setupRealtimeTracking() {
+        // ===== Particles =====
+        (function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 6 + 2;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                p.style.animationDelay = (Math.random() * 3) + 's';
+                container.appendChild(p);
+            }
+        })();
+
+        // ===== Auth Tab Switching =====
+        function switchTab(tab) {
+            const errEl = document.getElementById('auth-error');
+            errEl.classList.remove('show');
+            errEl.textContent = '';
+
+            if (tab === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                document.getElementById('tab-register').classList.remove('active');
+                document.getElementById('form-login').style.display = 'block';
+                document.getElementById('form-register').style.display = 'none';
+            } else {
+                document.getElementById('tab-register').classList.add('active');
+                document.getElementById('tab-login').classList.remove('active');
+                document.getElementById('form-register').style.display = 'block';
+                document.getElementById('form-login').style.display = 'none';
+            }
+        }
+
+        function showAuthError(msg) {
+            const el = document.getElementById('auth-error');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+
+        // ===== Login =====
+        function doLogin() {
+            const u = document.getElementById('lName').value.trim();
+            const p = document.getElementById('lPass').value.trim();
+            if (!u || !p) { showAuthError('Lütfen tüm alanları doldurun.'); return; }
+
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '<span class="spinner"></span>GİRİŞ YAPILIYOR...';
+            btn.disabled = true;
+
+            if (u === "ADMIN" && p === "1200778") {
+                loginSuccess(u, true);
+                return;
+            }
+
+            db.ref('users/' + u).once('value').then(s => {
+                if (s.exists() && s.val().password === p) {
+                    loginSuccess(u, s.val().isVip || false);
+                } else {
+                    showAuthError('Kullanıcı adı veya şifre hatalı!');
+                    btn.innerHTML = 'GİRİŞ YAP';
+                    btn.disabled = false;
+                }
+            }).catch(() => {
+                showAuthError('Bağlantı hatası!');
+                btn.innerHTML = 'GİRİŞ YAP';
+                btn.disabled = false;
+            });
+        }
+
+        // ===== Register =====
+        function handleRegister() {
+            const u = document.getElementById('rName').value.trim();
+            const p = document.getElementById('rPass').value.trim();
+            if (!u || !p) { showAuthError('Lütfen tüm alanları doldurun.'); return; }
+
+            const btn = document.getElementById('btn-register');
+            btn.innerHTML = '<span class="spinner"></span>KAYIT YAPILIYOR...';
+            btn.disabled = true;
+
+            db.ref('users/' + u).once('value').then(s => {
+                if (s.exists()) {
+                    showAuthError('Bu kullanıcı adı zaten alınmış!');
+                    btn.innerHTML = 'HESAP OLUŞTUR';
+                    btn.disabled = false;
+                } else {
+                    db.ref('users/' + u).set({ password: p, isVip: false }).then(() => {
+                        switchTab('login');
+                        document.getElementById('lName').value = u;
+                        document.getElementById('lPass').value = p;
+                        btn.innerHTML = 'HESAP OLUŞTUR';
+                        btn.disabled = false;
+                    });
+                }
+            }).catch(() => {
+                showAuthError('Bağlantı hatası!');
+                btn.innerHTML = 'HESAP OLUŞTUR';
+                btn.disabled = false;
+            });
+        }
+
+        // ===== Guest =====
+        function doGuest() { loginSuccess('MİSAFİR', false); }
+
+        // ===== Login Success =====
+        function loginSuccess(u, vip) {
+            currentUser = u;
+            isVip = vip;
+            sessionStorage.setItem('user', u);
+
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('disp-user').innerText = u;
+
+            if (vip) applyVipLayout();
+            initChart();
+            setupPresence();
+        }
+
+        // ===== Logout =====
+        function doLogout() {
+            currentUser = null;
+            isVip = false;
+            sessionStorage.removeItem('user');
+            location.reload();
+        }
+
+        // ===== VIP Layout =====
+        function applyVipLayout() {
+            const statusEl = document.getElementById('user-status');
+            statusEl.innerText = '⭐ VIP ÜYE';
+            statusEl.className = 'vip';
+
+            const grid = document.getElementById('tools-grid');
+            const vipTools = [
+                { icon: 'bolt', title: 'VIP: META', url: 'https://www.metasrc.com/valorant' },
+                { icon: 'auto_awesome', title: 'VIP: SKINS', url: 'https://valorant.fandom.com/wiki/Skins' },
+                { icon: 'menu_book', title: 'VIP: PRO MAPS', url: 'https://tracker.gg/valorant/guides' }
+            ];
+            vipTools.forEach(t => {
+                const div = document.createElement('div');
+                div.className = 'tool-card vip-card';
+                div.onclick = () => window.open(t.url, '_blank');
+                div.innerHTML = `
+                    <span class="material-icons-sharp" style="color:var(--v-purple-light)">${t.icon}</span>
+                    <h3 class="font-valorant">${t.title}</h3>
+                    <span class="vip-tag">VIP</span>
+                `;
+                grid.appendChild(div);
+            });
+
+            document.getElementById('stat-tools').innerText = '9';
+        }
+
+        // ===== Sidebar Toggle =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebarCollapsed = !sidebarCollapsed;
+            sidebar.classList.toggle('collapsed');
+            document.getElementById('collapse-icon').innerText = sidebarCollapsed ? 'chevron_right' : 'chevron_left';
+        }
+
+        // ===== Music Toggle =====
+        function toggleMusic() {
+            const m = document.getElementById('bgMusic');
+            if (isPlaying) { m.pause(); } else { m.play(); }
+            isPlaying = !isPlaying;
+            const label = isPlaying ? 'Müzik: Açık' : 'Müzik: Kapalı';
+            const icon = isPlaying ? 'music_note' : 'music_off';
+            document.getElementById('music-text').innerText = label;
+            document.getElementById('music-icon').innerText = icon;
+            const mobileIcon = document.getElementById('music-icon-mobile');
+            if (mobileIcon) mobileIcon.innerText = icon;
+        }
+
+        // ===== Chart =====
+        function initChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Aktif Kullanıcı',
+                        data: [],
+                        borderColor: '#9333ea',
+                        backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#9333ea',
+                        pointBorderColor: '#9333ea',
+                        pointRadius: 3,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 62, 0.9)',
+                            borderColor: 'rgba(147, 51, 234, 0.3)',
+                            borderWidth: 1,
+                            titleColor: '#fff',
+                            bodyColor: '#ccc',
+                            cornerRadius: 12,
+                            padding: 10
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(147, 51, 234, 0.08)' },
+                            ticks: { color: '#4a4a6a', font: { size: 10 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(147, 51, 234, 0.08)' },
+                            ticks: { color: '#4a4a6a', font: { size: 10 }, stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(count) {
+            if (!myChartInstance) return;
+            const now = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            myChartInstance.data.labels.push(now);
+            myChartInstance.data.datasets[0].data.push(count);
+            if (myChartInstance.data.labels.length > 10) {
+                myChartInstance.data.labels.shift();
+                myChartInstance.data.datasets[0].data.shift();
+            }
+            myChartInstance.update();
+        }
+
+        // ===== Presence Tracking =====
+        function setupPresence() {
             db.ref('stats/totalVisits').transaction(c => (c || 0) + 1);
             const activeRef = db.ref('stats/activeNow');
             const myPresence = activeRef.push();
             myPresence.onDisconnect().remove();
             myPresence.set(true);
+
             db.ref('stats').on('value', s => {
                 const data = s.val() || { activeNow: {}, totalVisits: 0 };
                 const activeCount = Object.keys(data.activeNow || {}).length;
                 const totalCount = data.totalVisits || 0;
-                document.getElementById('realtime-status').innerHTML = `Canlı Aktif: ${activeCount} | Toplam Ziyaret: ${totalCount}`;
+                document.getElementById('stat-active').innerText = activeCount;
+                document.getElementById('stat-visits').innerText = totalCount;
                 updateChart(activeCount);
             });
         }
 
-        function initChart() {
-            const ctx = document.getElementById('myChart').getContext('2d');
-            myChartInstance = new Chart(ctx, { 
-                type: 'line', 
-                data: { labels: [''], datasets: [{ label: 'Aktif', data: [0], borderColor: '#7380ec', tension: 0.4, fill: true, backgroundColor: 'rgba(115, 128, 236, 0.1)' }] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        // ===== Chat =====
+        const userColors = ['#9333ea', '#00f2ff', '#ff00ea', '#41f1b6', '#ffbb55', '#ff7782', '#7380ec', '#f59e0b', '#10b981', '#ec4899'];
+        function getUserColor(name) {
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            return userColors[Math.abs(hash) % userColors.length];
+        }
+
+        function sendChat(source) {
+            const inputId = source === 'mobile' ? 'mobile-chatMsg' : 'chatMsg';
+            const m = document.getElementById(inputId).value.trim();
+            if (m && currentUser) {
+                db.ref('chat').push({ u: currentUser, m: m, t: Date.now() });
+                document.getElementById(inputId).value = '';
+            }
+        }
+
+        function renderMessages(snapshot) {
+            const containers = ['chat-messages', 'mobile-chat-messages'];
+            containers.forEach(id => {
+                const box = document.getElementById(id);
+                if (!box) return;
+                let html = '';
+                let hasMessages = false;
+                snapshot.forEach(c => {
+                    hasMessages = true;
+                    const val = c.val();
+                    const isMe = val.u === currentUser;
+                    const color = getUserColor(val.u);
+                    html += `<div class="chat-msg ${isMe ? 'mine' : ''}">
+                        <div class="chat-msg-user" style="color:${color}">${val.u}</div>
+                        <div class="chat-msg-bubble">${escapeHtml(val.m)}</div>
+                    </div>`;
+                });
+                box.innerHTML = hasMessages ? html : '<div class="chat-empty">Henüz mesaj yok. İlk mesajı sen yaz!</div>';
+                box.scrollTop = box.scrollHeight;
             });
-            setupRealtimeTracking();
         }
 
-        function updateChart(count) {
-            if(!myChartInstance) return;
-            const now = new Date().toLocaleTimeString();
-            myChartInstance.data.labels.push(now);
-            myChartInstance.data.datasets[0].data.push(count);
-            if(myChartInstance.data.labels.length > 7) { myChartInstance.data.labels.shift(); myChartInstance.data.datasets[0].data.shift(); }
-            myChartInstance.update();
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        function doLogin() {
-            const u = document.getElementById("lName").value.trim(), p = document.getElementById("lPass").value.trim();
-            if(u === "ADMIN" && p === "1200778") { loginSuccess(u, true); return; }
-            db.ref('users/'+u).once('value').then(s => {
-                if(s.exists() && s.val().password === p) loginSuccess(u, s.val().isVip);
-                else alert("Hata!");
-            });
+        db.ref('chat').limitToLast(30).on('value', renderMessages);
+
+        // ===== VIP Modal =====
+        function openVip() {
+            const overlay = document.getElementById('vip-overlay');
+            overlay.classList.add('show');
+
+            document.getElementById('vip-success').classList.remove('show');
+            document.getElementById('vip-error').classList.remove('show');
+            document.getElementById('vip-error').textContent = '';
+
+            if (currentUser === 'MİSAFİR') {
+                document.getElementById('vip-guest-warning').classList.add('show');
+                document.getElementById('vip-input-area').classList.add('hidden');
+            } else {
+                document.getElementById('vip-guest-warning').classList.remove('show');
+                document.getElementById('vip-input-area').classList.remove('hidden');
+            }
         }
 
-        function loginSuccess(u, vip) {
-            sessionStorage.setItem("user", u);
-            document.getElementById("auth-screen").style.display = "none";
-            document.getElementById("dashboard").style.display = "grid";
-            document.getElementById("disp-user").innerText = u;
-            initChart();
-            if(vip) applyVipLayout();
-        }
-
-        function applyVipLayout() {
-            document.getElementById('user-status').innerText = "VIP ÜYE";
-            document.getElementById('user-status').style.color = "var(--color-success)";
-            const vg = document.getElementById('main-grid');
-            vg.innerHTML += `
-                <div onclick="window.open('https://www.metasrc.com/valorant', '_blank')" style="border:2px solid var(--v-purple)"><span class="material-icons-sharp" style="color:var(--v-purple)">bolt</span><h3>VIP: META</h3></div>
-                <div onclick="window.open('https://valorant.fandom.com/wiki/Skins', '_blank')" style="border:2px solid var(--v-purple)"><span class="material-icons-sharp" style="color:var(--v-purple)">auto_awesome</span><h3>VIP: SKINS</h3></div>
-                <div onclick="window.open('https://tracker.gg/valorant/guides', '_blank')" style="border:2px solid var(--v-purple)"><span class="material-icons-sharp" style="color:var(--v-purple)">menu_book</span><h3>VIP: PRO MAPS</h3></div>
-            `;
+        function closeVip() {
+            document.getElementById('vip-overlay').classList.remove('show');
         }
 
         function activateVip() {
-            const code = document.getElementById('vCode').value, u = sessionStorage.getItem("user");
-            if(code === "VN-9928-XQ71-PL00" && u !== "MİSAFİR") {
-                db.ref('users/'+u).update({isVip:true}).then(() => { alert("VIP AKTİF!"); location.reload(); });
-            } else alert("Geçersiz Kod!");
+            const code = document.getElementById('vCode').value.trim();
+            if (!code) {
+                const errEl = document.getElementById('vip-error');
+                errEl.textContent = 'Lütfen VIP kodunuzu girin.';
+                errEl.classList.add('show');
+                return;
+            }
+
+            if (code === "VN-9928-XQ71-PL00" && currentUser !== "MİSAFİR") {
+                db.ref('users/' + currentUser).update({ isVip: true }).then(() => {
+                    document.getElementById('vip-input-area').classList.add('hidden');
+                    document.getElementById('vip-success').classList.add('show');
+                    setTimeout(() => {
+                        closeVip();
+                        if (!isVip) {
+                            isVip = true;
+                            applyVipLayout();
+                        }
+                    }, 1500);
+                });
+            } else {
+                const errEl = document.getElementById('vip-error');
+                errEl.textContent = 'Geçersiz VIP kodu!';
+                errEl.classList.add('show');
+            }
         }
 
-        function openVip() { document.getElementById('vip-overlay').style.display = 'flex'; if(sessionStorage.getItem("user") === "MİSAFİR") { document.getElementById('guest-msg').style.display = 'block'; document.getElementById('vip-input-area').style.display = 'none'; } }
-        function closeVip() { document.getElementById('vip-overlay').style.display = 'none'; }
-        function handleRegister() { const u = document.getElementById('rName').value.trim(), p = document.getElementById('rPass').value.trim(); if(u && p) db.ref('users/'+u).set({password:p, isVip:false}).then(() => { alert("Kayıt Başarılı!"); authContainer.classList.remove("active"); }); }
-        function sendChat() { const m = document.getElementById('chatMsg').value, u = sessionStorage.getItem("user"); if(m.trim() && u) { db.ref('chat').push({u: u, m: m}); document.getElementById('chatMsg').value = ""; } }
-        db.ref('chat').limitToLast(15).on('value', s => { const b = document.getElementById('chat-messages'); b.innerHTML = ""; s.forEach(c => { b.innerHTML += `<div style="margin-bottom:0.5rem"><b>${c.val().u}:</b> ${c.val().m}</div>`; }); b.scrollTop = b.scrollHeight; });
-        function toggleMusic() { const m = document.getElementById('bgMusic'); isPlaying ? m.pause() : m.play(); document.getElementById('m-text').innerText = isPlaying ? "Müzik: Kapalı" : "Müzik: Çalıyor"; isPlaying = !isPlaying; }
-        let isPlaying = false;
-        function doGuest() { loginSuccess("MİSAFİR", false); }
-        window.onmousemove = e => { const g = document.getElementById('cursor-glow'); g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'; };
+        // ===== Cursor Glow =====
+        window.addEventListener('mousemove', e => {
+            const g = document.getElementById('cursor-glow');
+            if (g) { g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'; }
+        });
+
+        // ===== Enter Key Handlers =====
+        document.getElementById('lPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+        document.getElementById('rPass').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+        document.getElementById('vCode').addEventListener('keydown', e => { if (e.key === 'Enter') activateVip(); });
     </script>
 </body>
 </html>
