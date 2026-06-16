@@ -1,1179 +1,574 @@
+```html
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VANGUARD NEXUS | GLOBAL</title>
-    
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/valorant');
-
-        /* ===== CSS VARIABLES ===== */
-        :root {
-            --bg-primary: #0a0a1a;
-            --bg-secondary: #111127;
-            --bg-card: rgba(26, 26, 62, 0.6);
-            --bg-card-solid: #1a1a3e;
-            --bg-input: rgba(255, 255, 255, 0.05);
-            --v-purple: #9333ea;
-            --v-purple-light: #a855f7;
-            --v-cyan: #00f2ff;
-            --v-pink: #ff00ea;
-            --v-green: #41f1b6;
-            --v-orange: #ffbb55;
-            --v-red: #ff7782;
-            --text-primary: #ffffff;
-            --text-secondary: #8b8fa3;
-            --text-muted: #4a4a6a;
-            --border-glow: rgba(147, 51, 234, 0.3);
-            --border-subtle: rgba(147, 51, 234, 0.15);
-            --glass-bg: rgba(26, 26, 62, 0.6);
-            --glass-border: rgba(147, 51, 234, 0.2);
-        }
-
-        /* ===== RESET & BASE ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        a { text-decoration: none; color: inherit; }
-        ul, li { list-style: none; }
-        button { border: none; outline: none; cursor: pointer; font-family: inherit; }
-        input { border: none; outline: none; font-family: inherit; }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        .font-valorant {
-            font-family: 'VALORANT', sans-serif;
-            letter-spacing: 2px;
-        }
-
-        /* ===== GLASSMORPHISM ===== */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-        }
-
-        .glass-light {
-            background: rgba(26, 26, 62, 0.3);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(147, 51, 234, 0.1);
-        }
-
-        /* ===== GLOW EFFECTS ===== */
-        .glow-purple { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), 0 0 60px rgba(147, 51, 234, 0.1); }
-        .glow-cyan { box-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
-        .text-glow-purple { text-shadow: 0 0 10px rgba(147, 51, 234, 0.5), 0 0 30px rgba(147, 51, 234, 0.3); }
-        .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 30px rgba(0, 242, 255, 0.3); }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3); } 50% { box-shadow: 0 0 40px rgba(147, 51, 234, 0.6), 0 0 80px rgba(147, 51, 234, 0.2); } }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        .animate-slide-up { animation: slideUp 0.6s ease-out forwards; }
-        .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(10, 10, 26, 0.5); }
-        ::-webkit-scrollbar-thumb { background: rgba(147, 51, 234, 0.5); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(147, 51, 234, 0.8); }
-
-        /* ===== CURSOR GLOW ===== */
-        #cursor-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(147, 51, 234, 0.08) 0%, transparent 70%);
-            pointer-events: none; z-index: 99999;
-            transform: translate(-50%, -50%);
-            transition: left 0.1s ease, top 0.1s ease;
-        }
-
-        /* ========================================
-           AUTH SCREEN
-        ======================================== */
-        #auth-screen {
-            position: fixed; inset: 0; z-index: 100000;
-            display: flex; align-items: center; justify-content: center;
-            background-image: url('https://mgx-backend-cdn.metadl.com/generate/images/977031/2026-02-18/0c11e437-06ff-478b-a4e8-17d42b56b92b.png');
-            background-size: cover; background-position: center;
-        }
-        #auth-screen .overlay {
-            position: absolute; inset: 0;
-            background: rgba(10, 10, 26, 0.82);
-            backdrop-filter: blur(4px);
-        }
-
-        /* Floating Particles */
-        .particle {
-            position: absolute; border-radius: 50%;
-            background: rgba(147, 51, 234, 0.2);
-            animation: float 5s ease-in-out infinite;
-        }
-
-        .auth-card {
-            position: relative; z-index: 10;
-            width: 100%; max-width: 420px; margin: 0 16px;
-            border-radius: 20px; overflow: hidden;
-        }
-
-        .auth-header { text-align: center; padding: 32px 24px 16px; }
-        .auth-header h1 { font-size: 1.8rem; color: #fff; margin-bottom: 2px; }
-        .auth-header h2 { font-size: 1rem; color: var(--v-cyan); }
-        .auth-divider {
-            width: 80px; height: 2px; margin: 16px auto 0;
-            background: linear-gradient(to right, transparent, var(--v-purple), transparent);
-        }
-
-        .auth-tabs {
-            display: flex; margin: 8px 24px 0; border-radius: 10px; overflow: hidden;
-        }
-        .auth-tabs .glass-light { width: 100%; display: flex; }
-        .auth-tab {
-            flex: 1; padding: 10px; font-size: 0.85rem; font-weight: 600;
-            background: transparent; color: var(--text-muted);
-            transition: all 0.3s;
-        }
-        .auth-tab.active {
-            background: linear-gradient(135deg, #7c3aed, #9333ea);
-            color: #fff; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
-        }
-        .auth-tab:hover:not(.active) { color: #fff; }
-
-        .auth-form { padding: 20px 24px; }
-        .auth-error {
-            color: var(--v-red); font-size: 0.8rem; text-align: center;
-            background: rgba(255, 119, 130, 0.1); border: 1px solid rgba(255, 119, 130, 0.2);
-            border-radius: 10px; padding: 8px; margin-bottom: 12px;
-            display: none;
-        }
-        .auth-error.show { display: block; animation: fadeIn 0.3s ease; }
-
-        .auth-input {
-            width: 100%; padding: 12px 16px; margin-bottom: 10px;
-            background: var(--bg-input); border: 1px solid var(--border-subtle);
-            border-radius: 10px; color: #fff; font-size: 0.9rem;
-            transition: border-color 0.3s;
-        }
-        .auth-input::placeholder { color: var(--text-muted); }
-        .auth-input:focus { border-color: var(--v-purple-light); }
-
-        .auth-btn {
-            width: 100%; padding: 12px; border-radius: 10px;
-            font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;
-            transition: all 0.3s; margin-top: 4px;
-        }
-        .auth-btn-primary {
-            background: linear-gradient(135deg, #7c3aed, #9333ea);
-            color: #fff;
-        }
-        .auth-btn-primary:hover {
-            background: linear-gradient(135deg, #6d28d9, #7c3aed);
-            box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
-        }
-        .auth-btn-cyan {
-            background: linear-gradient(135deg, #00d4dd, #00f2ff);
-            color: var(--bg-primary);
-        }
-        .auth-btn-cyan:hover {
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
-        }
-        .auth-btn-ghost {
-            background: transparent; border: 1px solid var(--text-muted);
-            color: var(--text-secondary); font-size: 0.75rem; margin-top: 8px;
-        }
-        .auth-btn-ghost:hover { border-color: var(--border-glow); color: #fff; }
-
-        .auth-footer {
-            text-align: center; padding: 0 24px 24px;
-        }
-        .auth-footer-line {
-            width: 100%; height: 1px; margin-bottom: 16px;
-            background: linear-gradient(to right, transparent, rgba(147, 51, 234, 0.3), transparent);
-        }
-        .auth-footer p { color: var(--text-muted); font-size: 0.7rem; }
-
-        .spinner {
-            display: inline-block; width: 16px; height: 16px;
-            border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
-            border-radius: 50%; animation: spin 0.6s linear infinite;
-            margin-right: 8px; vertical-align: middle;
-        }
-
-        /* ========================================
-           DASHBOARD
-        ======================================== */
-        #dashboard { display: none; min-height: 100vh; position: relative; }
-
-        .dashboard-bg {
-            position: fixed; inset: 0; opacity: 0.1; pointer-events: none;
-            background-image: url('https://mgx-backend-cdn.metadl.com/generate/images/977031/2026-02-18/52a72aba-367c-4071-ba23-86b48cf32a84.png');
-            background-size: cover; background-position: center;
-        }
-
-        .dashboard-layout {
-            position: relative; z-index: 10;
-            display: flex; min-height: 100vh;
-        }
-
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 260px; height: 100vh; position: sticky; top: 0;
-            padding: 12px; display: flex; flex-direction: column;
-            transition: width 0.3s;
-        }
-        .sidebar.collapsed { width: 80px; }
-        .sidebar-inner {
-            flex: 1; border-radius: 16px; padding: 16px;
-            display: flex; flex-direction: column;
-        }
-
-        .sidebar-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; padding: 0 8px; }
-        .sidebar-logo-icon {
-            width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
-            background: linear-gradient(135deg, #9333ea, #00f2ff);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .sidebar-logo-icon .material-icons-sharp { color: #fff; font-size: 20px; }
-        .sidebar-logo-text h1 { font-size: 0.85rem; color: #fff; }
-        .sidebar-logo-text p { font-size: 0.6rem; color: var(--text-muted); }
-        .sidebar.collapsed .sidebar-logo-text { display: none; }
-
-        .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-
-        .nav-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px 12px; border-radius: 12px;
-            color: var(--text-secondary); background: transparent;
-            transition: all 0.2s; width: 100%; text-align: left;
-        }
-        .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
-        .nav-item.active { color: #fff; background: rgba(147, 51, 234, 0.2); }
-        .nav-item.active .material-icons-sharp { color: var(--v-purple-light); }
-        .nav-item.danger:hover { color: var(--v-red); background: rgba(255, 119, 130, 0.1); }
-        .nav-item .material-icons-sharp { font-size: 20px; }
-        .nav-item span:last-child { font-size: 0.85rem; font-weight: 500; }
-        .sidebar.collapsed .nav-item span:last-child { display: none; }
-        .nav-item .nav-dot {
-            margin-left: auto; width: 6px; height: 6px;
-            border-radius: 50%; background: var(--v-purple-light);
-        }
-        .sidebar.collapsed .nav-dot { display: none; }
-
-        .sidebar-collapse-btn {
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; padding: 8px; border-radius: 10px; margin-top: 12px;
-            background: transparent; color: var(--text-muted);
-            transition: all 0.2s;
-        }
-        .sidebar-collapse-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
-
-        .nav-spacer { flex: 1; }
-
-        /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 20px 24px; overflow: hidden; }
-
-        /* Top Bar */
-        .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-        .top-bar h1 { font-size: 1.3rem; color: #fff; }
-        .top-bar p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
-        .top-bar-right { display: flex; align-items: center; gap: 12px; }
-
-        .mobile-btn {
-            display: none; width: 40px; height: 40px; border-radius: 12px;
-            align-items: center; justify-content: center;
-            transition: all 0.3s;
-        }
-        .mobile-btn .material-icons-sharp { color: #fff; font-size: 20px; }
-        .mobile-btn:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3); }
-
-        .user-badge {
-            display: flex; align-items: center; gap: 12px;
-            border-radius: 12px; padding: 8px 16px;
-        }
-        .user-avatar {
-            width: 32px; height: 32px; border-radius: 10px;
-            background: linear-gradient(135deg, #9333ea, #00f2ff);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .user-avatar .material-icons-sharp { color: #fff; font-size: 16px; }
-        .user-info { display: block; }
-        .user-info p { font-size: 0.85rem; font-weight: 500; color: #fff; }
-        .user-info small { font-size: 0.7rem; }
-        .user-info small.vip { color: var(--v-green); }
-        .user-info small.standard { color: var(--text-muted); }
-
-        /* Stats Row */
-        .stats-row {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 12px; margin-bottom: 24px;
-        }
-        .stat-card {
-            border-radius: 16px; padding: 16px;
-            display: flex; align-items: center; gap: 12px;
-        }
-        .stat-icon {
-            width: 40px; height: 40px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
-        .stat-icon.green { background: rgba(65, 241, 182, 0.15); }
-        .stat-icon.green .material-icons-sharp { color: var(--v-green); }
-        .stat-icon.purple { background: rgba(147, 51, 234, 0.15); }
-        .stat-icon.purple .material-icons-sharp { color: var(--v-purple-light); }
-        .stat-icon.cyan { background: rgba(0, 242, 255, 0.15); }
-        .stat-icon.cyan .material-icons-sharp { color: var(--v-cyan); }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: #fff; }
-        .stat-label { font-size: 0.7rem; color: var(--text-muted); }
-
-        /* Tool Cards Grid */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px; margin-bottom: 24px;
-        }
-        .tool-card {
-            border-radius: 16px; padding: 20px; text-align: center;
-            transition: all 0.3s; cursor: pointer; background: var(--glass-bg);
-            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-        }
-        .tool-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), 0 0 60px rgba(147, 51, 234, 0.1);
-        }
-        .tool-card.vip-card { border: 1px solid rgba(147, 51, 234, 0.4); }
-        .tool-card .material-icons-sharp { font-size: 2rem; margin-bottom: 10px; display: block; transition: transform 0.3s; }
-        .tool-card:hover .material-icons-sharp { transform: scale(1.1); }
-        .tool-card h3 { font-size: 0.7rem; color: #fff; }
-        .tool-card .vip-tag {
-            display: inline-block; margin-top: 8px; font-size: 0.55rem;
-            background: rgba(147, 51, 234, 0.2); color: var(--v-purple-light);
-            padding: 2px 8px; border-radius: 20px;
-        }
-
-        /* Chart Section */
-        .chart-section { border-radius: 20px; padding: 20px; margin-bottom: 24px; }
-        .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .chart-header-left { display: flex; align-items: center; gap: 8px; }
-        .chart-header-left .material-icons-sharp { color: var(--v-cyan); font-size: 18px; }
-        .chart-header-left h3 { font-size: 0.8rem; color: #fff; }
-        .chart-header-right { display: flex; align-items: center; gap: 6px; }
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--v-green); animation: pulseGlow 2s infinite; }
-        .chart-header-right span { font-size: 0.7rem; color: var(--text-muted); }
-        .chart-wrapper { height: 220px; position: relative; }
-
-        /* --- RIGHT PANEL --- */
-        .right-panel { width: 340px; padding: 20px 16px; }
-        .right-panel-inner { position: sticky; top: 24px; }
-
-        /* Chat */
-        .chat-box { border-radius: 20px; padding: 16px; display: flex; flex-direction: column; height: 400px; }
-        .chat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-        .chat-header .material-icons-sharp { color: var(--v-cyan); font-size: 18px; }
-        .chat-header h3 { font-size: 0.8rem; color: #fff; }
-        .chat-header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-        .chat-header-right .live-dot { width: 6px; height: 6px; }
-        .chat-header-right span { font-size: 0.65rem; color: var(--text-muted); }
-
-        .chat-divider {
-            width: 100%; height: 1px; margin-bottom: 12px;
-            background: linear-gradient(to right, transparent, rgba(147, 51, 234, 0.3), transparent);
-        }
-
-        .chat-messages { flex: 1; overflow-y: auto; padding-right: 4px; }
-        .chat-empty { text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 40px 0; }
-
-        .chat-msg { margin-bottom: 10px; animation: fadeIn 0.3s ease; }
-        .chat-msg.mine { text-align: right; }
-        .chat-msg-user { font-size: 0.6rem; font-weight: 600; margin-bottom: 2px; padding: 0 4px; }
-        .chat-msg-bubble {
-            display: inline-block; max-width: 85%; padding: 6px 12px;
-            border-radius: 12px; font-size: 0.8rem; line-height: 1.4;
-        }
-        .chat-msg.mine .chat-msg-bubble {
-            background: rgba(147, 51, 234, 0.3); color: #fff;
-            border-bottom-right-radius: 4px;
-        }
-        .chat-msg:not(.mine) .chat-msg-bubble {
-            background: rgba(255, 255, 255, 0.05); color: #e0e0e0;
-            border-bottom-left-radius: 4px;
-        }
-
-        .chat-input-area {
-            display: flex; gap: 8px; margin-top: 12px;
-            border-top: 1px solid rgba(147, 51, 234, 0.15); padding-top: 12px;
-        }
-        .chat-input {
-            flex: 1; padding: 8px 14px; border-radius: 10px;
-            background: var(--bg-input); border: 1px solid var(--border-subtle);
-            color: #fff; font-size: 0.8rem; transition: border-color 0.3s;
-        }
-        .chat-input::placeholder { color: var(--text-muted); }
-        .chat-input:focus { border-color: var(--v-purple-light); }
-        .chat-send-btn {
-            width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-            background: linear-gradient(135deg, #7c3aed, #9333ea);
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s;
-        }
-        .chat-send-btn:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.4); }
-        .chat-send-btn .material-icons-sharp { color: #fff; font-size: 18px; }
-
-        /* ===== VIP MODAL ===== */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; z-index: 200000;
-            align-items: center; justify-content: center; padding: 16px;
-        }
-        .modal-overlay.show { display: flex; }
-        .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
-
-        .vip-modal {
-            position: relative; z-index: 10; width: 100%; max-width: 380px;
-            border-radius: 20px; overflow: hidden; animation: slideUp 0.4s ease;
-        }
-        .vip-modal-header {
-            position: relative; height: 120px; overflow: hidden;
-        }
-        .vip-modal-header img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .vip-modal-header .gradient-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom, transparent, var(--bg-primary));
-        }
-        .vip-modal-header h2 {
-            position: absolute; bottom: 12px; left: 0; right: 0;
-            text-align: center; font-size: 1.3rem; color: #fff;
-        }
-
-        .vip-modal-body { padding: 20px; }
-        .vip-modal-body .ig-link { text-align: center; margin-bottom: 16px; }
-        .vip-modal-body .ig-link a { color: var(--v-pink); font-size: 0.85rem; font-weight: 500; transition: color 0.3s; }
-        .vip-modal-body .ig-link a:hover { color: #ff44ef; }
-
-        .vip-guest-warning {
-            display: none; text-align: center; padding: 16px;
-            background: rgba(255, 119, 130, 0.1); border: 1px solid rgba(255, 119, 130, 0.2);
-            border-radius: 12px;
-        }
-        .vip-guest-warning.show { display: block; }
-        .vip-guest-warning .material-icons-sharp { color: var(--v-red); font-size: 2rem; margin-bottom: 8px; }
-        .vip-guest-warning p { color: var(--v-red); font-size: 0.85rem; font-weight: 500; }
-        .vip-guest-warning small { color: var(--text-muted); font-size: 0.7rem; }
-
-        .vip-success {
-            display: none; text-align: center; padding: 16px;
-            background: rgba(65, 241, 182, 0.1); border: 1px solid rgba(65, 241, 182, 0.2);
-            border-radius: 12px;
-        }
-        .vip-success.show { display: block; animation: fadeIn 0.3s ease; }
-        .vip-success .material-icons-sharp { color: var(--v-green); font-size: 2rem; margin-bottom: 8px; }
-        .vip-success p { color: var(--v-green); font-size: 0.85rem; font-weight: 500; }
-
-        .vip-input-area { display: block; }
-        .vip-input-area.hidden { display: none; }
-
-        .vip-close-btn {
-            width: 100%; padding: 10px; margin-top: 16px;
-            background: transparent; color: var(--text-muted);
-            font-size: 0.8rem; border-radius: 10px; transition: all 0.2s;
-        }
-        .vip-close-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
-
-        /* ===== RESPONSIVE ===== */
-        @media screen and (max-width: 1200px) {
-            .right-panel { width: 300px; }
-        }
-        @media screen and (max-width: 992px) {
-            .sidebar { display: none; }
-            .right-panel { display: none; }
-            .mobile-btn { display: flex; }
-            .mobile-chat { display: block; margin-top: 24px; }
-            .mobile-logout { display: flex; }
-        }
-        @media screen and (max-width: 768px) {
-            .stats-row { grid-template-columns: 1fr 1fr; }
-            .stats-row .stat-card:last-child { grid-column: span 2; }
-            .user-info { display: none; }
-            .top-bar h1 { font-size: 1rem; }
-        }
-        @media screen and (max-width: 500px) {
-            .tools-grid { grid-template-columns: 1fr 1fr; }
-            .stats-row { grid-template-columns: 1fr; }
-            .stats-row .stat-card:last-child { grid-column: span 1; }
-        }
-
-        .mobile-chat { display: none; }
-        .mobile-logout {
-            display: none; width: 100%; margin-top: 16px;
-            border-radius: 12px; padding: 12px;
-            align-items: center; justify-content: center; gap: 8px;
-            color: var(--text-muted); transition: color 0.3s;
-        }
-        .mobile-logout:hover { color: var(--v-red); }
-        .mobile-logout .material-icons-sharp { font-size: 18px; }
-        .mobile-logout span:last-child { font-size: 0.85rem; }
-    </style>
-</head>
-<body>
-
-    <div id="cursor-glow"></div>
-    <audio id="bgMusic" loop src="https://files.catbox.moe/97p877.mp3"></audio>
-
-    <!-- ========== AUTH SCREEN ========== -->
-    <div id="auth-screen">
-        <div class="overlay"></div>
-        <!-- Particles -->
-        <div id="particles"></div>
-
-        <div class="auth-card glass glow-purple">
-            <div class="auth-header">
-                <h1 class="font-valorant text-glow-purple">VANGUARD</h1>
-                <h2 class="font-valorant text-glow-cyan">NEXUS</h2>
-                <div class="auth-divider"></div>
-            </div>
-
-            <div class="auth-tabs">
-                <div class="glass-light" style="display:flex; width:100%; border-radius:10px;">
-                    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">GİRİŞ YAP</button>
-                    <button class="auth-tab" id="tab-register" onclick="switchTab('register')">KAYDOL</button>
-                </div>
-            </div>
-
-            <div class="auth-form">
-                <div class="auth-error" id="auth-error"></div>
-
-                <!-- Login Form -->
-                <div id="form-login" class="animate-fade-in">
-                    <input type="text" id="lName" class="auth-input" placeholder="Kullanıcı Adı">
-                    <input type="password" id="lPass" class="auth-input" placeholder="Şifre">
-                    <button class="auth-btn auth-btn-primary" id="btn-login" onclick="doLogin()">GİRİŞ YAP</button>
-                    <button class="auth-btn auth-btn-ghost" onclick="doGuest()">MİSAFİR OLARAK GİR</button>
-                </div>
-
-                <!-- Register Form -->
-                <div id="form-register" style="display:none;" class="animate-fade-in">
-                    <input type="text" id="rName" class="auth-input" placeholder="Kullanıcı Adı">
-                    <input type="password" id="rPass" class="auth-input" placeholder="Şifre">
-                    <button class="auth-btn auth-btn-cyan" id="btn-register" onclick="handleRegister()">HESAP OLUŞTUR</button>
-                </div>
-            </div>
-
-            <div class="auth-footer">
-                <div class="auth-footer-line"></div>
-                <p>VANGUARD NEXUS © 2024 — Tüm Hakları Saklıdır</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== DASHBOARD ========== -->
-    <div id="dashboard">
-        <div class="dashboard-bg"></div>
-
-        <div class="dashboard-layout">
-            <!-- Sidebar -->
-            <aside class="sidebar" id="sidebar">
-                <div class="sidebar-inner glass-light">
-                    <div class="sidebar-logo">
-                        <div class="sidebar-logo-icon"><span class="material-icons-sharp">shield</span></div>
-                        <div class="sidebar-logo-text">
-                            <h1 class="font-valorant">NEXUS</h1>
-                            <p>VANGUARD</p>
-                        </div>
-                    </div>
-
-                    <nav class="sidebar-nav">
-                        <button class="nav-item active">
-                            <span class="material-icons-sharp">grid_view</span>
-                            <span>Dashboard</span>
-                            <div class="nav-dot"></div>
-                        </button>
-                        <button class="nav-item" onclick="toggleMusic()">
-                            <span class="material-icons-sharp" id="music-icon">music_off</span>
-                            <span id="music-text">Müzik: Kapalı</span>
-                        </button>
-                        <button class="nav-item" onclick="openVip()">
-                            <span class="material-icons-sharp">workspace_premium</span>
-                            <span>VIP Panel</span>
-                        </button>
-
-                        <div class="nav-spacer"></div>
-
-                        <button class="nav-item danger" onclick="doLogout()">
-                            <span class="material-icons-sharp">logout</span>
-                            <span>Çıkış Yap</span>
-                        </button>
-                    </nav>
-
-                    <button class="sidebar-collapse-btn" onclick="toggleSidebar()">
-                        <span class="material-icons-sharp" id="collapse-icon">chevron_left</span>
-                    </button>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="main-content">
-                <!-- Top Bar -->
-                <div class="top-bar">
-                    <div>
-                        <h1 class="font-valorant text-glow-purple">SİSTEM PANELİ</h1>
-                        <p>Hoş geldin, komutan.</p>
-                    </div>
-                    <div class="top-bar-right">
-                        <button class="mobile-btn glass" onclick="toggleMusic()">
-                            <span class="material-icons-sharp" id="music-icon-mobile">music_off</span>
-                        </button>
-                        <button class="mobile-btn glass" onclick="openVip()">
-                            <span class="material-icons-sharp" style="color:var(--v-purple-light)">workspace_premium</span>
-                        </button>
-                        <div class="user-badge glass">
-                            <div class="user-avatar"><span class="material-icons-sharp">person</span></div>
-                            <div class="user-info">
-                                <p id="disp-user">...</p>
-                                <small id="user-status" class="standard">Standart Üye</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stats Row -->
-                <div class="stats-row">
-                    <div class="stat-card glass">
-                        <div class="stat-icon green"><span class="material-icons-sharp">people</span></div>
-                        <div><div class="stat-value" id="stat-active">0</div><div class="stat-label">Canlı Aktif</div></div>
-                    </div>
-                    <div class="stat-card glass">
-                        <div class="stat-icon purple"><span class="material-icons-sharp">visibility</span></div>
-                        <div><div class="stat-value" id="stat-visits">0</div><div class="stat-label">Toplam Ziyaret</div></div>
-                    </div>
-                    <div class="stat-card glass">
-                        <div class="stat-icon cyan"><span class="material-icons-sharp">dashboard</span></div>
-                        <div><div class="stat-value" id="stat-tools">6</div><div class="stat-label">Araç Sayısı</div></div>
-                    </div>
-                </div>
-
-                <!-- Tool Cards -->
-                <div class="tools-grid" id="tools-grid">
-                    <div class="tool-card" onclick="window.open('https://tracker.gg/valorant','_blank')">
-                        <span class="material-icons-sharp" style="color:var(--v-cyan)">analytics</span>
-                        <h3 class="font-valorant">STATÜ ANALİZİ</h3>
-                    </div>
-                    <div class="tool-card" onclick="window.open('https://vcrdb.net/','_blank')">
-                        <span class="material-icons-sharp" style="color:var(--v-cyan)">ads_click</span>
-                        <h3 class="font-valorant">NİŞANGAH</h3>
-                    </div>
-                    <div class="tool-card" onclick="window.open('https://playvalorant.com/tr-tr/maps/','_blank')">
-                        <span class="material-icons-sharp" style="color:var(--v-orange)">map</span>
-                        <h3 class="font-valorant">HARİTALAR</h3>
-                    </div>
-                    <div class="tool-card" onclick="window.open('https://playvalorant.com/tr-tr/agents/','_blank')">
-                        <span class="material-icons-sharp" style="color:var(--v-orange)">groups</span>
-                        <h3 class="font-valorant">AJANLAR</h3>
-                    </div>
-                    <div class="tool-card" onclick="window.open('https://lineupsvalorant.com/','_blank')">
-                        <span class="material-icons-sharp" style="color:var(--v-pink)">gps_fixed</span>
-                        <h3 class="font-valorant">LINEUPS</h3>
-                    </div>
-                    <div class="tool-card" onclick="window.open('https://www.vlr.gg/','_blank')">
-                        <span class="material-icons-sharp" style="color:var(--v-pink)">emoji_events</span>
-                        <h3 class="font-valorant">ESPORT</h3>
-                    </div>
-                </div>
-
-                <!-- Chart -->
-                <div class="chart-section glass">
-                    <div class="chart-header">
-                        <div class="chart-header-left">
-                            <span class="material-icons-sharp">show_chart</span>
-                            <h3 class="font-valorant">AKTİVİTE GRAFİĞİ</h3>
-                        </div>
-                        <div class="chart-header-right">
-                            <div class="live-dot"></div>
-                            <span>Gerçek Zamanlı</span>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
-                        <canvas id="myChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Mobile Chat -->
-                <div class="mobile-chat">
-                    <div class="chat-box glass" id="mobile-chat-box">
-                        <div class="chat-header">
-                            <span class="material-icons-sharp">forum</span>
-                            <h3 class="font-valorant">GLOBAL CHAT</h3>
-                            <div class="chat-header-right"><div class="live-dot"></div><span>Canlı</span></div>
-                        </div>
-                        <div class="chat-divider"></div>
-                        <div class="chat-messages" id="mobile-chat-messages"><div class="chat-empty">Henüz mesaj yok. İlk mesajı sen yaz!</div></div>
-                        <div class="chat-input-area">
-                            <input type="text" class="chat-input" id="mobile-chatMsg" placeholder="Mesaj yazın..." onkeydown="if(event.key==='Enter')sendChat('mobile')">
-                            <button class="chat-send-btn" onclick="sendChat('mobile')"><span class="material-icons-sharp">send</span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile Logout -->
-                <button class="mobile-logout glass" onclick="doLogout()">
-                    <span class="material-icons-sharp">logout</span>
-                    <span>Çıkış Yap</span>
-                </button>
-            </main>
-
-            <!-- Right Panel -->
-            <aside class="right-panel">
-                <div class="right-panel-inner">
-                    <div class="chat-box glass">
-                        <div class="chat-header">
-                            <span class="material-icons-sharp">forum</span>
-                            <h3 class="font-valorant">GLOBAL CHAT</h3>
-                            <div class="chat-header-right"><div class="live-dot"></div><span>Canlı</span></div>
-                        </div>
-                        <div class="chat-divider"></div>
-                        <div class="chat-messages" id="chat-messages"><div class="chat-empty">Henüz mesaj yok. İlk mesajı sen yaz!</div></div>
-                        <div class="chat-input-area">
-                            <input type="text" class="chat-input" id="chatMsg" placeholder="Mesaj yazın..." onkeydown="if(event.key==='Enter')sendChat('desktop')">
-                            <button class="chat-send-btn" onclick="sendChat('desktop')"><span class="material-icons-sharp">send</span></button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
-    </div>
-
-    <!-- ========== VIP MODAL ========== -->
-    <div id="vip-overlay" class="modal-overlay">
-        <div class="modal-backdrop" onclick="closeVip()"></div>
-        <div class="vip-modal glass glow-purple animate-slide-up">
-            <div class="vip-modal-header">
-                <img src="https://mgx-backend-cdn.metadl.com/generate/images/977031/2026-02-18/3b9bcab3-51e2-4721-817d-18993487a8b5.png" alt="VIP">
-                <div class="gradient-overlay"></div>
-                <h2 class="font-valorant text-glow-purple">VIP PANEL</h2>
-            </div>
-            <div class="vip-modal-body">
-                <div class="ig-link"><a href="https://www.instagram.com/ahmet_57z" target="_blank">@ahmet_57z</a></div>
-
-                <div class="vip-guest-warning" id="vip-guest-warning">
-                    <span class="material-icons-sharp">lock</span>
-                    <p>KAYITLI HESAP GEREKLİ!</p>
-                    <small>VIP özelliklerini kullanmak için kayıt olun.</small>
-                </div>
-
-                <div class="vip-success" id="vip-success">
-                    <span class="material-icons-sharp">check_circle</span>
-                    <p>VIP AKTİF EDİLDİ!</p>
-                </div>
-
-                <div class="vip-input-area" id="vip-input-area">
-                    <div class="auth-error" id="vip-error"></div>
-                    <input type="text" id="vCode" class="auth-input" placeholder="VIP KODUNUZU GİRİN" style="text-align:center; letter-spacing:2px;" onkeydown="if(event.key==='Enter')activateVip()">
-                    <button class="auth-btn auth-btn-primary" style="background:linear-gradient(135deg,#9333ea,#ff00ea);" onclick="activateVip()">ONAYLA</button>
-                </div>
-
-                <button class="vip-close-btn" onclick="closeVip()">KAPAT</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== JAVASCRIPT ========== -->
+    <title>Profesyonel Web Sitesi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // ===== Firebase Setup =====
-        const config = {
-            apiKey: "AIzaSyBC_h0zpRSSGdzcbtGsq3Bh2WGKAgTrNKc",
-            authDomain: "vanguardnexus-a2871.firebaseapp.com",
-            databaseURL: "https://vanguardnexus-a2871-default-rtdb.firebaseio.com",
-            projectId: "vanguardnexus-a2871"
-        };
-        firebase.initializeApp(config);
-        const db = firebase.database();
-
-        // ===== State =====
-        let currentUser = null;
-        let isVip = false;
-        let isPlaying = false;
-        let myChartInstance = null;
-        let sidebarCollapsed = false;
-
-        // ===== Particles =====
-        (function createParticles() {
-            const container = document.getElementById('particles');
-            if (!container) return;
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const size = Math.random() * 6 + 2;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.top = Math.random() * 100 + '%';
-                p.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                p.style.animationDelay = (Math.random() * 3) + 's';
-                container.appendChild(p);
-            }
-        })();
-
-        // ===== Auth Tab Switching =====
-        function switchTab(tab) {
-            const errEl = document.getElementById('auth-error');
-            errEl.classList.remove('show');
-            errEl.textContent = '';
-
-            if (tab === 'login') {
-                document.getElementById('tab-login').classList.add('active');
-                document.getElementById('tab-register').classList.remove('active');
-                document.getElementById('form-login').style.display = 'block';
-                document.getElementById('form-register').style.display = 'none';
-            } else {
-                document.getElementById('tab-register').classList.add('active');
-                document.getElementById('tab-login').classList.remove('active');
-                document.getElementById('form-register').style.display = 'block';
-                document.getElementById('form-login').style.display = 'none';
-            }
-        }
-
-        function showAuthError(msg) {
-            const el = document.getElementById('auth-error');
-            el.textContent = msg;
-            el.classList.add('show');
-        }
-
-        // ===== Login =====
-        function doLogin() {
-            const u = document.getElementById('lName').value.trim();
-            const p = document.getElementById('lPass').value.trim();
-            if (!u || !p) { showAuthError('Lütfen tüm alanları doldurun.'); return; }
-
-            const btn = document.getElementById('btn-login');
-            btn.innerHTML = '<span class="spinner"></span>GİRİŞ YAPILIYOR...';
-            btn.disabled = true;
-
-            if (u === "ADMIN" && p === "1200778") {
-                loginSuccess(u, true);
-                return;
-            }
-
-            db.ref('users/' + u).once('value').then(s => {
-                if (s.exists() && s.val().password === p) {
-                    loginSuccess(u, s.val().isVip || false);
-                } else {
-                    showAuthError('Kullanıcı adı veya şifre hatalı!');
-                    btn.innerHTML = 'GİRİŞ YAP';
-                    btn.disabled = false;
-                }
-            }).catch(() => {
-                showAuthError('Bağlantı hatası!');
-                btn.innerHTML = 'GİRİŞ YAP';
-                btn.disabled = false;
-            });
-        }
-
-        // ===== Register =====
-        function handleRegister() {
-            const u = document.getElementById('rName').value.trim();
-            const p = document.getElementById('rPass').value.trim();
-            if (!u || !p) { showAuthError('Lütfen tüm alanları doldurun.'); return; }
-
-            const btn = document.getElementById('btn-register');
-            btn.innerHTML = '<span class="spinner"></span>KAYIT YAPILIYOR...';
-            btn.disabled = true;
-
-            db.ref('users/' + u).once('value').then(s => {
-                if (s.exists()) {
-                    showAuthError('Bu kullanıcı adı zaten alınmış!');
-                    btn.innerHTML = 'HESAP OLUŞTUR';
-                    btn.disabled = false;
-                } else {
-                    db.ref('users/' + u).set({ password: p, isVip: false }).then(() => {
-                        switchTab('login');
-                        document.getElementById('lName').value = u;
-                        document.getElementById('lPass').value = p;
-                        btn.innerHTML = 'HESAP OLUŞTUR';
-                        btn.disabled = false;
-                    });
-                }
-            }).catch(() => {
-                showAuthError('Bağlantı hatası!');
-                btn.innerHTML = 'HESAP OLUŞTUR';
-                btn.disabled = false;
-            });
-        }
-
-        // ===== Guest =====
-        function doGuest() { loginSuccess('MİSAFİR', false); }
-
-        // ===== Login Success =====
-        function loginSuccess(u, vip) {
-            currentUser = u;
-            isVip = vip;
-            sessionStorage.setItem('user', u);
-
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('disp-user').innerText = u;
-
-            if (vip) applyVipLayout();
-            initChart();
-            setupPresence();
-        }
-
-        // ===== Logout =====
-        function doLogout() {
-            currentUser = null;
-            isVip = false;
-            sessionStorage.removeItem('user');
-            location.reload();
-        }
-
-        // ===== VIP Layout =====
-        function applyVipLayout() {
-            const statusEl = document.getElementById('user-status');
-            statusEl.innerText = '⭐ VIP ÜYE';
-            statusEl.className = 'vip';
-
-            const grid = document.getElementById('tools-grid');
-            const vipTools = [
-                { icon: 'bolt', title: 'VIP: META', url: 'https://www.metasrc.com/valorant' },
-                { icon: 'auto_awesome', title: 'VIP: SKINS', url: 'https://valorant.fandom.com/wiki/Skins' },
-                { icon: 'menu_book', title: 'VIP: PRO MAPS', url: 'https://tracker.gg/valorant/guides' }
-            ];
-            vipTools.forEach(t => {
-                const div = document.createElement('div');
-                div.className = 'tool-card vip-card';
-                div.onclick = () => window.open(t.url, '_blank');
-                div.innerHTML = `
-                    <span class="material-icons-sharp" style="color:var(--v-purple-light)">${t.icon}</span>
-                    <h3 class="font-valorant">${t.title}</h3>
-                    <span class="vip-tag">VIP</span>
-                `;
-                grid.appendChild(div);
-            });
-
-            document.getElementById('stat-tools').innerText = '9';
-        }
-
-        // ===== Sidebar Toggle =====
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebarCollapsed = !sidebarCollapsed;
-            sidebar.classList.toggle('collapsed');
-            document.getElementById('collapse-icon').innerText = sidebarCollapsed ? 'chevron_right' : 'chevron_left';
-        }
-
-        // ===== Music Toggle =====
-        function toggleMusic() {
-            const m = document.getElementById('bgMusic');
-            if (isPlaying) { m.pause(); } else { m.play(); }
-            isPlaying = !isPlaying;
-            const label = isPlaying ? 'Müzik: Açık' : 'Müzik: Kapalı';
-            const icon = isPlaying ? 'music_note' : 'music_off';
-            document.getElementById('music-text').innerText = label;
-            document.getElementById('music-icon').innerText = icon;
-            const mobileIcon = document.getElementById('music-icon-mobile');
-            if (mobileIcon) mobileIcon.innerText = icon;
-        }
-
-        // ===== Chart =====
-        function initChart() {
-            const ctx = document.getElementById('myChart').getContext('2d');
-            myChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Aktif Kullanıcı',
-                        data: [],
-                        borderColor: '#9333ea',
-                        backgroundColor: 'rgba(147, 51, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        borderWidth: 2,
-                        pointBackgroundColor: '#9333ea',
-                        pointBorderColor: '#9333ea',
-                        pointRadius: 3,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(26, 26, 62, 0.9)',
-                            borderColor: 'rgba(147, 51, 234, 0.3)',
-                            borderWidth: 1,
-                            titleColor: '#fff',
-                            bodyColor: '#ccc',
-                            cornerRadius: 12,
-                            padding: 10
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: 'rgba(147, 51, 234, 0.08)' },
-                            ticks: { color: '#4a4a6a', font: { size: 10 } }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(147, 51, 234, 0.08)' },
-                            ticks: { color: '#4a4a6a', font: { size: 10 }, stepSize: 1 }
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
                         }
                     }
                 }
-            });
-        }
-
-        function updateChart(count) {
-            if (!myChartInstance) return;
-            const now = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            myChartInstance.data.labels.push(now);
-            myChartInstance.data.datasets[0].data.push(count);
-            if (myChartInstance.data.labels.length > 10) {
-                myChartInstance.data.labels.shift();
-                myChartInstance.data.datasets[0].data.shift();
-            }
-            myChartInstance.update();
-        }
-
-        // ===== Presence Tracking =====
-        function setupPresence() {
-            db.ref('stats/totalVisits').transaction(c => (c || 0) + 1);
-            const activeRef = db.ref('stats/activeNow');
-            const myPresence = activeRef.push();
-            myPresence.onDisconnect().remove();
-            myPresence.set(true);
-
-            db.ref('stats').on('value', s => {
-                const data = s.val() || { activeNow: {}, totalVisits: 0 };
-                const activeCount = Object.keys(data.activeNow || {}).length;
-                const totalCount = data.totalVisits || 0;
-                document.getElementById('stat-active').innerText = activeCount;
-                document.getElementById('stat-visits').innerText = totalCount;
-                updateChart(activeCount);
-            });
-        }
-
-        // ===== Chat =====
-        const userColors = ['#9333ea', '#00f2ff', '#ff00ea', '#41f1b6', '#ffbb55', '#ff7782', '#7380ec', '#f59e0b', '#10b981', '#ec4899'];
-        function getUserColor(name) {
-            let hash = 0;
-            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-            return userColors[Math.abs(hash) % userColors.length];
-        }
-
-        function sendChat(source) {
-            const inputId = source === 'mobile' ? 'mobile-chatMsg' : 'chatMsg';
-            const m = document.getElementById(inputId).value.trim();
-            if (m && currentUser) {
-                db.ref('chat').push({ u: currentUser, m: m, t: Date.now() });
-                document.getElementById(inputId).value = '';
             }
         }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
 
-        function renderMessages(snapshot) {
-            const containers = ['chat-messages', 'mobile-chat-messages'];
-            containers.forEach(id => {
-                const box = document.getElementById(id);
-                if (!box) return;
-                let html = '';
-                let hasMessages = false;
-                snapshot.forEach(c => {
-                    hasMessages = true;
-                    const val = c.val();
-                    const isMe = val.u === currentUser;
-                    const color = getUserColor(val.u);
-                    html += `<div class="chat-msg ${isMe ? 'mine' : ''}">
-                        <div class="chat-msg-user" style="color:${color}">${val.u}</div>
-                        <div class="chat-msg-bubble">${escapeHtml(val.m)}</div>
-                    </div>`;
-                });
-                box.innerHTML = hasMessages ? html : '<div class="chat-empty">Henüz mesaj yok. İlk mesajı sen yaz!</div>';
-                box.scrollTop = box.scrollHeight;
-            });
+    <!-- Header / Navbar -->
+    <header class="fixed top-0 left-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-50 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-primary-500 to-indigo-600 bg-clip-text text-transparent">
+                        PORTFOLYO<span class="text-primary-500">.</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-sm font-medium hover:text-primary-500 transition-colors">Ana Sayfa</a>
+                    <a href="#services" class="text-sm font-medium hover:text-primary-500 transition-colors">Hizmetler</a>
+                    <a href="#projects" class="text-sm font-medium hover:text-primary-500 transition-colors">Projeler</a>
+                    <a href="#about" class="text-sm font-medium hover:text-primary-500 transition-colors">Hakkımda</a>
+                    <a href="#contact" class="text-sm font-medium hover:text-primary-500 transition-colors">İletişim</a>
+                    
+                    <!-- Dark Mode Toggle Button -->
+                    <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none" aria-label="Karanlık Modu Aç/Kapat">
+                        <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
+                        <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu & Dark Mode Button -->
+                <div class="flex items-center md:hidden space-x-2">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none">
+                        <i id="theme-toggle-dark-icon-mob" class="fa-solid fa-moon hidden"></i>
+                        <i id="theme-toggle-light-icon-mob" class="fa-solid fa-sun hidden"></i>
+                    </button>
+                    <button id="mobile-menu-button" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-none" aria-label="Menüyü Aç">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+            <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Ana Sayfa</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Hizmetler</a>
+                <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Projeler</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Hakkımda</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">İletişim</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute top-1/4 left-1/10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative z-10 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- Text Area -->
+                <div class="space-y-6 text-center md:text-left">
+                    <span class="inline-block px-3 py-1 bg-primary-100 text-primary-600 dark:bg-primary-900/50 dark:text-primary-400 rounded-full text-xs font-semibold tracking-wider uppercase">
+                        Geliştirici & Tasarımcı
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+                        Fikirlerinizi <br>
+                        <span class="bg-gradient-to-r from-primary-500 to-indigo-600 bg-clip-text text-transparent">Dijital Sanata</span> Dönüştürün
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 max-w-lg mx-auto md:mx-0">
+                        Modern teknolojiler kullanarak şık, hızlı ve SEO dostu web siteleri tasarlıyorum. Kullanıcı deneyimini ön planda tutan çözümler üretiyorum.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="#projects" class="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg shadow-lg hover:shadow-primary-500/30 transition-all duration-300 text-center">
+                            Projeleri İncele
+                        </a>
+                        <a href="#contact" class="px-6 py-3 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-white border border-slate-300 dark:border-slate-700 font-medium rounded-lg transition-all duration-300 text-center">
+                            İletişime Geç
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Graphic/Visual Area -->
+                <div class="flex justify-center">
+                    <div class="relative w-72 h-72 sm:w-96 sm:h-96">
+                        <!-- Frame decorations -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-primary-500 to-indigo-600 rounded-3xl rotate-6 opacity-20 animate-pulse"></div>
+                        <div class="absolute inset-0 bg-slate-200 dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                            <!-- Showcase Graphic (SVG) -->
+                            <svg class="w-full h-full p-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services / Features Section -->
+    <section id="services" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold">Neler Sunuyorum?</h2>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
+                <p class="text-slate-600 dark:text-slate-400">İhtiyaçlarınıza özel, en güncel teknolojiler ve standartlarla donatılmış profesyonel hizmetler.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/50 text-primary-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-code text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Modern Web Geliştirme</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        En güncel teknolojiler (HTML5, CSS3, JS, React/Tailwind) ile temiz, okunabilir ve sürdürülebilir kod yapıları oluşturuyorum.
+                    </p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-mobile-screen-button text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Mobil Uyumlu Tasarım</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        Web siteniz tüm cihazlarda (telefon, tablet, masaüstü bilgisayarlar) mükemmel bir şekilde görüntülenir ve kusursuz çalışır.
+                    </p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-rocket text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">SEO & Hız Optimizasyonu</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        Google standartlarına tam uyum, hızlı yüklenme süreleri ve SEO teknikleriyle arama sonuçlarında üst sıralarda yer alın.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold">Son Projelerim</h2>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
+                <p class="text-slate-600 dark:text-slate-400">En son hayata geçirdiğim başarılı çalışmalardan bazıları.</p>
+            </div>
+
+            <!-- Project Filter Controls -->
+            <div class="flex justify-center space-x-2 mb-12 flex-wrap gap-y-2">
+                <button onclick="filterProjects('all')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-primary-500 text-white shadow-md transition-all">Hepsi</button>
+                <button onclick="filterProjects('web')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Web Tasarım</button>
+                <button onclick="filterProjects('app')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Uygulama</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="web">
+                    <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                        <i class="fa-solid fa-laptop-code text-5xl text-primary-500/30"></i>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">Web Tasarım</span>
+                        <h3 class="text-lg font-bold">E-Ticaret Arayüzü</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2">Kullanıcı dostu, hızlı ve dönüşüm odaklı tasarlanmış modern e-ticaret platformu şablonu.</p>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-xs text-slate-400">HTML / Tailwind</span>
+                            <a href="#" class="text-sm font-semibold text-primary-500 hover:text-primary-600 flex items-center gap-1">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="app">
+                    <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                        <i class="fa-solid fa-mobile text-5xl text-indigo-500/30"></i>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <span class="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Uygulama</span>
+                        <h3 class="text-lg font-bold">Finans Kontrol Uygulaması</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2">Kişisel bütçenizi kontrol altına alabileceğiniz dinamik grafiklere sahip bir web uygulaması.</p>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-xs text-slate-400">JavaScript / Charts</span>
+                            <a href="#" class="text-sm font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-1">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="web">
+                    <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                        <i class="fa-solid fa-building text-5xl text-emerald-500/30"></i>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <span class="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Web Tasarım</span>
+                        <h3 class="text-lg font-bold">Kurumsal Şirket Sitesi</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2">Şirketinizin profesyonel kimliğini yansıtan, modern, etkileyici ve akıcı açılış sayfası.</p>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-xs text-slate-400">Tailwind CSS</span>
+                            <a href="#" class="text-sm font-semibold text-emerald-500 hover:text-emerald-600 flex items-center gap-1">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Area -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl sm:text-4xl font-bold">Ben Kimim?</h2>
+                    <div class="h-1 w-20 bg-primary-500 rounded-full"></div>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Yıllardır dijital dünyada estetik ve işlevselliği birleştiren web çözümleri üretiyorum. Hem göze hitap eden modern arayüzler tasarlıyor hem de arkasında tıkır tıkır çalışan güçlü bir kod yapısı kuruyorum.
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Müşterilerimin dijital dünyadaki hedeflerine ulaşması için stratejik adımlarla ilerliyor ve her projeyi kendiminki gibi sahipleniyorum.
+                    </p>
+
+                    <!-- Professional Metrics / Achievements -->
+                    <div class="grid grid-cols-3 gap-4 pt-4 text-center">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <span class="block text-2xl sm:text-3xl font-extrabold text-primary-500">5+</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Yıllık Tecrübe</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <span class="block text-2xl sm:text-3xl font-extrabold text-indigo-500">50+</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Mutlu Müşteri</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <span class="block text-2xl sm:text-3xl font-extrabold text-emerald-500">100+</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tamamlanan Proje</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Bars Area -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-6">
+                    <h3 class="text-xl font-bold mb-4">Yetenek Havuzum</h3>
+                    
+                    <!-- Skill 1 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-medium">
+                            <span>HTML5 & CSS3 / Tailwind</span>
+                            <span class="text-primary-500">95%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary-500 rounded-full" style="width: 95%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Skill 2 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-medium">
+                            <span>Javascript (ES6+)</span>
+                            <span class="text-indigo-500">85%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Skill 3 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-medium">
+                            <span>React.js / Frontend frameworks</span>
+                            <span class="text-emerald-500">80%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-500 rounded-full" style="width: 80%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Skill 4 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-medium">
+                            <span>UI/UX Arayüz Tasarımı</span>
+                            <span class="text-amber-500">75%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-amber-500 rounded-full" style="style: width: 75%; width: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold">Benimle İletişime Geçin</h2>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
+                <p class="text-slate-600 dark:text-slate-400">Aklınızda bir proje mi var? Hemen mesaj atın, en kısa sürede dönüş sağlayayım.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Contact Info -->
+                <div class="lg:col-span-1 space-y-8">
+                    <!-- Info Item 1 -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/50 text-primary-500 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-envelope text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">E-posta</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">iletisim@ornek.com</p>
+                        </div>
+                    </div>
+
+                    <!-- Info Item 2 -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-phone text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Telefon</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">+90 (555) 123 45 67</p>
+                        </div>
+                    </div>
+
+                    <!-- Info Item 3 -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-500 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-location-dot text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Lokasyon</h4>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">İstanbul, Türkiye</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-950 p-8 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl">
+                    <form id="contact-form" class="space-y-6" onsubmit="handleFormSubmit(event)">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="name" class="text-sm font-medium">Adınız Soyadınız</label>
+                                <input type="text" id="name" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="email" class="text-sm font-medium">E-posta Adresiniz</label>
+                                <input type="email" id="email" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="subject" class="text-sm font-medium">Konu</label>
+                            <input type="text" id="subject" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="message" class="text-sm font-medium">Mesajınız</label>
+                            <textarea id="message" rows="5" required class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg shadow-lg hover:shadow-primary-500/30 transition-all duration-300">
+                            Mesaj Gönder
+                        </button>
+                    </form>
+
+                    <!-- Alert / Feedback Notification in place of alert() -->
+                    <div id="form-feedback" class="hidden mt-4 p-4 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 text-sm font-medium text-center">
+                        Mesajınız başarıyla iletildi! En kısa zamanda geri dönüş yapacağım.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Brand logo -->
+                <span class="text-xl font-bold bg-gradient-to-r from-primary-500 to-indigo-600 bg-clip-text text-transparent">PORTFOLYO<span class="text-primary-500">.</span></span>
+                
+                <!-- Copyright -->
+                <p class="text-sm text-slate-500 dark:text-slate-400 text-center md:text-left">&copy; 2026 Tüm Hakları Saklıdır.</p>
+
+                <!-- Social Links -->
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-all"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-all"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Vanilla Javascript Logic -->
+    <script>
+        // --- 1. DARK / LIGHT MODE CONTROL ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleBtnMob = document.getElementById('theme-toggle-mobile');
+        
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIconMob = document.getElementById('theme-toggle-dark-icon-mob');
+        const themeToggleLightIconMob = document.getElementById('theme-toggle-light-icon-mob');
+
+        // Check local storage or system preferences
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+            themeToggleLightIconMob.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleDarkIcon.classList.remove('hidden');
+            themeToggleDarkIconMob.classList.remove('hidden');
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        db.ref('chat').limitToLast(30).on('value', renderMessages);
-
-        // ===== VIP Modal =====
-        function openVip() {
-            const overlay = document.getElementById('vip-overlay');
-            overlay.classList.add('show');
-
-            document.getElementById('vip-success').classList.remove('show');
-            document.getElementById('vip-error').classList.remove('show');
-            document.getElementById('vip-error').textContent = '';
-
-            if (currentUser === 'MİSAFİR') {
-                document.getElementById('vip-guest-warning').classList.add('show');
-                document.getElementById('vip-input-area').classList.add('hidden');
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleLightIconMob.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
+                themeToggleDarkIconMob.classList.remove('hidden');
             } else {
-                document.getElementById('vip-guest-warning').classList.remove('show');
-                document.getElementById('vip-input-area').classList.remove('hidden');
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                
+                themeToggleDarkIcon.classList.add('hidden');
+                themeToggleDarkIconMob.classList.add('hidden');
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleLightIconMob.classList.remove('hidden');
             }
         }
 
-        function closeVip() {
-            document.getElementById('vip-overlay').classList.remove('show');
-        }
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleBtnMob.addEventListener('click', toggleTheme);
 
-        function activateVip() {
-            const code = document.getElementById('vCode').value.trim();
-            if (!code) {
-                const errEl = document.getElementById('vip-error');
-                errEl.textContent = 'Lütfen VIP kodunuzu girin.';
-                errEl.classList.add('show');
-                return;
-            }
 
-            if (code === "VN-9928-XQ71-PL00" && currentUser !== "MİSAFİR") {
-                db.ref('users/' + currentUser).update({ isVip: true }).then(() => {
-                    document.getElementById('vip-input-area').classList.add('hidden');
-                    document.getElementById('vip-success').classList.add('show');
-                    setTimeout(() => {
-                        closeVip();
-                        if (!isVip) {
-                            isVip = true;
-                            applyVipLayout();
-                        }
-                    }, 1500);
-                });
+        // --- 2. MOBILE MENU ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuButton.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.className = 'fa-solid fa-bars text-xl';
             } else {
-                const errEl = document.getElementById('vip-error');
-                errEl.textContent = 'Geçersiz VIP kodu!';
-                errEl.classList.add('show');
+                icon.className = 'fa-solid fa-xmark text-xl';
             }
-        }
-
-        // ===== Cursor Glow =====
-        window.addEventListener('mousemove', e => {
-            const g = document.getElementById('cursor-glow');
-            if (g) { g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'; }
         });
 
-        // ===== Enter Key Handlers =====
-        document.getElementById('lPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-        document.getElementById('rPass').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
-        document.getElementById('vCode').addEventListener('keydown', e => { if (e.key === 'Enter') activateVip(); });
+        // Close mobile menu on clicking links
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuButton.querySelector('i').className = 'fa-solid fa-bars text-xl';
+            });
+        });
+
+
+        // --- 3. PORTFOLIO FILTERING ---
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.project-tab-btn');
+
+            // Set active class on button
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-primary-500', 'text-white', 'shadow-md');
+                btn.classList.add('bg-white', 'dark:bg-slate-800', 'hover:bg-slate-100', 'dark:hover:bg-slate-700');
+            });
+
+            // Highlight the clicked filter button
+            event.currentTarget.classList.add('bg-primary-500', 'text-white', 'shadow-md');
+            event.currentTarget.classList.remove('bg-white', 'dark:bg-slate-800', 'hover:bg-slate-100', 'dark:hover:bg-slate-700');
+
+            // Filter logic
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.classList.remove('hidden');
+                    // Simple animation reflow
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transition = 'opacity 300ms ease-in-out';
+                    }, 50);
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+
+        // --- 4. CONTACT FORM HANDLER (NO BROWSER ALERT) ---
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('contact-form');
+            const feedback = document.getElementById('form-feedback');
+
+            // Simulate sending message
+            feedback.classList.remove('hidden');
+            form.reset();
+
+            // Hide feedback message after 5 seconds
+            setTimeout(() => {
+                feedback.classList.add('hidden');
+            }, 5000);
+        }
     </script>
 </body>
 </html>
+
+```
