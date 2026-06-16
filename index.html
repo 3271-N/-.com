@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profesyonel Web Sitesi</title>
+    <title>Profesyonel Web Sitesi & Geliştirici Laboratuvarı</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,19 +14,27 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
+                            50: 'var(--primary-light)',
+                            100: 'var(--primary-light)',
+                            500: 'var(--primary-color)',
+                            600: 'var(--primary-hover)',
+                            700: 'var(--primary-hover)',
                         }
                     }
                 }
             }
         }
     </script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Dinamik Tema Renk Değişkenleri */
+        :root {
+            --primary-color: #0ea5e9;
+            --primary-hover: #0284c7;
+            --primary-light: #e0f2fe;
+        }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -41,36 +50,72 @@
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #0ea5e9;
+            background: var(--primary-color);
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
 
+    <!-- Header / Navbar -->
     <header class="fixed top-0 left-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-50 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-primary-500 to-indigo-600 bg-clip-text text-transparent">
+                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-primary-500 to-indigo-600 bg-clip-text text-transparent transition-all">
                         PORTFOLYO<span class="text-primary-500">.</span>
                     </a>
                 </div>
 
-                <nav class="hidden md:flex space-x-8 items-center">
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6 items-center">
                     <a href="#home" class="text-sm font-medium hover:text-primary-500 transition-colors">Ana Sayfa</a>
                     <a href="#services" class="text-sm font-medium hover:text-primary-500 transition-colors">Hizmetler</a>
                     <a href="#projects" class="text-sm font-medium hover:text-primary-500 transition-colors">Projeler</a>
                     <a href="#editor" class="text-sm font-medium hover:text-primary-500 transition-colors">Kod Editörü</a>
+                    <a href="#tools" class="text-sm font-medium hover:text-primary-500 transition-colors">Tasarım Araçları</a>
+                    <a href="#faq" class="text-sm font-medium hover:text-primary-500 transition-colors">S.S.S.</a>
                     <a href="#about" class="text-sm font-medium hover:text-primary-500 transition-colors">Hakkımda</a>
                     <a href="#contact" class="text-sm font-medium hover:text-primary-500 transition-colors">İletişim</a>
                     
+                    <!-- Theme Color Accent Trigger Button -->
+                    <div class="relative">
+                        <button id="accent-menu-btn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none" aria-label="Sitenin Rengini Değiştir">
+                            <i class="fa-solid fa-palette"></i>
+                        </button>
+                        <!-- Accent Color Palette Dropdown Menu -->
+                        <div id="accent-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xl space-y-2 z-50">
+                            <span class="block text-xs font-bold text-slate-400 mb-1">Tema Rengi</span>
+                            <button onclick="changeAccent('#0ea5e9', '#0284c7', '#e0f2fe')" class="w-full flex items-center gap-2 text-xs font-semibold p-1.5 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-slate-700 dark:text-slate-300">
+                                <span class="w-3.5 h-3.5 rounded-full bg-sky-500"></span> Mavi
+                            </button>
+                            <button onclick="changeAccent('#10b981', '#059669', '#d1fae5')" class="w-full flex items-center gap-2 text-xs font-semibold p-1.5 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-slate-700 dark:text-slate-300">
+                                <span class="w-3.5 h-3.5 rounded-full bg-emerald-500"></span> Yeşil
+                            </button>
+                            <button onclick="changeAccent('#8b5cf6', '#7c3aed', '#ede9fe')" class="w-full flex items-center gap-2 text-xs font-semibold p-1.5 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-slate-700 dark:text-slate-300">
+                                <span class="w-3.5 h-3.5 rounded-full bg-violet-500"></span> Mor
+                            </button>
+                            <button onclick="changeAccent('#f59e0b', '#d97706', '#fef3c7')" class="w-full flex items-center gap-2 text-xs font-semibold p-1.5 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-slate-700 dark:text-slate-300">
+                                <span class="w-3.5 h-3.5 rounded-full bg-amber-500"></span> Kehribar
+                            </button>
+                            <button onclick="changeAccent('#f43f5e', '#e11d48', '#ffe4e6')" class="w-full flex items-center gap-2 text-xs font-semibold p-1.5 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-slate-700 dark:text-slate-300">
+                                <span class="w-3.5 h-3.5 rounded-full bg-rose-500"></span> Gül Kırmızı
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dark Mode Toggle Button -->
                     <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none" aria-label="Karanlık Modu Aç/Kapat">
                         <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
                         <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
                     </button>
                 </nav>
 
-                <div class="flex items-center md:hidden space-x-2">
+                <!-- Mobile Menu & Dark/Color Buttons -->
+                <div class="flex items-center md:hidden space-x-1.5">
+                    <button id="accent-menu-btn-mob" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
                     <button id="theme-toggle-mobile" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none">
                         <i id="theme-toggle-dark-icon-mob" class="fa-solid fa-moon hidden"></i>
                         <i id="theme-toggle-light-icon-mob" class="fa-solid fa-sun hidden"></i>
@@ -82,26 +127,32 @@
             </div>
         </div>
 
+        <!-- Mobile Menu Navigation -->
         <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
             <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
                 <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Ana Sayfa</a>
                 <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Hizmetler</a>
                 <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Projeler</a>
                 <a href="#editor" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Kod Editörü</a>
+                <a href="#tools" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Tasarım Araçları</a>
+                <a href="#faq" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">S.S.S.</a>
                 <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Hakkımda</a>
                 <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">İletişim</a>
             </div>
         </div>
     </header>
 
+    <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+        <!-- Background decorative elements -->
         <div class="absolute top-1/4 left-1/10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative z-10 w-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- Text Area -->
                 <div class="space-y-6 text-center md:text-left">
-                    <span class="inline-block px-3 py-1 bg-primary-100 text-primary-600 dark:bg-primary-900/50 dark:text-primary-400 rounded-full text-xs font-semibold tracking-wider uppercase">
+                    <span class="inline-block px-3 py-1 bg-primary-100 text-primary-500 rounded-full text-xs font-semibold tracking-wider uppercase transition-all">
                         Geliştirici & Tasarımcı
                     </span>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
@@ -121,11 +172,14 @@
                     </div>
                 </div>
 
+                <!-- Graphic/Visual Area -->
                 <div class="flex justify-center">
                     <div class="relative w-72 h-72 sm:w-96 sm:h-96">
+                        <!-- Frame decorations -->
                         <div class="absolute inset-0 bg-gradient-to-tr from-primary-500 to-indigo-600 rounded-3xl rotate-6 opacity-20 animate-pulse"></div>
                         <div class="absolute inset-0 bg-slate-200 dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
-                            <svg class="w-full h-full p-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Showcase Graphic (SVG) -->
+                            <svg class="w-full h-full p-8 text-primary-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
                             </svg>
                         </div>
@@ -135,17 +189,19 @@
         </div>
     </section>
 
+    <!-- Services / Features Section -->
     <section id="services" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <h2 class="text-3xl sm:text-4xl font-bold">Neler Sunuyorum?</h2>
-                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
-                <p class="text-slate-600 dark:text-slate-400">İhtiyaçlarına özel, en güncel teknolojiler ve standartlarla donatılmış profesyonel hizmetler.</p>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full transition-all"></div>
+                <p class="text-slate-600 dark:text-slate-400">İhtiyaçlarınıza özel, en güncel teknolojiler ve standartlarla donatılmış profesyonel hizmetler.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/50 text-primary-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                         <i class="fa-solid fa-code text-xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3">Modern Web Geliştirme</h3>
@@ -154,8 +210,9 @@
                     </p>
                 </div>
 
+                <!-- Service 2 -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                         <i class="fa-solid fa-mobile-screen-button text-xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3">Mobil Uyumlu Tasarım</h3>
@@ -164,8 +221,9 @@
                     </p>
                 </div>
 
+                <!-- Service 3 -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                         <i class="fa-solid fa-rocket text-xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3">SEO & Hız Optimizasyonu</h3>
@@ -177,36 +235,41 @@
         </div>
     </section>
 
+    <!-- Projects Section -->
     <section id="projects" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold">Son Projelerim</h2>
-                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full transition-all"></div>
                 <p class="text-slate-600 dark:text-slate-400">En son hayata geçirdiğim başarılı çalışmalardan bazıları.</p>
             </div>
 
+            <!-- Project Filter Controls -->
             <div class="flex justify-center space-x-2 mb-12 flex-wrap gap-y-2">
                 <button onclick="filterProjects('all')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-primary-500 text-white shadow-md transition-all">Hepsi</button>
                 <button onclick="filterProjects('web')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Web Tasarım</button>
                 <button onclick="filterProjects('app')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Uygulama</button>
             </div>
 
+            <!-- Projects Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
                 <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="web">
                     <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-                        <i class="fa-solid fa-laptop-code text-5xl text-primary-500/30"></i>
+                        <i class="fa-solid fa-laptop-code text-5xl text-primary-500/30 transition-colors"></i>
                     </div>
                     <div class="p-6 space-y-4">
-                        <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider">Web Tasarım</span>
+                        <span class="text-xs font-semibold text-primary-500 uppercase tracking-wider transition-all">Web Tasarım</span>
                         <h3 class="text-lg font-bold">E-Ticaret Arayüzü</h3>
                         <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2">Kullanıcı dostu, hızlı ve dönüşüm odaklı tasarlanmış modern e-ticaret platformu şablonu.</p>
                         <div class="flex justify-between items-center pt-2">
                             <span class="text-xs text-slate-400">HTML / Tailwind</span>
-                            <a href="#" class="text-sm font-semibold text-primary-500 hover:text-primary-600 flex items-center gap-1">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                            <a href="#" class="text-sm font-semibold text-primary-500 hover:text-primary-600 flex items-center gap-1 transition-colors">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
                         </div>
                     </div>
                 </div>
 
+                <!-- Project 2 -->
                 <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="app">
                     <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                         <i class="fa-solid fa-mobile text-5xl text-indigo-500/30"></i>
@@ -222,6 +285,7 @@
                     </div>
                 </div>
 
+                <!-- Project 3 -->
                 <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="web">
                     <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                         <i class="fa-solid fa-building text-5xl text-emerald-500/30"></i>
@@ -232,7 +296,7 @@
                         <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2">Şirketinizin profesyonel kimliğini yansıtan, modern, etkileyici ve akıcı açılış sayfası.</p>
                         <div class="flex justify-between items-center pt-2">
                             <span class="text-xs text-slate-400">Tailwind CSS</span>
-                            <a href="#" class="text-sm font-semibold text-emerald-500 hover:text-emerald-600 flex items-center gap-1">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                            <a href="#" class="text-sm font-semibold text-emerald-500 hover:text-emerald-600 flex items-center gap-1 font-semibold">İncele <i class="fa-solid fa-arrow-right text-xs"></i></a>
                         </div>
                     </div>
                 </div>
@@ -240,19 +304,22 @@
         </div>
     </section>
 
+    <!-- LIVE CODE PLAYGROUND SECTION -->
     <section id="editor" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold">Canlı Kod Editörü</h2>
-                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full transition-all"></div>
                 <p class="text-slate-600 dark:text-slate-400">HTML ve CSS kodlarınızı sol tarafa yazın, çıktısını sağ taraftaki köşede anında izleyin.</p>
             </div>
 
+            <!-- Editor Wrapper -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[550px]">
+                <!-- Code Writing Side -->
                 <div class="flex flex-col h-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-900 overflow-hidden shadow-xl">
                     <div class="px-4 py-3 border-b border-slate-800 bg-slate-950/80 flex items-center justify-between">
                         <div class="flex items-center space-x-2 text-slate-400 font-mono text-xs">
-                            <i class="fa-solid fa-terminal text-primary-500"></i>
+                            <i class="fa-solid fa-terminal text-primary-500 transition-colors"></i>
                             <span>index.html</span>
                         </div>
                         <div class="flex space-x-1.5">
@@ -264,23 +331,313 @@
                     <textarea id="code-input" class="w-full flex-1 p-4 bg-slate-900 text-emerald-400 font-mono text-sm focus:outline-none resize-none selection:bg-slate-700" spellcheck="false" placeholder="Buraya HTML kodları yazmaya başlayın..."></textarea>
                 </div>
 
+                <!-- Visual Output Side -->
                 <div class="flex flex-col h-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xl">
                     <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/50 flex items-center space-x-2">
                         <i class="fa-solid fa-eye text-indigo-500 text-xs"></i>
                         <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Canlı Önizleme Köşesi</span>
                     </div>
+                    <!-- Fixed secure iframe -->
                     <iframe id="code-preview" class="w-full flex-1 bg-white" sandbox="allow-scripts"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="about" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <!-- DEVELOPER TOOLS & GENERATORS SECTION -->
+    <section id="tools" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+                <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 rounded-full text-xs font-semibold tracking-wider uppercase">
+                    Geliştirici Araç Kutusu
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-bold">İnteraktif CSS Tasarımcıları</h2>
+                <div class="h-1 w-20 bg-indigo-500 mx-auto rounded-full"></div>
+                <p class="text-slate-600 dark:text-slate-400">Web elemanlarını görsel olarak tasarla, üretilen kodları yukarıdaki Canlı Editör'de test et!</p>
+            </div>
+
+            <!-- Tab Buttons for Tools -->
+            <div class="flex justify-center space-x-3 mb-10 flex-wrap gap-y-3">
+                <button onclick="switchToolTab('button-designer')" id="tab-btn-button-designer" class="tool-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-indigo-500 text-white shadow-lg transition-all">
+                    <i class="fa-solid fa-toggle-on mr-1.5"></i> Buton Oluşturucu
+                </button>
+                <button onclick="switchToolTab('glass-designer')" id="tab-btn-glass-designer" class="tool-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Buzlu Cam (Glass)
+                </button>
+                <button onclick="switchToolTab('shadow-designer')" id="tab-btn-shadow-designer" class="tool-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+                    <i class="fa-solid fa-circle-half-stroke mr-1.5"></i> CSS Gölge (Shadow)
+                </button>
+                <button onclick="switchToolTab('wave-designer')" id="tab-btn-wave-designer" class="tool-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+                    <i class="fa-solid fa-water mr-1.5"></i> SVG Dalga (Wave)
+                </button>
+            </div>
+
+            <!-- TOOL TAB 1: BUTTON DESIGNER -->
+            <div id="tool-button-designer" class="tool-tab-content grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Controls Side -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-6">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Tasarım Ayarları</h3>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>İç Boşluk (Padding)</span>
+                            <span id="padding-val">12px 24px</span>
+                        </div>
+                        <input type="range" id="input-padding" min="6" max="32" value="12" class="w-full accent-indigo-500">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Köşe Yuvarlaklığı (Border Radius)</span>
+                            <span id="radius-val">12px</span>
+                        </div>
+                        <input type="range" id="input-radius" min="0" max="40" value="12" class="w-full accent-indigo-500">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Gölge Boyutu (Shadow Blur)</span>
+                            <span id="shadow-val">10px</span>
+                        </div>
+                        <input type="range" id="input-shadow" min="0" max="30" value="12" class="w-full accent-indigo-500">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Arka Plan Rengi</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="input-bg-color" value="#6366f1" class="w-10 h-10 border-0 rounded cursor-pointer bg-transparent">
+                            <span id="color-hex-val" class="font-mono text-sm uppercase text-slate-500 dark:text-slate-400">#6366F1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Sandbox Side -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Canlı Buton Görünümü</h3>
+                    
+                    <div class="flex-1 min-h-[180px] bg-slate-100 dark:bg-slate-900 rounded-xl my-6 flex items-center justify-center p-4 transition-colors">
+                        <button id="gen-button-preview" style="color: white; border: none; font-weight: 600; font-family: sans-serif; cursor: pointer; transition: all 0.1s;">Tıkla Beni!</button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Oluşturulan HTML Kodu</span>
+                            <button onclick="copyGeneratedCode('gen-code-output')" class="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-1 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1.5 rounded-lg transition-all">
+                                <i class="fa-regular fa-copy"></i> Kodu Kopyala
+                            </button>
+                        </div>
+                        <textarea id="gen-code-output" readonly class="w-full h-16 p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-xs font-mono text-indigo-500 resize-none focus:outline-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL TAB 2: GLASSMORPHISM DESIGNER -->
+            <div id="tool-glass-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Controls Side -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Buzlu Cam Ayarları</h3>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Bulanıklık (Blur)</span>
+                            <span id="glass-blur-val">10px</span>
+                        </div>
+                        <input type="range" id="input-glass-blur" min="0" max="30" value="10" class="w-full accent-indigo-500">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Saydamlık (Opacity)</span>
+                            <span id="glass-op-val">0.25</span>
+                        </div>
+                        <input type="range" id="input-glass-op" min="0" max="100" value="25" class="w-full accent-indigo-500">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Doygunluk (Saturation)</span>
+                            <span id="glass-sat-val">120%</span>
+                        </div>
+                        <input type="range" id="input-glass-sat" min="50" max="250" value="120" class="w-full accent-indigo-500">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Cam Ton Rengi</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-1.5 text-xs font-semibold cursor-pointer">
+                                <input type="radio" name="glass-base-color" value="255,255,255" checked class="accent-indigo-500"> Beyaz (Açık)
+                            </label>
+                            <label class="flex items-center gap-1.5 text-xs font-semibold cursor-pointer">
+                                <input type="radio" name="glass-base-color" value="15,23,42" class="accent-indigo-500"> Lacivert (Koyu)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Sandbox Side -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Canlı Cam Görünümü</h3>
+                    
+                    <div class="flex-1 min-h-[180px] rounded-xl my-6 flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+                        <div class="absolute w-20 h-20 bg-yellow-400 rounded-full top-4 left-6 animate-pulse"></div>
+                        <div class="absolute w-28 h-28 bg-emerald-400 rounded-full -bottom-6 -right-4 animate-bounce" style="animation-duration: 4s;"></div>
+                        
+                        <div id="gen-glass-preview" class="p-6 max-w-[280px] text-center border relative z-10 transition-all duration-75">
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Modern Cam</h4>
+                            <p class="text-xs text-slate-800 dark:text-slate-200 leading-relaxed">İçerisi bulanık ve aşırı şık görünür.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Oluşturulan HTML Kodu</span>
+                            <button onclick="copyGeneratedCode('gen-glass-output')" class="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-1 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1.5 rounded-lg transition-all">
+                                <i class="fa-regular fa-copy"></i> Kodu Kopyala
+                            </button>
+                        </div>
+                        <textarea id="gen-glass-output" readonly class="w-full h-16 p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-xs font-mono text-indigo-500 resize-none focus:outline-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL TAB 3: BOX SHADOW DESIGNER -->
+            <div id="tool-shadow-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Controls Side -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Gölge Tasarım Ayarları</h3>
+                    
+                    <!-- X Offset -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Yatay Sapma (X Offset)</span>
+                            <span id="shadow-x-val">0px</span>
+                        </div>
+                        <input type="range" id="input-shadow-x" min="-50" max="50" value="0" class="w-full accent-indigo-500">
+                    </div>
+
+                    <!-- Y Offset -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Dikey Sapma (Y Offset)</span>
+                            <span id="shadow-y-val">15px</span>
+                        </div>
+                        <input type="range" id="input-shadow-y" min="-50" max="50" value="15" class="w-full accent-indigo-500">
+                    </div>
+
+                    <!-- Blur Radius -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Gölge Dağılımı (Blur Radius)</span>
+                            <span id="shadow-blur-val">30px</span>
+                        </div>
+                        <input type="range" id="input-shadow-blur" min="0" max="100" value="30" class="w-full accent-indigo-500">
+                    </div>
+
+                    <!-- Shadow Opacity -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Gölge Yoğunluğu (Opacity)</span>
+                            <span id="shadow-op-val">0.15</span>
+                        </div>
+                        <input type="range" id="input-shadow-op" min="0" max="100" value="15" class="w-full accent-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Visual Sandbox Side -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Canlı Gölge Görünümü</h3>
+                    
+                    <div class="flex-1 min-h-[180px] bg-slate-100 dark:bg-slate-900 rounded-xl my-6 flex items-center justify-center p-4 transition-colors">
+                        <!-- Main Shadow Preview Box -->
+                        <div id="gen-shadow-preview" class="w-40 h-24 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center border border-slate-100 dark:border-slate-700/50 transition-all duration-75">
+                            <span class="text-xs font-bold text-slate-400">Hacimli Kutu</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Oluşturulan HTML/CSS Kodu</span>
+                            <button onclick="copyGeneratedCode('gen-shadow-output')" class="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-1 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1.5 rounded-lg transition-all">
+                                <i class="fa-regular fa-copy"></i> Kodu Kopyala
+                            </button>
+                        </div>
+                        <textarea id="gen-shadow-output" readonly class="w-full h-16 p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-xs font-mono text-indigo-500 resize-none focus:outline-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL TAB 4: SVG WAVE GENERATOR -->
+            <div id="tool-wave-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Controls Side -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Dalga Ayarları</h3>
+                    
+                    <!-- Wave Height -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Dalga Yüksekliği (Height)</span>
+                            <span id="wave-height-val">120px</span>
+                        </div>
+                        <input type="range" id="input-wave-height" min="40" max="240" value="120" class="w-full accent-indigo-500">
+                    </div>
+
+                    <!-- Wave Complexity -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Kıvrım Karmaşıklığı</span>
+                            <span id="wave-comp-val">Orta</span>
+                        </div>
+                        <input type="range" id="input-wave-complexity" min="1" max="4" value="2" class="w-full accent-indigo-500">
+                    </div>
+
+                    <!-- Wave Color -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span>Dalga Rengi</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="input-wave-color" value="#6366f1" class="w-10 h-10 border-0 rounded cursor-pointer bg-transparent">
+                            <span id="wave-color-hex" class="font-mono text-sm uppercase text-slate-500 dark:text-slate-400">#6366F1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Sandbox Side -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between">
+                    <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Canlı Dalga Görünümü</h3>
+                    
+                    <div class="flex-1 min-h-[180px] bg-slate-100 dark:bg-slate-900 rounded-xl my-6 flex flex-col justify-end overflow-hidden transition-colors relative">
+                        <span class="absolute top-4 left-4 text-xs font-bold text-slate-400">Zemin Seviyesi</span>
+                        <!-- Main Live SVG Container -->
+                        <div id="gen-wave-container" class="w-full"></div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Oluşturulan SVG / HTML Kodu</span>
+                            <button onclick="copyGeneratedCode('gen-wave-output')" class="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-1 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1.5 rounded-lg transition-all">
+                                <i class="fa-regular fa-copy"></i> Kodu Kopyala
+                            </button>
+                        </div>
+                        <textarea id="gen-wave-output" readonly class="w-full h-16 p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-xs font-mono text-indigo-500 resize-none focus:outline-none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Area -->
                 <div class="space-y-6">
                     <h2 class="text-3xl sm:text-4xl font-bold">Ben Kimim?</h2>
-                    <div class="h-1 w-20 bg-primary-500 rounded-full"></div>
+                    <div class="h-1 w-20 bg-primary-500 rounded-full transition-all"></div>
                     <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
                         Yıllardır dijital dünyada estetik ve işlevselliği birleştiren web çözümleri üretiyorum. Hem göze hitap eden modern arayüzler tasarlıyor hem de arkasında tıkır tıkır çalışan güçlü bir kod yapısı kuruyorum.
                     </p>
@@ -288,9 +645,10 @@
                         Müşterilerimin dijital dünyadaki hedeflerine ulaşması için stratejik adımlarla ilerliyor ve her projeyi kendiminki gibi sahipleniyorum.
                     </p>
 
+                    <!-- Professional Metrics -->
                     <div class="grid grid-cols-3 gap-4 pt-4 text-center">
                         <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                            <span class="block text-2xl sm:text-3xl font-extrabold text-primary-500">5+</span>
+                            <span class="block text-2xl sm:text-3xl font-extrabold text-primary-500 transition-all">5+</span>
                             <span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Yıllık Tecrübe</span>
                         </div>
                         <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
@@ -304,16 +662,17 @@
                     </div>
                 </div>
 
-                <div class="p-8 rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-6">
+                <!-- Skill Bars Area -->
+                <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-6">
                     <h3 class="text-xl font-bold mb-4">Yetenek Havuzum</h3>
                     
                     <div class="space-y-2">
                         <div class="flex justify-between text-sm font-medium">
                             <span>HTML5 & CSS3 / Tailwind</span>
-                            <span class="text-primary-500">95%</span>
+                            <span class="text-primary-500 transition-colors">95%</span>
                         </div>
                         <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                            <div class="h-full bg-primary-500 rounded-full" style="width: 95%"></div>
+                            <div class="h-full bg-primary-500 rounded-full transition-all" style="width: 95%"></div>
                         </div>
                     </div>
 
@@ -351,18 +710,70 @@
         </div>
     </section>
 
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold">Sıkça Sorulan Sorular</h2>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full transition-all"></div>
+                <p class="text-slate-600 dark:text-slate-400">Projelerim ve çalışma disiplinim hakkında en çok merak edilenler.</p>
+            </div>
+
+            <!-- FAQ Wrapper -->
+            <div class="space-y-4">
+                <div class="faq-item bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80 overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex items-center justify-between text-left font-bold text-slate-800 dark:text-slate-100 hover:text-primary-500 transition-colors">
+                        <span>Bir web sitesi projesi ne kadar sürede tamamlanır?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <p class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50 pt-3">
+                            Projenin kapsamına ve ihtiyaçlarınıza bağlı olarak değişiklik gösterir. Genellikle tek sayfalık modern açılış sayfaları (Landing Page) 3-5 gün arasında sürerken, kapsamlı kurumsal siteler 2-3 haftalık bir çalışma gerektirir.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80 overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex items-center justify-between text-left font-bold text-slate-800 dark:text-slate-100 hover:text-primary-500 transition-colors">
+                        <span>Tasarımı sonradan kendim güncelleyebilir miyim?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <p class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50 pt-3">
+                            Evet! Kod yapısını temiz ve modüler tuttuğum için kod üzerinde küçük oynamalar yapabilirsiniz. Ayrıca eklediğimiz Canlı Kod Editörü sayesinde sitenizdeki bileşenleri değiştirmeden önce tarayıcınızda canlı olarak test edebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80 overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex items-center justify-between text-left font-bold text-slate-800 dark:text-slate-100 hover:text-primary-500 transition-colors">
+                        <span>Sitenin mobil cihazlardaki görünümü nasıl olacak?</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <p class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50 pt-3">
+                            Tüm tasarımlarımı "Mobil Öncelikli" (Mobile-First) yaklaşımıyla geliştiriyorum. Siteniz cep telefonlarında, tabletlerde ve tüm ekran çözünürlüklerinde tamamen akıcı ve kusursuz bir mobil deneyim sunar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
     <section id="contact" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <h2 class="text-3xl sm:text-4xl font-bold">Benimle İletişime Geçin</h2>
-                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full"></div>
+                <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full transition-all"></div>
                 <p class="text-slate-600 dark:text-slate-400">Aklınızda bir proje mi var? Hemen mesaj atın, en kısa sürede dönüş sağlayayım.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Contact Info -->
                 <div class="lg:col-span-1 space-y-8">
                     <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/50 text-primary-500 flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-500 flex items-center justify-center shrink-0">
                             <i class="fa-solid fa-envelope text-lg"></i>
                         </div>
                         <div>
@@ -372,7 +783,7 @@
                     </div>
 
                     <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-500 flex items-center justify-center shrink-0">
                             <i class="fa-solid fa-phone text-lg"></i>
                         </div>
                         <div>
@@ -382,7 +793,7 @@
                     </div>
 
                     <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-500 flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center shrink-0">
                             <i class="fa-solid fa-location-dot text-lg"></i>
                         </div>
                         <div>
@@ -392,8 +803,10 @@
                     </div>
                 </div>
 
+                <!-- Contact Form -->
                 <div class="lg:col-span-2 bg-white dark:bg-slate-950 p-8 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl">
                     <form id="contact-form" class="space-y-6" onsubmit="handleFormSubmit(event)">
+                        <!-- Çalışan Web3Forms Aktif Anahtarın -->
                         <input type="hidden" name="access_key" value="ef6bb9d3-bb89-45a4-9ab8-ff942b57a923">
                         <input type="hidden" name="from_name" value="Web Sitenizden Yeni Mesaj">
                         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
@@ -430,6 +843,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -444,6 +858,7 @@
         </div>
     </footer>
 
+    <!-- Vanilla Javascript Logic -->
     <script>
         // --- 1. DARK / LIGHT MODE CONTROL ---
         const themeToggleBtn = document.getElementById('theme-toggle');
@@ -488,7 +903,42 @@
         themeToggleBtnMob.addEventListener('click', toggleTheme);
 
 
-        // --- 2. MOBILE MENU ---
+        // --- 2. THEME COLOR ACCENT CUSTOMIZER ---
+        const accentMenuBtn = document.getElementById('accent-menu-btn');
+        const accentMenuBtnMob = document.getElementById('accent-menu-btn-mob');
+        const accentDropdown = document.getElementById('accent-dropdown');
+
+        function toggleAccentDropdown(event) {
+            event.stopPropagation();
+            accentDropdown.classList.toggle('hidden');
+        }
+
+        accentMenuBtn.addEventListener('click', toggleAccentDropdown);
+        accentMenuBtnMob.addEventListener('click', toggleAccentDropdown);
+
+        document.addEventListener('click', () => {
+            accentDropdown.classList.add('hidden');
+        });
+
+        window.changeAccent = function(primary, hover, light) {
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--primary-hover', hover);
+            document.documentElement.style.setProperty('--primary-light', light);
+            
+            localStorage.setItem('theme-accent-primary', primary);
+            localStorage.setItem('theme-accent-hover', hover);
+            localStorage.setItem('theme-accent-light', light);
+        };
+
+        const savedPrimary = localStorage.getItem('theme-accent-primary');
+        const savedHover = localStorage.getItem('theme-accent-hover');
+        const savedLight = localStorage.getItem('theme-accent-light');
+        if (savedPrimary && savedHover && savedLight) {
+            changeAccent(savedPrimary, savedHover, savedLight);
+        }
+
+
+        // --- 3. MOBILE MENU ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -511,7 +961,7 @@
         });
 
 
-        // --- 3. PORTFOLIO FILTERING ---
+        // --- 4. PORTFOLIO FILTERING ---
         function filterProjects(category) {
             const cards = document.querySelectorAll('.project-card');
             const buttons = document.querySelectorAll('.project-tab-btn');
@@ -539,20 +989,17 @@
         }
 
 
-        // --- 4. FIXED LIVE CODE PLAYGROUND LOGIC ---
+        // --- 5. LIVE CODE PLAYGROUND LOGIC ---
         const codeInput = document.getElementById('code-input');
         const codePreview = document.getElementById('code-preview');
 
         function updateLivePreview() {
             const userCode = codeInput.value;
-            // Güvenlik duvarını tamamen aşan modern srcdoc yöntemi
             codePreview.srcdoc = userCode;
         }
 
-        // Klavyeden her bir satır/karakter girildiğinde tetiklenir
         codeInput.addEventListener('input', updateLivePreview);
 
-        // Editörün ilk açılış şablonu
         const defaultPlaygroundContent = `<div style="text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; color: #334155;">
     <h1 style="color: #0ea5e9; font-size: 2.5rem; margin-bottom: 10px;">🚀 Sistem Hazır!</h1>
     <p style="font-size: 1.1rem; color: #64748b;">Sol taraftaki kutuya HTML veya satır içi CSS yazarak bu alanı anlık değiştirebilirsin.</p>
@@ -565,7 +1012,260 @@
         updateLivePreview();
 
 
-        // --- 5. CONTACT FORM HANDLER ---
+        // --- 6. DEVELOPER TOOLS TAB SWITCHING ---
+        window.switchToolTab = function(tabId) {
+            const tabs = document.querySelectorAll('.tool-tab-content');
+            const tabButtons = document.querySelectorAll('.tool-tab-btn');
+
+            tabs.forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            tabButtons.forEach(btn => {
+                btn.classList.remove('bg-indigo-500', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-white', 'dark:bg-slate-800', 'hover:bg-slate-100', 'dark:hover:bg-slate-700');
+            });
+
+            document.getElementById(`tool-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('bg-indigo-500', 'text-white', 'shadow-lg');
+            document.getElementById(`tab-btn-${tabId}`).classList.remove('bg-white', 'dark:bg-slate-800', 'hover:bg-slate-100', 'dark:hover:bg-slate-700');
+        };
+
+
+        // --- 7. INTERACTIVE CSS BUTTON GENERATOR ---
+        const padInput = document.getElementById('input-padding');
+        const radInput = document.getElementById('input-radius');
+        const shaInput = document.getElementById('input-shadow');
+        const bgcInput = document.getElementById('input-bg-color');
+
+        const genPreview = document.getElementById('gen-button-preview');
+        const genOutput = document.getElementById('gen-code-output');
+
+        const padVal = document.getElementById('padding-val');
+        const radVal = document.getElementById('radius-val');
+        const shaVal = document.getElementById('shadow-val');
+        const colorHex = document.getElementById('color-hex-val');
+
+        function generateButton() {
+            const padding = padInput.value;
+            const radius = radInput.value;
+            const shadow = shaInput.value;
+            const bgColor = bgcInput.value;
+
+            padVal.textContent = `${padding}px ${padding * 2}px`;
+            radVal.textContent = `${radius}px`;
+            shaVal.textContent = `${shadow}px`;
+            colorHex.textContent = bgColor.toUpperCase();
+
+            genPreview.style.padding = `${padding}px ${padding * 2}px`;
+            genPreview.style.borderRadius = `${radius}px`;
+            genPreview.style.boxShadow = `0 ${shadow / 2}px ${shadow}px rgba(0, 0, 0, 0.25)`;
+            genPreview.style.backgroundColor = bgColor;
+
+            const rawCode = `<button style="background-color: ${bgColor}; color: white; border: none; padding: ${padding}px ${padding * 2}px; border-radius: ${radius}px; box-shadow: 0 ${shadow / 2}px ${shadow}px rgba(0,0,0,0.25); font-weight: 600; font-family: sans-serif; cursor: pointer;">Tıkla Beni!</button>`;
+            
+            genOutput.value = rawCode;
+        }
+
+        [padInput, radInput, shaInput, bgcInput].forEach(elem => {
+            elem.addEventListener('input', generateButton);
+        });
+
+        generateButton();
+
+
+        // --- 8. GLASSMORPHISM GENERATOR LOGIC ---
+        const glassBlurInput = document.getElementById('input-glass-blur');
+        const glassOpInput = document.getElementById('input-glass-op');
+        const glassSatInput = document.getElementById('input-glass-sat');
+        const glassColorRadio = document.getElementsByName('glass-base-color');
+
+        const glassPreview = document.getElementById('gen-glass-preview');
+        const glassOutput = document.getElementById('gen-glass-output');
+
+        const glassBlurVal = document.getElementById('glass-blur-val');
+        const glassOpVal = document.getElementById('glass-op-val');
+        const glassSatVal = document.getElementById('glass-sat-val');
+
+        function generateGlass() {
+            const blur = glassBlurInput.value;
+            const opacity = glassOpInput.value / 100;
+            const saturation = glassSatInput.value;
+            
+            let colorRGB = "255,255,255";
+            for (const radio of glassColorRadio) {
+                if (radio.checked) {
+                    colorRGB = radio.value;
+                    break;
+                }
+            }
+
+            glassBlurVal.textContent = `${blur}px`;
+            glassOpVal.textContent = opacity;
+            glassSatVal.textContent = `${saturation}%`;
+
+            const bgColor = `rgba(${colorRGB}, ${opacity})`;
+            const backdropFilter = `blur(${blur}px) saturate(${saturation}%)`;
+            const borderColor = `rgba(${colorRGB}, ${parseFloat(opacity) + 0.15})`;
+
+            glassPreview.style.backgroundColor = bgColor;
+            glassPreview.style.backdropFilter = backdropFilter;
+            glassPreview.style.webkitBackdropFilter = backdropFilter;
+            glassPreview.style.borderColor = borderColor;
+            glassPreview.style.borderRadius = "16px";
+
+            const rawGlassCode = `<div style="background: ${bgColor}; backdrop-filter: ${backdropFilter}; -webkit-backdrop-filter: ${backdropFilter}; border: 1px solid ${borderColor}; border-radius: 16px; padding: 24px; text-align: center; font-family: sans-serif; max-width: 280px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);">
+    <h4 style="margin: 0 0 8px 0; color: ${colorRGB === '255,255,255' ? '#1e293b' : '#ffffff'};">Modern Cam</h4>
+    <p style="margin: 0; font-size: 13px; color: ${colorRGB === '255,255,255' ? '#64748b' : '#cbd5e1'};">İçerisi bulanık ve aşırı şık görünür.</p>
+</div>`;
+
+            glassOutput.value = rawGlassCode;
+        }
+
+        [glassBlurInput, glassOpInput, glassSatInput].forEach(elem => {
+            elem.addEventListener('input', generateGlass);
+        });
+        glassColorRadio.forEach(radio => {
+            radio.addEventListener('change', generateGlass);
+        });
+
+        generateGlass();
+
+
+        // --- 9. INTERACTIVE BOX SHADOW GENERATOR ---
+        const shadowXInput = document.getElementById('input-shadow-x');
+        const shadowYInput = document.getElementById('input-shadow-y');
+        const shadowBlurInput = document.getElementById('input-shadow-blur');
+        const shadowOpInput = document.getElementById('input-shadow-op');
+
+        const shadowPreview = document.getElementById('gen-shadow-preview');
+        const shadowOutput = document.getElementById('gen-shadow-output');
+
+        const shadowXVal = document.getElementById('shadow-x-val');
+        const shadowYVal = document.getElementById('shadow-y-val');
+        const shadowBlurVal = document.getElementById('shadow-blur-val');
+        const shadowOpVal = document.getElementById('shadow-op-val');
+
+        function generateShadow() {
+            const x = shadowXInput.value;
+            const y = shadowYInput.value;
+            const blur = shadowBlurInput.value;
+            const opacity = shadowOpInput.value / 100;
+
+            shadowXVal.textContent = `${x}px`;
+            shadowYVal.textContent = `${y}px`;
+            shadowBlurVal.textContent = `${blur}px`;
+            shadowOpVal.textContent = opacity;
+
+            const shadowStyle = `${x}px ${y}px ${blur}px rgba(0, 0, 0, ${opacity})`;
+            shadowPreview.style.boxShadow = shadowStyle;
+
+            const rawShadowCode = `<div style="width: 160px; height: 96px; background-color: white; border-radius: 12px; box-shadow: ${shadowStyle}; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
+    <span style="font-size: 12px; color: #94a3b8; font-weight: bold;">Hacimli Kutu</span>
+</div>`;
+
+            shadowOutput.value = rawShadowCode;
+        }
+
+        [shadowXInput, shadowYInput, shadowBlurInput, shadowOpInput].forEach(elem => {
+            elem.addEventListener('input', generateShadow);
+        });
+
+        generateShadow();
+
+
+        // --- 10. INTERACTIVE SVG WAVE GENERATOR ---
+        const waveHeightInput = document.getElementById('input-wave-height');
+        const waveCompInput = document.getElementById('input-wave-complexity');
+        const waveColorInput = document.getElementById('input-wave-color');
+
+        const waveContainer = document.getElementById('gen-wave-container');
+        const waveOutput = document.getElementById('gen-wave-output');
+
+        const waveHeightVal = document.getElementById('wave-height-val');
+        const waveCompVal = document.getElementById('wave-comp-val');
+        const waveColorHex = document.getElementById('wave-color-hex');
+
+        function generateWave() {
+            const height = parseInt(waveHeightInput.value);
+            const complexity = parseInt(waveCompInput.value);
+            const color = waveColorInput.value;
+
+            waveHeightVal.textContent = `${height}px`;
+            waveColorHex.textContent = color.toUpperCase();
+
+            // Set complexity text
+            const complexityTexts = ["Çok Basit", "Orta", "Kıvrımlı", "Yoğun Dalgalı"];
+            waveCompVal.textContent = complexityTexts[complexity - 1];
+
+            // Build Wave SVG Path dynamically based on height and complexity
+            let pathD = "";
+            if (complexity === 1) {
+                pathD = `M0 80 C 300 ${80 - height/2}, 900 ${80 + height/2}, 1440 80 L1440 320 L0 320 Z`;
+            } else if (complexity === 2) {
+                pathD = `M0 100 C 360 ${100 - height}, 720 ${100 + height}, 1080 ${100 - height/2}, 1440 100 L1440 320 L0 320 Z`;
+            } else if (complexity === 3) {
+                pathD = `M0 120 Q 180 ${120 - height}, 360 120 T 720 120 T 1080 120 T 1440 120 L1440 320 L0 320 Z`;
+            } else {
+                pathD = `M0 120 C 180 ${120 - height}, 360 ${120 + height}, 540 ${120 - height}, 720 ${120 + height}, 900 ${120 - height}, 1080 ${120 + height}, 1260 ${120 - height}, 1440 120 L1440 320 L0 320 Z`;
+            }
+
+            const rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="margin-bottom: -10px;">
+    <path fill="${color}" fill-opacity="1" d="${pathD}"></path>
+</svg>`;
+
+            // Inject to live view
+            waveContainer.innerHTML = rawSvg;
+            waveOutput.value = rawSvg;
+        }
+
+        [waveHeightInput, waveCompInput, waveColorInput].forEach(elem => {
+            elem.addEventListener('input', generateWave);
+        });
+
+        generateWave();
+
+
+        // --- 11. CLIPBOARD COPY UTILITY ---
+        window.copyGeneratedCode = function(textareaId) {
+            const targetTextarea = document.getElementById(textareaId);
+            targetTextarea.select();
+            targetTextarea.setSelectionRange(0, 99999); // Mobile
+            document.execCommand('copy');
+            
+            const copyBtn = event.currentTarget;
+            const originalContent = copyBtn.innerHTML;
+            copyBtn.innerHTML = `<i class="fa-solid fa-check"></i> Kopyalandı!`;
+            setTimeout(() => {
+                copyBtn.innerHTML = originalContent;
+            }, 2000);
+        }
+
+
+        // --- 12. INTERACTIVE FAQ ACCORDION ---
+        window.toggleFaq = function(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const icon = element.querySelector('i');
+            
+            const allItems = document.querySelectorAll('.faq-item');
+            allItems.forEach(item => {
+                if (item !== faqItem) {
+                    item.querySelector('.faq-answer').style.maxHeight = null;
+                    item.querySelector('i').style.transform = null;
+                }
+            });
+
+            if (answer.style.maxHeight) {
+                answer.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                answer.style.maxHeight = answer.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+
+        // --- 13. CONTACT FORM HANDLER (WITH WEB3FORMS EMAIL API) ---
         async function handleFormSubmit(event) {
             event.preventDefault();
             
@@ -614,3 +1314,5 @@
     </script>
 </body>
 </html>
+
+```
