@@ -64,7 +64,7 @@
             animation: blink .75s step-end infinite;
         }
 
-        /* --- YENİ: Canlı Kod Editörü Vurgulama (Highlight) Sistemi --- */
+        /* --- Canlı Kod Editörü Vurgulama (Highlight) Sistemi --- */
         .editor-container {
             position: relative;
             background-color: transparent;
@@ -81,16 +81,15 @@
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
             font-size: 0.875rem; /* text-sm */
             line-height: 1.5;
-            white-space: pre; /* Kodu satır kaydırmadan dümdüz tutar */
+            white-space: pre; 
             overflow: auto;
             tab-size: 4;
         }
         #highlight-backdrop {
-            color: transparent; /* Metin şeffaf, sadece arka plan görünecek */
-            pointer-events: none; /* Tıklamaları alttaki textarea'ya geçirir */
+            color: transparent; 
+            pointer-events: none; 
             z-index: 1;
         }
-        /* Arka planın kaydırma çubuklarını gizle ki çakışma olmasın */
         #highlight-backdrop::-webkit-scrollbar {
             display: none; 
         }
@@ -101,13 +100,12 @@
             color: #34d399; /* emerald-400 */
             background: transparent;
             z-index: 2;
-            caret-color: #f8fafc; /* İmleç rengi */
+            caret-color: #f8fafc;
             outline: none;
             resize: none;
         }
-        /* Eşleşen kelimelerin vurgu stili */
         #highlight-backdrop mark {
-            background-color: rgba(225, 29, 72, 0.6); /* Yarı saydam pembe/kırmızı */
+            background-color: rgba(225, 29, 72, 0.6); 
             color: transparent;
             border-radius: 3px;
             padding: 0 1px;
@@ -116,12 +114,10 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 relative">
 
-    <!-- Okuma İlerleme Çubuğu -->
     <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-primary-500 z-[60] transition-all duration-75" style="width: 0%;"></div>
 
     <!-- Header / Navbar -->
     <header class="fixed top-0 left-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-50 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <!-- ... Header İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
@@ -141,12 +137,10 @@
                     <a href="#about" class="text-sm font-medium hover:text-primary-500 transition-colors">Hakkımda</a>
                     <a href="#contact" class="text-sm font-medium hover:text-primary-500 transition-colors">İletişim</a>
                     
-                    <!-- Theme Color Accent Trigger Button -->
                     <div class="relative">
                         <button id="accent-menu-btn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none" aria-label="Sitenin Rengini Değiştir">
                             <i class="fa-solid fa-palette"></i>
                         </button>
-                        <!-- Accent Color Palette Dropdown Menu -->
                         <div id="accent-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xl space-y-2 z-50">
                             <span class="block text-xs font-bold text-slate-400 mb-1">Tema Rengi</span>
                             <button onclick="changeAccent('#0ea5e9', '#0284c7', '#e0f2fe')" class="w-full flex items-center gap-2 text-xs font-semibold p-1.5 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg text-slate-700 dark:text-slate-300">
@@ -167,14 +161,12 @@
                         </div>
                     </div>
 
-                    <!-- Dark Mode Toggle Button -->
                     <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none" aria-label="Karanlık Modu Aç/Kapat">
                         <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
                         <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
                     </button>
                 </nav>
 
-                <!-- Mobile Menu & Dark/Color Buttons -->
                 <div class="flex items-center md:hidden space-x-1.5">
                     <button id="accent-menu-btn-mob" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-all focus:outline-none">
                         <i class="fa-solid fa-palette"></i>
@@ -190,7 +182,6 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Navigation -->
         <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
             <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
                 <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Ana Sayfa</a>
@@ -205,15 +196,12 @@
         </div>
     </header>
 
-    <!-- Hero Section with Typewriter -->
     <section id="home" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
-        <!-- Background decorative elements -->
         <div class="absolute top-1/4 left-1/10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative z-10 w-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <!-- Text Area -->
                 <div class="space-y-6 text-center md:text-left">
                     <span class="inline-block px-3 py-1 bg-primary-100 text-primary-500 rounded-full text-xs font-semibold tracking-wider uppercase transition-all">
                         Geliştirici & Tasarımcı
@@ -235,13 +223,10 @@
                     </div>
                 </div>
 
-                <!-- Graphic/Visual Area -->
                 <div class="flex justify-center">
                     <div class="relative w-72 h-72 sm:w-96 sm:h-96">
-                        <!-- Frame decorations -->
                         <div class="absolute inset-0 bg-gradient-to-tr from-primary-500 to-indigo-600 rounded-3xl rotate-6 opacity-20 animate-pulse"></div>
                         <div class="absolute inset-0 bg-slate-200 dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
-                            <!-- Showcase Graphic (SVG) -->
                             <svg class="w-full h-full p-8 text-primary-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
                             </svg>
@@ -252,9 +237,7 @@
         </div>
     </section>
 
-    <!-- Services / Features Section -->
     <section id="services" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
-        <!-- ... Hizmetler İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <h2 class="text-3xl sm:text-4xl font-bold">Neler Sunuyorum?</h2>
@@ -263,7 +246,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service 1 -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
                     <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                         <i class="fa-solid fa-code text-xl"></i>
@@ -273,7 +255,6 @@
                         En güncel teknolojiler (HTML5, CSS3, JS, React/Tailwind) ile temiz, okunabilir ve sürdürülebilir kod yapıları oluşturuyorum.
                     </p>
                 </div>
-                <!-- Service 2 -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
                     <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                         <i class="fa-solid fa-mobile-screen-button text-xl"></i>
@@ -283,7 +264,6 @@
                         Web siteniz tüm cihazlarda (telefon, tablet, masaüstü bilgisayarlar) mükemmel bir şekilde görüntülenir ve kusursuz çalışır.
                     </p>
                 </div>
-                <!-- Service 3 -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:shadow-xl transition-all duration-300 group">
                     <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                         <i class="fa-solid fa-rocket text-xl"></i>
@@ -297,9 +277,7 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-        <!-- ... Projeler İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold">Son Projelerim</h2>
@@ -307,16 +285,13 @@
                 <p class="text-slate-600 dark:text-slate-400">En son hayata geçirdiğim başarılı çalışmalardan bazıları.</p>
             </div>
 
-            <!-- Project Filter Controls -->
             <div class="flex justify-center space-x-2 mb-12 flex-wrap gap-y-2">
                 <button onclick="filterProjects('all')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-primary-500 text-white shadow-md transition-all">Hepsi</button>
                 <button onclick="filterProjects('web')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Web Tasarım</button>
                 <button onclick="filterProjects('app')" class="project-tab-btn px-4 py-2 text-sm font-medium rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Uygulama</button>
             </div>
 
-            <!-- Projects Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
                 <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="web">
                     <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                         <i class="fa-solid fa-laptop-code text-5xl text-primary-500/30 transition-colors"></i>
@@ -332,7 +307,6 @@
                     </div>
                 </div>
 
-                <!-- Project 2 -->
                 <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="app">
                     <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                         <i class="fa-solid fa-mobile text-5xl text-indigo-500/30"></i>
@@ -348,7 +322,6 @@
                     </div>
                 </div>
 
-                <!-- Project 3 -->
                 <div class="project-card overflow-hidden rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-300" data-category="web">
                     <div class="relative h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                         <i class="fa-solid fa-building text-5xl text-emerald-500/30"></i>
@@ -367,19 +340,18 @@
         </div>
     </section>
 
-    <!-- LIVE CODE PLAYGROUND SECTION (Güncellendi) -->
+    <!-- LIVE CODE PLAYGROUND SECTION -->
     <section id="editor" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold">Canlı Kod Editörü</h2>
                 <div class="h-1 w-20 bg-primary-500 mx-auto rounded-full transition-all"></div>
-                <p class="text-slate-600 dark:text-slate-400">HTML ve CSS kodlarınızı sol tarafa yazın, hatalarınızı arama çubuğuyla hızlıca bulun.</p>
+                <p class="text-slate-600 dark:text-slate-400">Hatalarınızı arama çubuğuyla bulun, editör sizi otomatik olarak oraya götürsün.</p>
             </div>
 
-            <!-- Editor Wrapper -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[550px]">
                 
-                <!-- YENİ/GÜNCELLENEN BÖLÜM: Kod Yazma Tarafı -->
+                <!-- Kod Yazma Tarafı -->
                 <div class="flex flex-col h-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-900 overflow-hidden shadow-xl">
                     <div class="px-4 py-3 border-b border-slate-800 bg-slate-950/80 flex items-center justify-between">
                         <div class="flex items-center space-x-2 text-slate-400 font-mono text-xs hidden sm:flex">
@@ -387,7 +359,7 @@
                             <span>index.html</span>
                         </div>
                         
-                        <!-- YENİ ARAMA ÇUBUĞU BURADA -->
+                        <!-- Arama Çubuğu -->
                         <div class="flex items-center bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs mx-2 flex-1 max-w-[280px] focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500/50 transition-all duration-300">
                             <i class="fa-solid fa-magnifying-glass text-slate-500 mr-2 ml-1"></i>
                             <input type="text" id="editor-search" placeholder="Hatalı kodu ara..." class="bg-transparent border-none outline-none text-slate-200 w-full placeholder-slate-600 font-mono" autocomplete="off">
@@ -401,11 +373,9 @@
                         </div>
                     </div>
                     
-                    <!-- Vurgulama Katmanı ve Textarea Katmanı -->
+                    <!-- Vurgulama ve Textarea Katmanı -->
                     <div class="editor-container flex-1">
-                        <!-- Arka Planda Kalan ve Vurguyu Gösteren Şeffaf Div -->
                         <div id="highlight-backdrop" class="editor-layer" aria-hidden="true"></div>
-                        <!-- Kullanıcının Kodu Yazdığı Textarea -->
                         <textarea id="code-input" class="editor-layer selection:bg-slate-700" spellcheck="false" placeholder="Buraya HTML kodları yazmaya başlayın..."></textarea>
                     </div>
                 </div>
@@ -425,7 +395,6 @@
 
     <!-- DEVELOPER TOOLS & GENERATORS SECTION -->
     <section id="tools" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-        <!-- ... Tasarım Araçları İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
                 <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 rounded-full text-xs font-semibold tracking-wider uppercase">
@@ -455,9 +424,7 @@
                 </button>
             </div>
 
-            <!-- TOOL TAB 1: BUTTON DESIGNER -->
             <div id="tool-button-designer" class="tool-tab-content grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                <!-- Controls -->
                 <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-6">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Tasarım Ayarları</h3>
                     <div class="space-y-2">
@@ -480,7 +447,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Visual -->
                 <div class="lg:col-span-7 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Canlı Buton Görünümü</h3>
                     <div class="flex-1 min-h-[180px] bg-slate-100 dark:bg-slate-900 rounded-xl my-6 flex items-center justify-center p-4 transition-colors">
@@ -498,9 +464,7 @@
                 </div>
             </div>
 
-            <!-- TOOL TAB 2: GLASSMORPHISM -->
             <div id="tool-glass-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                <!-- Controls -->
                 <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Buzlu Cam Ayarları</h3>
                     <div class="space-y-2">
@@ -523,7 +487,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Visual -->
                 <div class="lg:col-span-7 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Canlı Cam Görünümü</h3>
                     <div class="flex-1 min-h-[180px] rounded-xl my-6 flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
@@ -546,7 +509,6 @@
                 </div>
             </div>
 
-            <!-- TOOL TAB 3: BOX SHADOW -->
             <div id="tool-shadow-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                 <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Gölge Tasarım Ayarları</h3>
@@ -586,7 +548,6 @@
                 </div>
             </div>
 
-            <!-- TOOL TAB 4: SVG WAVE -->
             <div id="tool-wave-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                 <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Dalga Ayarları</h3>
@@ -624,7 +585,6 @@
                 </div>
             </div>
 
-            <!-- CSS GRADIENT GENERATOR -->
             <div id="tool-gradient-designer" class="tool-tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                 <div class="lg:col-span-5 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col justify-between space-y-5">
                     <h3 class="font-bold text-lg border-b border-slate-100 dark:border-slate-800 pb-3">Renk Geçiş Ayarları</h3>
@@ -677,10 +637,8 @@
 
     <!-- About Section -->
     <section id="about" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
-        <!-- ... Hakkımda İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Area -->
                 <div class="space-y-6">
                     <h2 class="text-3xl sm:text-4xl font-bold">Ben Kimim?</h2>
                     <div class="h-1 w-20 bg-primary-500 rounded-full transition-all"></div>
@@ -691,7 +649,6 @@
                         Müşterilerimin dijital dünyadaki hedeflerine ulaşması için stratejik adımlarla ilerliyor ve her projeyi kendiminki gibi sahipleniyorum.
                     </p>
 
-                    <!-- Professional Metrics -->
                     <div class="grid grid-cols-3 gap-4 pt-4 text-center">
                         <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
                             <span class="block text-2xl sm:text-3xl font-extrabold text-primary-500 transition-all">5+</span>
@@ -708,7 +665,6 @@
                     </div>
                 </div>
 
-                <!-- Skill Bars Area -->
                 <div class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-6">
                     <h3 class="text-xl font-bold mb-4">Yetenek Havuzum</h3>
                     
@@ -758,7 +714,6 @@
 
     <!-- FAQ SECTION -->
     <section id="faq" class="py-24 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-        <!-- ... SSS İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <h2 class="text-3xl sm:text-4xl font-bold">Sıkça Sorulan Sorular</h2>
@@ -766,7 +721,6 @@
                 <p class="text-slate-600 dark:text-slate-400">Projelerim ve çalışma disiplinim hakkında en çok merak edilenler.</p>
             </div>
 
-            <!-- FAQ Wrapper -->
             <div class="space-y-4">
                 <div class="faq-item bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80 overflow-hidden transition-all duration-300">
                     <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex items-center justify-between text-left font-bold text-slate-800 dark:text-slate-100 hover:text-primary-500 transition-colors">
@@ -787,7 +741,7 @@
                     </button>
                     <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
                         <p class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50 pt-3">
-                            Evet! Kod yapısını temiz ve modüler tuttuğum için kod üzerinde küçük oynamalar yapabilirsiniz. Ayrıca eklediğimiz Canlı Kod Editörü sayesinde sitenizdeki bileşenleri değiştirmeden önce tarayıcınızda canlı olarak test edebilirsiniz.
+                            Hayır! Neden çünkü bu site özel bir sitedir dışarıdan müdahale edilmesi yasaktır.
                         </p>
                     </div>
                 </div>
@@ -809,7 +763,6 @@
 
     <!-- Contact Section -->
     <section id="contact" class="py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
-        <!-- ... İletişim İçeriği (Değiştirilmedi) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <h2 class="text-3xl sm:text-4xl font-bold">Benimle İletişime Geçin</h2>
@@ -818,7 +771,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <!-- Contact Info -->
                 <div class="lg:col-span-1 space-y-8">
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-500 flex items-center justify-center shrink-0">
@@ -826,7 +778,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-lg">E-posta</h4>
-                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">iletisim@ornek.com</p>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">portfolyailetisim7@gmail.com</p>
                         </div>
                     </div>
 
@@ -836,7 +788,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-lg">Telefon</h4>
-                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">+90 (555) 123 45 67</p>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">TELEFON NUMARASI BULUNMAMAKTADIR.</p>
                         </div>
                     </div>
 
@@ -851,10 +803,8 @@
                     </div>
                 </div>
 
-                <!-- Contact Form -->
                 <div class="lg:col-span-2 bg-white dark:bg-slate-950 p-8 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl">
                     <form id="contact-form" class="space-y-6" onsubmit="handleFormSubmit(event)">
-                        <!-- Çalışan Web3Forms Aktif Anahtarın -->
                         <input type="hidden" name="access_key" value="ef6bb9d3-bb89-45a4-9ab8-ff942b57a923">
                         <input type="hidden" name="from_name" value="Web Sitenizden Yeni Mesaj">
                         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
@@ -963,7 +913,6 @@
             setTimeout(type, typeSpeed);
         }
         setTimeout(type, 1000);
-
 
         // --- 3. DARK / LIGHT MODE CONTROL ---
         const themeToggleBtn = document.getElementById('theme-toggle');
@@ -1094,14 +1043,13 @@
         }
 
 
-        // --- 7. LIVE CODE PLAYGROUND LOGIC & SEARCH HIGHLIGHT (GÜNCELLENDİ) ---
+        // --- 7. LIVE CODE PLAYGROUND LOGIC & OTOMATİK SCROLL ARAMA ---
         const codeInput = document.getElementById('code-input');
         const codePreview = document.getElementById('code-preview');
         const highlightBackdrop = document.getElementById('highlight-backdrop');
         const editorSearch = document.getElementById('editor-search');
         const searchCount = document.getElementById('search-count');
 
-        // Güvenli HTML karakter dönüşümü (Kodları düz metin olarak göstermek için)
         function escapeHTML(str) {
             return str.replace(/&/g, '&amp;')
                       .replace(/</g, '&lt;')
@@ -1110,38 +1058,33 @@
                       .replace(/'/g, '&#039;');
         }
 
-        // Sağdaki iframe ekranını günceller
         function updateLivePreview() {
             const userCode = codeInput.value;
             codePreview.srcdoc = userCode;
         }
 
-        // Arama motoru ve Renkli Vurgulama mekanizması
-        function applyHighlights() {
+        // isFromSearch parametresi: Sadece arama çubuğundan tetiklenirse otomatik kaydırma yapar
+        function applyHighlights(isFromSearch = false) {
             let text = codeInput.value;
             const query = editorSearch.value;
 
-            // Editörün alt kısımdaki kaydırma boşluğunu telafi et
             if (text[text.length - 1] === '\n') {
                 text += ' ';
             }
 
-            // Arama kutusu boşsa tüm vurguları temizle
             if (!query) {
                 highlightBackdrop.innerHTML = escapeHTML(text);
                 searchCount.classList.add('hidden');
                 return;
             }
 
-            // Regex (Düzenli İfade) kullanarak eşleşen kelimeleri arama
-            const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Regex karakterlerini kaçışla
-            const regex = new RegExp(`(${escapedQuery})`, 'gi'); // Büyük-küçük harf duyarsız genel arama
+            const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedQuery})`, 'gi');
             
             let matchCount = 0;
             const parts = text.split(regex);
             let finalHTML = '';
             
-            // Eşleşenleri bulup arkaplanda renkli <mark> etiketine sarar
             parts.forEach(part => {
                 if (part.toLowerCase() === query.toLowerCase()) {
                     matchCount++;
@@ -1153,29 +1096,43 @@
 
             highlightBackdrop.innerHTML = finalHTML;
             
-            // Eşleşme sayısını yazdır
             if (matchCount > 0) {
                 searchCount.textContent = `${matchCount} Sonuç`;
                 searchCount.classList.remove('hidden');
+
+                // --- YENİ: Otomatik Kaydırma (Sadece arama yaparken) ---
+                if (isFromSearch) {
+                    const firstMatch = highlightBackdrop.querySelector('mark');
+                    if (firstMatch) {
+                        // Bulunan kelimenin 50px üstünden başlayarak yumuşak kaydır
+                        const scrollTarget = firstMatch.offsetTop - 50; 
+                        codeInput.scrollTo({
+                            top: Math.max(0, scrollTarget),
+                            behavior: 'smooth'
+                        });
+                    }
+                }
             } else {
                 searchCount.textContent = '0 Sonuç';
                 searchCount.classList.remove('hidden');
             }
         }
 
-        // Textarea ile şeffaf arkaplanı aynı hizaya (scroll) getirir
         function syncScroll() {
             highlightBackdrop.scrollTop = codeInput.scrollTop;
             highlightBackdrop.scrollLeft = codeInput.scrollLeft;
         }
 
+        // Kod yazarken önizlemeyi ve vurgulamayı güncelle ama EKRANI KAYDIRMA
         codeInput.addEventListener('input', () => {
             updateLivePreview();
-            applyHighlights(); // Kod yazarken de vurguları güncelle
+            applyHighlights(false); 
         });
 
+        // Arama çubuğuna yazarken bulduğu yere OTOMATİK KAYDIR
+        editorSearch.addEventListener('input', () => applyHighlights(true)); 
+
         codeInput.addEventListener('scroll', syncScroll);
-        editorSearch.addEventListener('input', applyHighlights); // Arama yaparken vurguları güncelle
 
         const defaultPlaygroundContent = `<div style="text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; color: #334155;">
     <h1 style="color: #0ea5e9; font-size: 2.5rem; margin-bottom: 10px;">🚀 Sistem Hazır!</h1>
@@ -1187,7 +1144,7 @@
         
         codeInput.value = defaultPlaygroundContent;
         updateLivePreview();
-        applyHighlights();
+        applyHighlights(false);
 
 
         // --- 8. DEVELOPER TOOLS TAB SWITCHING ---
@@ -1517,5 +1474,6 @@
     </script>
 </body>
 </html>
+
 
 ```
